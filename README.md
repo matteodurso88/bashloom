@@ -62,6 +62,16 @@ _BLM_*     # internal state
 - logging foundations
 - tests, ShellCheck and formatting CI
 
+### Governance and contributions
+
+External contributions are welcome, but they are proposals for inclusion in the official Bashloom codebase and require final maintainer review.
+
+Maintainers may adapt, refactor or reimplement accepted contributions before merge to preserve API consistency, security, portability, maintainability, documentation quality and architectural coherence.
+
+Final merge authority for the official repository is reserved to `matteodurso88` and `dev-oriqo`.
+
+See `GOVERNANCE.md` for the authoritative governance policy and `CONTRIBUTING.md` for contribution requirements.
+
 ### Documentation languages
 
 All user-facing project documentation is maintained in **English and Italian**. Source code, identifiers, commit messages and code comments use **English**.
@@ -119,6 +129,16 @@ _BLM_*     # stato interno
 - utility base filesystem e path
 - fondamenta logging
 - test, ShellCheck e CI di formattazione
+
+### Governance e contributi
+
+I contributi esterni sono benvenuti, ma costituiscono proposte di integrazione nella codebase ufficiale di Bashloom e richiedono revisione finale da parte dei maintainer.
+
+I maintainer possono adattare, rifattorizzare o reimplementare i contributi accettati prima del merge per preservare coerenza delle API, sicurezza, portabilità, manutenibilità, qualità documentale e coerenza architetturale.
+
+L'autorità di merge finale sul repository ufficiale è riservata a `matteodurso88` e `dev-oriqo`.
+
+Vedi `GOVERNANCE.md` per la policy di governance ufficiale e `CONTRIBUTING.md` per i requisiti di contribuzione.
 
 ### Lingue della documentazione
 

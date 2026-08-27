@@ -6,9 +6,6 @@
 # locale advertises UTF-8. Plain/JSON output remains deterministic and ASCII
 # safe. Set BLM_UI_CHARSET=ascii|unicode to override auto detection.
 
-# Internal helper: resolve the character-set policy used by human TTY output.
-# BLM_UI_CHARSET accepts auto (default), ascii or unicode. Auto relies only on
-# locale variables and therefore introduces no external dependency.
 _blm_ui_charset() {
   local requested=${BLM_UI_CHARSET:-auto}
   case $requested in
@@ -27,15 +24,12 @@ _blm_ui_charset() {
   esac
 }
 
-# Internal helper: return success only when rich human rendering is appropriate.
-# BLM_UI_STYLE=minimal disables rich borders while preserving human output.
 _blm_ui_rich_enabled() {
   [[ ${BLM_UI_STYLE:-rich} == rich ]] || return 1
   [[ $(_blm_output_mode) == human ]] || return 1
   blm_is_tty
 }
 
-# Internal helper: repeat a single-byte or UTF-8 glyph N times without seq/tr.
 _blm_repeat_glyph() {
   (($# == 2)) || return 2
   local glyph=$1 count=$2 out="" i
@@ -49,11 +43,7 @@ _blm_repeat_glyph() {
 # Usage: blm_panel <title> [line...]
 # Returns: 0 on success; 2 for missing title or invalid UI charset policy.
 # Output: Rich human TTY mode sizes the border to the longest title/body line.
-#         Minimal human uses ASCII. Plain uses labelled lines. JSON emits one
-#         machine-readable panel record per supplied line.
 # Side effects: None.
-# Portability: Unicode borders are used only when charset policy resolves to
-#              unicode; ASCII remains the deterministic fallback.
 blm_panel() {
   (($# >= 1)) || return 2
   local title=$1
@@ -67,8 +57,7 @@ blm_panel() {
     else
       local line
       for line in "$@"; do
-        printf '{"type":"panel","title":"%s","message":"%s"}\n' \
-          "$(_blm_json_escape "$title")" "$(_blm_json_escape "$line")"
+        printf '{"type":"panel","title":"%s","message":"%s"}\n' "$(_blm_json_escape "$title")" "$(_blm_json_escape "$line")"
       done
     fi
     return 0
@@ -105,7 +94,6 @@ blm_panel() {
 # Output: Human mode computes column widths in pure Bash and aligns cells;
 #         plain mode expands tabs to two spaces; JSON preserves each raw row.
 # Side effects: None.
-# Notes: The first row is treated as a header for human rendering only.
 blm_table() {
   (($# >= 1)) || return 2
   local mode
@@ -132,8 +120,8 @@ blm_table() {
     IFS=$'\t' read -r -a cells <<<"$row"
     ((${#cells[@]} > max_cols)) && max_cols=${#cells[@]}
     for ((col = 0; col < ${#cells[@]}; col++)); do
-      [[ -n ${widths[$col]+x} ]] || widths[$col]=0
-      ((${#cells[$col]} > widths[$col])) && widths[$col]=${#cells[$col]}
+      [[ -n ${widths[col]+x} ]] || widths[col]=0
+      ((${#cells[col]} > widths[col])) && widths[col]=${#cells[col]}
     done
   done
 
@@ -141,20 +129,20 @@ blm_table() {
   charset=$(_blm_ui_charset) || return $?
   [[ $charset == unicode ]] && sep=' │ '
 
-  local row_index=0 rendered="" i
+  local row_index=0 rendered=""
   for row in "${rows[@]}"; do
     IFS=$'\t' read -r -a cells <<<"$row"
     rendered=""
     for ((col = 0; col < max_cols; col++)); do
-      cell=${cells[$col]-}
-      printf -v rendered '%s%-*s' "$rendered" "${widths[$col]}" "$cell"
+      cell=${cells[col]-}
+      printf -v rendered '%s%-*s' "$rendered" "${widths[col]}" "$cell"
       ((col + 1 < max_cols)) && rendered+=$sep
     done
     printf '%s\n' "$rendered"
     if ((row_index == 0)); then
       rendered=""
       for ((col = 0; col < max_cols; col++)); do
-        rendered+=$(_blm_repeat_glyph '-' "${widths[$col]}")
+        rendered+=$(_blm_repeat_glyph '-' "${widths[col]}")
         ((col + 1 < max_cols)) && rendered+='---'
       done
       printf '%s\n' "$rendered"
@@ -170,9 +158,6 @@ blm_table() {
 # Output: JSON emits explicit depth/label. Plain uses spaces only. Human TTY
 #         uses Unicode branch glyphs when available, otherwise ASCII markers.
 # Side effects: None.
-# Notes: This line-oriented primitive cannot infer whether an item is the final
-#        sibling; callers needing exact last-child topology should render their
-#        own connector semantics on top of the depth information.
 blm_tree() {
   (($# == 2)) || return 2
   _blm_is_nonnegative_integer "$1" || return 2

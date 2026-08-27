@@ -14,7 +14,6 @@
 # Output: None.
 # Side effects: None.
 blm_docker_available() {
-  (($# == 0)) || return 2
   blm_has_command docker
 }
 
@@ -28,7 +27,6 @@ blm_docker_available() {
 # Side effects: None beyond starting the Docker CLI.
 # External dependencies: docker.
 blm_docker_compose_available() {
-  (($# == 0)) || return 2
   blm_docker_available || return 1
   command docker compose version >/dev/null 2>&1
 }

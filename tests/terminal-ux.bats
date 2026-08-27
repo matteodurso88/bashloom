@@ -40,6 +40,13 @@ setup() {
   [ "$output" = '{"type":"progress","label":"sync","current":1,"total":4,"percent":25}' ]
 }
 
+@test "intermediate progress remains success-safe under set -e" {
+  run bash -c 'set -e; source "$1"; BLM_OUTPUT_MODE=plain blm_progress 0 4 build; printf "continued\n"' _ "$BASHLOOM_ENTRYPOINT"
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "build: 0% (0/4)" ]
+  [ "${lines[1]}" = "continued" ]
+}
+
 @test "ASCII progress bar is fixed width and proportional" {
   run bash -c 'source "$1"; BLM_UI_CHARSET=ascii _blm_progress_bar 50 10' _ "$BASHLOOM_ENTRYPOINT"
   [ "$status" -eq 0 ]

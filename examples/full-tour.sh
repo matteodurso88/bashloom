@@ -190,12 +190,16 @@ blm_env_bool BASHLOOM_EXAMPLE_BOOL
 printf 'env fallback: %s\n' "$(blm_env_get BASHLOOM_EXAMPLE_MISSING fallback)"
 
 runtime_config="$workdir/runtime.conf"
+# SC2016 is intentional here: the command substitution text is literal config
+# data and must not be expanded by the shell.
+# shellcheck disable=SC2016
 printf '%s\n' \
   '# literal data' \
   'APP=Bashloom' \
   'PAYLOAD=$(printf not-executed)' >"$runtime_config"
 blm_config_validate "$runtime_config"
 [[ $(blm_config_get "$runtime_config" APP) == Bashloom ]]
+# shellcheck disable=SC2016
 [[ $(blm_config_get "$runtime_config" PAYLOAD) == '$(printf not-executed)' ]]
 
 runtime_state="$workdir/runtime.state"

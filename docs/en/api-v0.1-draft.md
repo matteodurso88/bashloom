@@ -136,6 +136,36 @@ Explicit failure signaling:
 
 `blm_fail` returns an explicit status from 1 through 255 after rendering the error. `blm_usage_error` returns status `2`. Neither helper calls `exit`; the caller remains responsible for process termination, rollback or recovery.
 
+## M6C — Advanced system primitives
+
+Filesystem and integrity:
+
+- `blm_backup <source> <backup>`
+- `blm_safe_copy <source> <destination>`
+- `blm_safe_move <source> <destination>`
+- `blm_checksum_sha256 <file>`
+- `blm_ensure_owner <user:group> <path>`
+
+Locking:
+
+- `blm_lock_acquire <lock-path>`
+- `blm_lock_release <lock-path>`
+- `blm_with_lock <lock-path> <command> [args...]`
+
+XDG paths:
+
+- `blm_xdg_config_home`
+- `blm_xdg_data_home`
+- `blm_xdg_cache_home`
+- `blm_xdg_state_home`
+- `blm_xdg_runtime_dir`
+
+Safe copy/move/backup helpers refuse to overwrite existing destinations. `blm_backup`, `blm_safe_copy`, `blm_safe_move` and `blm_ensure_owner` participate in change tracking when they perform a successful mutation.
+
+Locks use atomic `mkdir` acquisition and are non-blocking. `blm_with_lock` preserves the wrapped command status and attempts lock release before returning. Stale-lock recovery remains caller policy.
+
+XDG helpers honor explicit environment variables and use standard HOME-based defaults where defined. `blm_xdg_runtime_dir` requires `XDG_RUNTIME_DIR` and does not invent a fallback.
+
 ## Detailed contracts
 
 See:
@@ -147,6 +177,7 @@ See:
 - `docs/en/compatibility.md`
 - `docs/en/idempotency.md`
 - `docs/en/output-error-model.md`
+- `docs/en/advanced-system.md`
 - `examples/README.md`
 
 ## Exit semantics

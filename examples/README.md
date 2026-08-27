@@ -16,16 +16,19 @@ The `examples/` directory is a maintained public surface: examples are copyable 
 - `07-output-error-model.sh` — M6B presentation, diagnostics and explicit failures.
 - `08-advanced-system.sh` — M6C backup/copy/move, checksum, locks, ownership and XDG.
 - `09-integrations.sh` — M6D Git, Docker/systemd capability detection and network readiness.
+- `10-terminal-ux.sh` — M6E CI-safe terminal UX foundation and non-interactive degradation.
+- `11-rich-terminal.sh` — M6E.1 visual showcase: rich panel, aligned table, tree, progress bar and animated spinner.
 - `full-tour.sh` — non-destructive end-to-end tour of all maintained capabilities.
 
 Run from the repository root:
 
 ```bash
-bash examples/09-integrations.sh
+bash examples/10-terminal-ux.sh
+bash examples/11-rich-terminal.sh
 bash examples/full-tour.sh
 ```
 
-Filesystem-changing focused examples use temporary workspaces and clean up after themselves. The integration example is intentionally non-destructive; mutating Docker/systemd calls are demonstrated as commented opt-in examples rather than executed by CI.
+`11-rich-terminal.sh` is intended to be run directly in a real terminal. In CI or through a pipe it degrades deterministically and does not block.
 
 ### Coverage matrix
 
@@ -40,10 +43,12 @@ Filesystem-changing focused examples use temporary workspaces and clean up after
 | change tracking + idempotent convergence | `06-idempotency.sh` | yes |
 | presentation/diagnostics/error status | `07-output-error-model.sh` | yes |
 | backup/copy/move/checksum/locks/owner/XDG | `08-advanced-system.sh` | yes |
-| Git adapter | `09-integrations.sh` | yes |
-| Docker Compose capability | `09-integrations.sh` | yes |
-| systemd capability | `09-integrations.sh` | yes |
-| DNS/network readiness | `09-integrations.sh` | yes |
+| Git/Docker/systemd/network integrations | `09-integrations.sh` | yes |
+| prompt/confirm/password/select | `10-terminal-ux.sh` | yes |
+| deterministic terminal degradation | `10-terminal-ux.sh` | yes |
+| rich panel/table/tree | `11-rich-terminal.sh` | yes |
+| visual progress bar / animated spinner | `11-rich-terminal.sh` | yes |
+| Unicode/ASCII UI fallback | `11-rich-terminal.sh` | yes |
 
 ### Maintenance rule
 
@@ -67,16 +72,19 @@ La directory `examples/` è una superficie pubblica mantenuta: gli esempi sono r
 - `07-output-error-model.sh` — M6B presentazione, diagnostica e failure espliciti.
 - `08-advanced-system.sh` — M6C backup/copy/move, checksum, lock, ownership e XDG.
 - `09-integrations.sh` — M6D Git, capability Docker/systemd e readiness di rete.
+- `10-terminal-ux.sh` — M6E foundation terminal UX CI-safe e degradazione non-interattiva.
+- `11-rich-terminal.sh` — M6E.1 showcase visuale: panel rich, tabella allineata, tree, progress bar e spinner animato.
 - `full-tour.sh` — tour end-to-end non distruttivo di tutte le capability mantenute.
 
 Dalla root:
 
 ```bash
-bash examples/09-integrations.sh
+bash examples/10-terminal-ux.sh
+bash examples/11-rich-terminal.sh
 bash examples/full-tour.sh
 ```
 
-Gli esempi che modificano il filesystem usano workspace temporanei. L'esempio integrazioni è volutamente non distruttivo: le chiamate mutanti Docker/systemd restano esempi commentati e opt-in, non vengono eseguite dalla CI.
+`11-rich-terminal.sh` è pensato per essere lanciato direttamente in un terminale reale. In CI o pipe degrada in modo deterministico e non blocca.
 
 ### Matrice di copertura
 
@@ -91,10 +99,12 @@ Gli esempi che modificano il filesystem usano workspace temporanei. L'esempio in
 | change tracking + convergenza idempotente | `06-idempotency.sh` | sì |
 | presentazione/diagnostica/status errore | `07-output-error-model.sh` | sì |
 | backup/copy/move/checksum/lock/owner/XDG | `08-advanced-system.sh` | sì |
-| adapter Git | `09-integrations.sh` | sì |
-| capability Docker Compose | `09-integrations.sh` | sì |
-| capability systemd | `09-integrations.sh` | sì |
-| readiness DNS/rete | `09-integrations.sh` | sì |
+| integrazioni Git/Docker/systemd/rete | `09-integrations.sh` | sì |
+| prompt/confirm/password/select | `10-terminal-ux.sh` | sì |
+| degradazione terminale deterministica | `10-terminal-ux.sh` | sì |
+| panel/table/tree rich | `11-rich-terminal.sh` | sì |
+| progress bar visuale / spinner animato | `11-rich-terminal.sh` | sì |
+| fallback UI Unicode/ASCII | `11-rich-terminal.sh` | sì |
 
 ### Regola di manutenzione
 

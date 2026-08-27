@@ -23,7 +23,12 @@ if blm_confirm "Continue" yes </dev/null; then
 fi
 
 blm_section "Panel"
-blm_panel "Runtime" "mode=${BLM_OUTPUT_MODE:-human}" "tty=$(blm_is_tty && echo yes || echo no)"
+if blm_is_tty; then
+  tty_state=yes
+else
+  tty_state=no
+fi
+blm_panel "Runtime" "mode=${BLM_OUTPUT_MODE:-human}" "tty=$tty_state"
 
 blm_section "Table"
 blm_table $'Capability\tState' $'prompt\tready' $'progress\tready'

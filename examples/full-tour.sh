@@ -25,6 +25,7 @@ examples=(
   08-advanced-system.sh
   09-integrations.sh
   10-terminal-ux.sh
+  11-rich-terminal.sh
 )
 
 printf '%s\n' '===================================================================='

@@ -40,6 +40,17 @@ setup() {
   [ "$output" = '{"type":"progress","label":"sync","current":1,"total":4,"percent":25}' ]
 }
 
+@test "ASCII progress bar is fixed width and proportional" {
+  run bash -c 'source "$1"; BLM_UI_CHARSET=ascii _blm_progress_bar 50 10' _ "$BASHLOOM_ENTRYPOINT"
+  [ "$status" -eq 0 ]
+  [ "$output" = "#####-----" ]
+}
+
+@test "invalid UI charset is rejected" {
+  run bash -c 'source "$1"; BLM_UI_CHARSET=broken blm_panel Runtime one' _ "$BASHLOOM_ENTRYPOINT"
+  [ "$status" -eq 2 ]
+}
+
 @test "panel plain output is deterministic" {
   run bash -c 'source "$1"; BLM_OUTPUT_MODE=plain blm_panel Runtime one two' _ "$BASHLOOM_ENTRYPOINT"
   [ "$status" -eq 0 ]

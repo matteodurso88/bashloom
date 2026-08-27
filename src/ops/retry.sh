@@ -1,7 +1,27 @@
 #!/usr/bin/env bash
 
 # Retry a command without changing the caller's shell options.
+#
+# Retry owns only repetition timing. It does not classify failures as transient
+# versus permanent; the caller chooses the command/predicate whose non-zero
+# statuses are eligible for retry.
 
+# Public API: blm_retry
+# Purpose: Execute an argv-safe command repeatedly until success or exhaustion.
+# Usage: blm_retry [--attempts N] [--delay S] [--backoff N] [--] <command> [args...]
+# Defaults: attempts=3, delay=1 second, integer backoff multiplier=1.
+# Returns:
+#   0    Command succeeded within the attempt budget.
+#   final wrapped-command status when all attempts fail.
+#   2    Invalid Bashloom options/values or missing command.
+#   127  Required sleep operation failed when a delay was needed.
+# Output:
+#   Wrapped command output passes through; a warning is emitted between failed
+#   attempts but never after the final failed attempt.
+# Side effects: Repeats the wrapped command and may sleep between invocations.
+# Errexit invariant: each command runs through blm_run inside an if-condition.
+# Timing invariant: delay is applied only between attempts; backoff multiplies
+# the next delay after each sleep and is restricted to positive integers.
 blm_retry() {
   local attempts=3
   local delay=1
@@ -72,6 +92,8 @@ blm_retry() {
 
     blm_warn "Attempt $attempt/$attempts failed with exit $status; retrying in ${current_delay}s"
     if ((current_delay > 0)); then
+      # `sleep` is required only when the configured delay is non-zero; this
+      # preserves feature-specific dependency use in zero-delay test/CI flows.
       command sleep "$current_delay" || return 127
     fi
 

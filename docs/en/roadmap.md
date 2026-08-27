@@ -47,17 +47,20 @@ Bashloom is currently in the foundation / early v0.1 implementation phase. The r
 
 ### M3 — System Safety
 
-Next implementation block:
-
-- [ ] require root
-- [ ] permission checks
-- [ ] safe temporary directory/file helpers
-- [ ] ensure directory
-- [ ] ensure symlink
-- [ ] atomic file write
-- [ ] path helpers
+- [x] require root
+- [x] readable/writable/executable permission checks
+- [x] safe temporary directory/file helpers
+- [x] ensure directory
+- [x] ensure symlink
+- [x] atomic file write
+- [x] pure-Bash lexical path helpers
+- [x] dependency-free entrypoint path resolution
+- [x] Bats contract coverage for M3
+- [x] EN/IT system-safety documentation
 
 ### M4 — Runtime State
+
+Next implementation block:
 
 - [ ] logging foundations
 - [ ] environment helpers
@@ -93,8 +96,8 @@ Next implementation block:
 
 ### Quality
 
-- [x] ShellCheck clean for M1/M2
-- [x] shfmt clean for M1/M2
+- [x] ShellCheck clean for implemented M1/M2 baseline
+- [x] shfmt clean for implemented M1/M2 baseline
 - [x] Bats tests for implemented public APIs
 - [ ] Bash version matrix
 - [ ] cross-distribution matrix

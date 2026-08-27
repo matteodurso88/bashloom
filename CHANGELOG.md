@@ -78,9 +78,24 @@ Il progetto seguirà il Semantic Versioning a partire dalle release pubbliche ve
 - Documentazione EN/IT su consumption e compatibilità.
 - Version metadata release gate and guarded tag-based GitHub Release workflow with SHA-256 checksums.
 - Release gate sui metadata di versione e workflow GitHub Release su tag con checksum SHA-256.
-- Maintained executable examples through M5 with CI full-tour execution.
-- Esempi eseguibili mantenuti fino a M5 con esecuzione full-tour in CI.
-- Bats contract tests for command runtime, reliability, system safety, runtime state and consumption paths.
-- Test contrattuali Bats per command runtime, reliability, system safety, runtime state e percorsi di consumo.
+- Aggregate and per-operation change tracking with `BLM_CHANGED` and `BLM_LAST_CHANGED`.
+- Change tracking aggregato e per singola operazione tramite `BLM_CHANGED` e `BLM_LAST_CHANGED`.
+- `blm_change_reset`, `blm_changed` and `blm_last_changed` convergence helpers.
+- Helper di convergenza `blm_change_reset`, `blm_changed` e `blm_last_changed`.
+- `blm_ensure_mode` and exact-line `blm_ensure_line` idempotency primitives.
+- Primitive idempotenti `blm_ensure_mode` e `blm_ensure_line` per righe esatte.
+- Change-aware directory and symlink ensure semantics.
+- Semantica changed/no-op per ensure directory e symlink.
+- EN/IT idempotency documentation and maintained executable example.
+- Documentazione EN/IT sull'idempotenza ed esempio eseguibile mantenuto.
+- Maintained executable examples through Linux idempotency with CI full-tour execution.
+- Esempi eseguibili mantenuti fino all'idempotenza Linux con esecuzione full-tour in CI.
+- Bats contract tests for command runtime, reliability, system safety, runtime state, consumption and idempotency paths.
+- Test contrattuali Bats per command runtime, reliability, system safety, runtime state, consumption e percorsi di idempotenza.
 - Bats smoke tests and CI foundation.
 - Smoke test Bats e foundation CI.
+
+### Changed / Modificato
+
+- Filesystem helpers now check `readlink` and `rm` explicitly when those utilities are required.
+- Gli helper filesystem verificano ora esplicitamente `readlink` e `rm` quando queste utility sono necessarie.

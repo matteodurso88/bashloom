@@ -6,25 +6,46 @@ Documentation is a first-class deliverable in Bashloom.
 
 ### Language policy
 
-- User-facing documentation is maintained in **English and Italian**.
-- English and Italian are peer versions: neither is considered a summary of the other.
-- Source code, API names, identifiers and code comments are written in **English**.
-- Commit messages and pull-request titles are written in **English**.
+- The **canonical project documentation** is maintained in **English and Italian**.
+- English and Italian are peer canonical versions: neither is considered a summary of the other.
+- Source code, API names and identifiers are written in **English**.
+- Code comments in the merged codebase are written in **English**.
+- Commit messages and pull-request titles should be written in **English** when reasonably possible; maintainers may normalize them during review.
 - Examples may contain localized output only when localization itself is being demonstrated.
 
 ### Contributor language accessibility
 
-Bashloom's bilingual policy must not become a barrier to contribution.
+Bashloom's language policy must not become a barrier to contribution.
 
-Contributors who are comfortable with only one of the project's documentation languages may submit or update documentation in **English or Italian only**. They are encouraged to state clearly which language they have provided and, when useful, note that maintainer translation or adaptation is required.
+Contributors may submit documentation, explanations, review notes and draft code comments in **their native language**, including languages other than English or Italian. A contribution must not be rejected solely because its author is not comfortable writing English or Italian.
 
-The responsibility for final EN/IT parity belongs to the **project at merge time**, not necessarily to the individual contributor. During final maintainer review, maintainers may translate, adapt, rewrite or complete the missing language counterpart before integration.
+During final maintainer review:
 
-A contribution must not be rejected solely because the contributor does not know English or Italian well enough to maintain both versions.
+1. documentation relevant to the accepted change is adapted into the canonical **EN and IT** versions;
+2. source-code comments are translated or rewritten into **English** before merge;
+3. identifiers and public API names remain English;
+4. maintainers may rewrite wording to preserve technical accuracy, terminology and consistency.
+
+The responsibility for final EN/IT parity and English-only merged source comments belongs to the **project at merge time**, not necessarily to the individual contributor.
+
+### Community translations
+
+When a contributor provides documentation in another language, Bashloom may preserve a reviewed version as an **optional community translation**.
+
+Community translations:
+
+- are supplementary and do not replace the canonical EN/IT documentation;
+- may be stored under `docs/translations/<locale>/`;
+- should link to the corresponding canonical document;
+- may be adapted by maintainers and, when practical, reviewed again by the contributor or another speaker of that language;
+- are not subject to mandatory parity with every future EN/IT change and may therefore lag behind;
+- must be clearly marked as non-canonical when they are not guaranteed to be current.
+
+This allows contributors to read and verify the maintainer-adapted result in a language they understand, without turning every accepted language into a permanent mandatory maintenance obligation for the project.
 
 ### Parity rule
 
-A change that affects public API, behavior, installation, compatibility, security assumptions or project architecture is incomplete **at merge time** until both EN and IT documentation are updated.
+A change that affects public API, behavior, installation, compatibility, security assumptions or project architecture is incomplete **at merge time** until both canonical EN and IT documentation are updated.
 
 Preferred layout:
 
@@ -34,26 +55,33 @@ docs/
 │   └── <document>.md
 ├── it/
 │   └── <document>.md
+├── translations/
+│   └── <locale>/
+│       └── <document>.md
 └── adr/
     ├── NNNN-<decision>-en.md
     └── NNNN-<decision>-it.md
 ```
 
-Each translated pair should preserve the same headings, semantic content and examples unless language-specific clarification is necessary.
+Each canonical EN/IT pair should preserve the same headings, semantic content and examples unless language-specific clarification is necessary.
 
 ### Documentation review checklist
 
 Before merging a behavior or API change, verify:
 
-1. EN documentation is present and current;
-2. IT documentation is present and current;
-3. missing translations or language adaptations have been completed by contributors or maintainers;
-4. examples remain executable or clearly marked as conceptual;
-5. public function names and signatures match source code;
-6. compatibility statements are still correct;
-7. security implications are documented when relevant.
+1. canonical EN documentation is present and current;
+2. canonical IT documentation is present and current;
+3. contributor-supplied native-language material has been reflected accurately in the accepted implementation;
+4. source comments in merged code are in English;
+5. examples remain executable or clearly marked as conceptual;
+6. public function names and signatures match source code;
+7. compatibility statements are still correct;
+8. security implications are documented when relevant;
+9. optional community translations are clearly marked and linked to their canonical counterpart.
 
 ### Source comments
+
+Contributors may initially write draft comments in a language they understand. Before merge, maintainers normalize source comments to English.
 
 Comments should explain **why**, invariants, edge cases, shell-specific traps and non-obvious portability decisions. Avoid comments that merely restate the next command.
 
@@ -79,25 +107,46 @@ La documentazione è un deliverable di prima classe in Bashloom.
 
 ### Policy linguistica
 
-- La documentazione destinata agli utenti viene mantenuta in **inglese e italiano**.
-- Le versioni inglese e italiana hanno pari dignità: nessuna è un semplice riassunto dell'altra.
-- Sorgenti, nomi delle API, identificatori e commenti nel codice sono scritti in **inglese**.
-- Commit message e titoli delle pull request sono scritti in **inglese**.
+- La **documentazione canonica del progetto** viene mantenuta in **inglese e italiano**.
+- Le versioni canoniche inglese e italiana hanno pari dignità: nessuna è un semplice riassunto dell'altra.
+- Sorgenti, nomi delle API e identificatori sono scritti in **inglese**.
+- I commenti nel codice della versione integrata sono scritti in **inglese**.
+- Commit message e titoli delle pull request dovrebbero essere in **inglese** quando ragionevolmente possibile; i maintainer possono normalizzarli durante la revisione.
 - Gli esempi possono contenere output localizzato solo quando la localizzazione stessa è oggetto della dimostrazione.
 
 ### Accessibilità linguistica per i contributor
 
-La policy bilingue di Bashloom non deve diventare una barriera alla contribuzione.
+La policy linguistica di Bashloom non deve diventare una barriera alla contribuzione.
 
-I contributor che conoscono in modo adeguato una sola delle due lingue documentali del progetto possono inviare o aggiornare la documentazione **solo in inglese oppure solo in italiano**. È consigliato indicare chiaramente quale lingua è stata fornita e, quando utile, segnalare che è necessaria la traduzione o l'adattamento da parte dei maintainer.
+I contributor possono inviare documentazione, spiegazioni, note di revisione e commenti provvisori nel codice nella **propria lingua madre**, comprese lingue diverse da inglese e italiano. Un contributo non deve essere rifiutato esclusivamente perché il suo autore non è a proprio agio nello scrivere in inglese o italiano.
 
-La responsabilità della parità finale EN/IT appartiene al **progetto al momento del merge**, non necessariamente al singolo contributor. Durante la revisione finale, i maintainer possono tradurre, adattare, riscrivere o completare la controparte linguistica mancante prima dell'integrazione.
+Durante la revisione finale dei maintainer:
 
-Un contributo non deve essere rifiutato esclusivamente perché il contributor non conosce abbastanza bene l'inglese o l'italiano da mantenere entrambe le versioni.
+1. la documentazione relativa alla modifica accettata viene adattata nelle versioni canoniche **EN e IT**;
+2. i commenti nei sorgenti vengono tradotti o riscritti in **inglese** prima del merge;
+3. identificatori e nomi delle API pubbliche restano in inglese;
+4. i maintainer possono riscrivere il testo per preservare accuratezza tecnica, terminologia e coerenza.
+
+La responsabilità della parità finale EN/IT e dei commenti in inglese nella codebase integrata appartiene al **progetto al momento del merge**, non necessariamente al singolo contributor.
+
+### Traduzioni della community
+
+Quando un contributor fornisce documentazione in un'altra lingua, Bashloom può conservarne una versione revisionata come **traduzione opzionale della community**.
+
+Le traduzioni della community:
+
+- sono supplementari e non sostituiscono la documentazione canonica EN/IT;
+- possono essere salvate sotto `docs/translations/<locale>/`;
+- devono rimandare al corrispondente documento canonico;
+- possono essere adattate dai maintainer e, quando possibile, nuovamente revisionate dal contributor o da un altro parlante della lingua;
+- non sono soggette all'obbligo di parità con ogni futura modifica EN/IT e possono quindi non essere sempre aggiornate;
+- devono essere chiaramente marcate come non canoniche quando non è garantito che siano aggiornate.
+
+Questo permette al contributor di leggere e verificare il risultato adattato dai maintainer in una lingua che comprende, senza trasformare ogni lingua accettata in un obbligo permanente di manutenzione per il progetto.
 
 ### Regola di parità
 
-Una modifica che influenza API pubblica, comportamento, installazione, compatibilità, assunzioni di sicurezza o architettura del progetto è incompleta **al momento del merge** finché la documentazione EN e IT non viene aggiornata.
+Una modifica che influenza API pubblica, comportamento, installazione, compatibilità, assunzioni di sicurezza o architettura del progetto è incompleta **al momento del merge** finché entrambe le versioni canoniche EN e IT non vengono aggiornate.
 
 Layout preferito:
 
@@ -107,26 +156,33 @@ docs/
 │   └── <document>.md
 ├── it/
 │   └── <document>.md
+├── translations/
+│   └── <locale>/
+│       └── <document>.md
 └── adr/
     ├── NNNN-<decision>-en.md
     └── NNNN-<decision>-it.md
 ```
 
-Ogni coppia tradotta dovrebbe mantenere gli stessi titoli, contenuti semantici ed esempi salvo chiarimenti specifici della lingua.
+Ogni coppia canonica EN/IT dovrebbe mantenere gli stessi titoli, contenuti semantici ed esempi salvo chiarimenti specifici della lingua.
 
 ### Checklist di revisione documentale
 
 Prima di integrare una modifica ad API o comportamento, verificare:
 
-1. documentazione EN presente e aggiornata;
-2. documentazione IT presente e aggiornata;
-3. eventuali traduzioni o adattamenti mancanti completati dai contributor o dai maintainer;
-4. esempi ancora eseguibili o chiaramente marcati come concettuali;
-5. nomi e firme delle funzioni pubbliche allineati ai sorgenti;
-6. dichiarazioni di compatibilità ancora corrette;
-7. implicazioni di sicurezza documentate quando rilevanti.
+1. documentazione canonica EN presente e aggiornata;
+2. documentazione canonica IT presente e aggiornata;
+3. materiale in lingua madre fornito dal contributor recepito correttamente nell'implementazione accettata;
+4. commenti nei sorgenti integrati in inglese;
+5. esempi ancora eseguibili o chiaramente marcati come concettuali;
+6. nomi e firme delle funzioni pubbliche allineati ai sorgenti;
+7. dichiarazioni di compatibilità ancora corrette;
+8. implicazioni di sicurezza documentate quando rilevanti;
+9. eventuali traduzioni community chiaramente marcate e collegate alla controparte canonica.
 
 ### Commenti nei sorgenti
+
+I contributor possono inizialmente scrivere commenti provvisori in una lingua che comprendono. Prima del merge, i maintainer normalizzano i commenti nei sorgenti in inglese.
 
 I commenti devono spiegare il **perché**, gli invarianti, gli edge case, le insidie specifiche della shell e le decisioni di portabilità non ovvie. Evitare commenti che ripetono semplicemente il comando successivo.
 

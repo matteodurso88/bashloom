@@ -114,12 +114,16 @@ APT remains deferred from the first M6D slice because package-management policy 
 
 ### M6E — Terminal UX
 
-Candidate scope:
+- [x] spinner/progress
+- [x] confirm/input/password/select
+- [x] panels/tables/tree rendering
+- [x] graceful degradation for non-interactive environments
+- [x] selective `terminal` loader group
+- [x] Bats contract coverage
+- [x] maintained M6E example and full-tour coverage
+- [x] EN/IT terminal UX documentation
 
-- [ ] spinner/progress
-- [ ] confirm/input/password/select
-- [ ] panels/tables/tree rendering
-- [ ] graceful degradation for non-interactive environments
+Advanced full-screen TUI behavior, external Gum/fzf backends and richer Unicode decoration remain post-v0.1 candidates.
 
 ### M6F — Production Validation
 
@@ -136,7 +140,7 @@ Before `v0.1.0`:
 - [x] ShellCheck clean for implemented public source
 - [x] shfmt clean for implemented public source
 - [x] Bats tests for implemented public APIs
-- [x] maintained executable examples through M6D
+- [x] maintained executable examples through M6E
 - [x] machine-enforced public API source documentation
 - [ ] Bash version matrix
 - [ ] cross-distribution matrix
@@ -147,11 +151,11 @@ Before `v0.1.0`:
 Candidate scope after the first usable foundation release:
 
 - richer panels and tables
-- tree rendering
 - advanced spinners/progress
 - timers
 - richer prompt/select flows
 - optional enhanced backends such as Gum/fzf
+- full-screen/cursor-addressed components only if real consumers justify them
 
 ## v0.3 — System & Integrations
 

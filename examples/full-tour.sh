@@ -3,7 +3,7 @@
 # Bashloom full feature tour.
 #
 # This script is both a presentation/demo and a manual integration smoke test
-# for every public primitive implemented through M3. It is intentionally
+# for every public primitive implemented through M4. It is intentionally
 # non-destructive: all filesystem work happens inside a temporary directory.
 #
 # Run from the repository root:
@@ -179,6 +179,44 @@ if blm_path_is_absolute relative/path; then
   exit 1
 fi
 
+section "Runtime state and machine output"
+BLM_OUTPUT_MODE=plain blm_info "plain output"
+BLM_OUTPUT_MODE=json blm_info "json output"
+BLM_OUTPUT_MODE=json blm_kv phase M4
+printf 'effective default output mode: %s\n' "$(blm_output_mode)"
+
+export BASHLOOM_EXAMPLE_BOOL=yes
+blm_env_bool BASHLOOM_EXAMPLE_BOOL
+printf 'env fallback: %s\n' "$(blm_env_get BASHLOOM_EXAMPLE_MISSING fallback)"
+
+runtime_config="$workdir/runtime.conf"
+# SC2016 is intentional here: the command substitution text is literal config
+# data and must not be expanded by the shell.
+# shellcheck disable=SC2016
+printf '%s\n' \
+  '# literal data' \
+  'APP=Bashloom' \
+  'PAYLOAD=$(printf not-executed)' >"$runtime_config"
+blm_config_validate "$runtime_config"
+[[ $(blm_config_get "$runtime_config" APP) == Bashloom ]]
+# shellcheck disable=SC2016
+[[ $(blm_config_get "$runtime_config" PAYLOAD) == '$(printf not-executed)' ]]
+
+runtime_state="$workdir/runtime.state"
+blm_state_set "$runtime_state" phase bootstrap
+blm_state_set "$runtime_state" phase ready
+[[ $(blm_state_get "$runtime_state" phase) == ready ]]
+blm_state_set "$runtime_state" attempts 1
+blm_state_delete "$runtime_state" attempts
+[[ $(blm_state_get "$runtime_state" attempts missing) == missing ]]
+
+log_file="$workdir/bashloom.log"
+BLM_OUTPUT_MODE=plain BLM_LOG_LEVEL=debug BLM_LOG_FILE="$log_file" \
+  blm_log debug "debug record"
+BLM_OUTPUT_MODE=json BLM_LOG_FILE="$log_file" \
+  blm_log info "runtime ready"
+[[ -s $log_file ]]
+
 section "Rollback stack"
 rollback_log="$workdir/rollback.log"
 rollback_first() { printf 'first\n' >>"$rollback_log"; }
@@ -189,23 +227,23 @@ blm_rollback_run
 [[ $(<"$rollback_log") == $'second\nfirst' ]]
 
 section "Transactions"
-state="$workdir/state"
-backup="$workdir/state.backup"
-printf 'original\n' >"$state"
-cp "$state" "$backup"
-restore_state() { cp "$backup" "$state"; }
+transaction_state="$workdir/transaction-state"
+backup="$workdir/transaction-state.backup"
+printf 'original\n' >"$transaction_state"
+cp "$transaction_state" "$backup"
+restore_state() { cp "$backup" "$transaction_state"; }
 
 blm_transaction_begin
 blm_rollback_add restore_state
-printf 'modified\n' >"$state"
+printf 'modified\n' >"$transaction_state"
 blm_transaction_rollback
-[[ $(<"$state") == original ]]
+[[ $(<"$transaction_state") == original ]]
 
 blm_transaction_begin
 blm_rollback_add restore_state
-printf 'committed\n' >"$state"
+printf 'committed\n' >"$transaction_state"
 blm_transaction_commit
-[[ $(<"$state") == committed ]]
+[[ $(<"$transaction_state") == committed ]]
 
 section "Cleanup stack behavior"
 cleanup_log="$workdir/cleanup.log"

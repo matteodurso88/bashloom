@@ -13,7 +13,8 @@ The `examples/` directory is a maintained part of the Bashloom project. It is in
 - `01-command-runtime.sh` — M1 command execution, exit-code preservation, steps and dry-run.
 - `02-reliability.sh` — M2 retry, polling, timeout, cleanup and rollback/transactions.
 - `03-system-safety.sh` — M3 requirements, permissions, temp resources, idempotent filesystem helpers, atomic writes and paths.
-- `full-tour.sh` — non-destructive end-to-end tour of all public primitives implemented through M3.
+- `04-runtime-state.sh` — M4 output modes, logging, environment helpers, safe config and persistent state.
+- `full-tour.sh` — non-destructive end-to-end tour of all public primitives implemented through M4.
 
 Run an example from the repository root:
 
@@ -21,6 +22,7 @@ Run an example from the repository root:
 bash examples/01-command-runtime.sh
 bash examples/02-reliability.sh
 bash examples/03-system-safety.sh
+bash examples/04-runtime-state.sh
 bash examples/full-tour.sh
 ```
 
@@ -39,6 +41,11 @@ All filesystem-changing examples operate inside temporary workspaces and clean u
 | ensure directory/symlink | `03-system-safety.sh` | yes |
 | atomic write | `03-system-safety.sh` | yes |
 | path helpers | `03-system-safety.sh` | yes |
+| human/plain/JSON output + key/value | `04-runtime-state.sh` | yes |
+| logging | `04-runtime-state.sh` | yes |
+| environment helpers | `04-runtime-state.sh` | yes |
+| safe config | `04-runtime-state.sh` | yes |
+| persistent state | `04-runtime-state.sh` | yes |
 
 ### Maintenance rule
 
@@ -63,7 +70,8 @@ La directory `examples/` è una parte mantenuta del progetto Bashloom. Ha tre sc
 - `01-command-runtime.sh` — M1: esecuzione comandi, preservazione exit code, step e dry-run.
 - `02-reliability.sh` — M2: retry, polling, timeout, cleanup e rollback/transazioni.
 - `03-system-safety.sh` — M3: requisiti, permessi, risorse temporanee, filesystem idempotente, atomic write e path.
-- `full-tour.sh` — tour end-to-end non distruttivo di tutte le primitive pubbliche implementate fino a M3.
+- `04-runtime-state.sh` — M4: modalità output, logging, helper environment, config sicura e stato persistente.
+- `full-tour.sh` — tour end-to-end non distruttivo di tutte le primitive pubbliche implementate fino a M4.
 
 Esecuzione dalla root del repository:
 
@@ -71,6 +79,7 @@ Esecuzione dalla root del repository:
 bash examples/01-command-runtime.sh
 bash examples/02-reliability.sh
 bash examples/03-system-safety.sh
+bash examples/04-runtime-state.sh
 bash examples/full-tour.sh
 ```
 
@@ -89,6 +98,11 @@ Tutti gli esempi che modificano il filesystem lavorano dentro workspace temporan
 | ensure directory/symlink | `03-system-safety.sh` | sì |
 | atomic write | `03-system-safety.sh` | sì |
 | helper path | `03-system-safety.sh` | sì |
+| output human/plain/JSON + key/value | `04-runtime-state.sh` | sì |
+| logging | `04-runtime-state.sh` | sì |
+| helper environment | `04-runtime-state.sh` | sì |
+| config sicura | `04-runtime-state.sh` | sì |
+| stato persistente | `04-runtime-state.sh` | sì |
 
 ### Regola di manutenzione
 

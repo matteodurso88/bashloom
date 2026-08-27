@@ -56,7 +56,21 @@ Il progetto seguirà il Semantic Versioning a partire dalle release pubbliche ve
 - Helper path lessicali pure-Bash e risoluzione path dell'entrypoint senza dipendenze esterne.
 - System-safety API documentation in English and Italian.
 - Documentazione API system-safety in inglese e italiano.
-- Bats contract tests for command runtime, reliability and system safety.
-- Test contrattuali Bats per command runtime, reliability e system safety.
+- Human/plain/JSON output modes and key/value machine output.
+- Modalità output human/plain/JSON e output key/value machine-readable.
+- Filtered logging with optional timestamped file persistence.
+- Logging filtrato con persistenza opzionale su file con timestamp.
+- Safe environment helpers for exact values and booleans.
+- Helper environment sicuri per valori esatti e booleani.
+- Safe literal `key=value` configuration parsing without `source` or `eval`.
+- Parsing sicuro della configurazione letterale `key=value` senza `source` o `eval`.
+- Atomic persistent state get/set/delete primitives.
+- Primitive atomiche get/set/delete per stato persistente.
+- Runtime-state API documentation in English and Italian.
+- Documentazione API runtime-state in inglese e italiano.
+- Maintained executable examples through M4 with CI full-tour execution.
+- Esempi eseguibili mantenuti fino a M4 con esecuzione full-tour in CI.
+- Bats contract tests for command runtime, reliability, system safety and runtime state.
+- Test contrattuali Bats per command runtime, reliability, system safety e runtime state.
 - Bats smoke tests and CI foundation.
 - Smoke test Bats e foundation CI.

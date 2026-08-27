@@ -60,15 +60,19 @@ Bashloom is currently in the foundation / early v0.1 implementation phase. The r
 
 ### M4 — Runtime State
 
-Next implementation block:
-
-- [ ] logging foundations
-- [ ] environment helpers
-- [ ] safe configuration helpers
-- [ ] state files
-- [ ] human/plain/machine-readable output model
+- [x] logging foundations
+- [x] environment helpers
+- [x] safe key/value configuration helpers
+- [x] atomic state files
+- [x] human/plain/JSON output model
+- [x] key/value machine output
+- [x] Bats contract coverage for M4
+- [x] maintained M4 example and full-tour coverage
+- [x] EN/IT runtime-state documentation
 
 ### M5 — Consumption
+
+Next implementation block:
 
 - [ ] installation model
 - [ ] vendoring guidance
@@ -87,18 +91,19 @@ Next implementation block:
 ### Remaining v0.1 UI/Core work
 
 - [ ] richer terminal capability model
-- [ ] output mode model
+- [x] output mode model
 - [ ] color and Unicode policy hardening
 - [ ] runtime/version diagnostics
 - [ ] title/section helpers
-- [ ] key/value output
+- [x] key/value output
 - [ ] explicit error/exit helpers
 
 ### Quality
 
-- [x] ShellCheck clean for implemented M1/M2 baseline
-- [x] shfmt clean for implemented M1/M2 baseline
+- [x] ShellCheck clean for implemented public source
+- [x] shfmt clean for implemented public source
 - [x] Bats tests for implemented public APIs
+- [x] maintained executable examples through M4
 - [ ] Bash version matrix
 - [ ] cross-distribution matrix
 - [ ] documentation parity checks where practical

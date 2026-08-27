@@ -115,9 +115,26 @@ Primitive filesystem idempotenti aggiuntive:
 - `blm_ensure_mode <mode> <path>`
 - `blm_ensure_line <path> <line>`
 
-`blm_ensure_dir` e `blm_ensure_symlink` partecipano ora al change tracking. Le operazioni tracciate impostano `BLM_LAST_CHANGED=1` solo quando modificano realmente il sistema. `BLM_CHANGED` è uno stato aggregato e resta impostato finché non viene chiamato `blm_change_reset`.
+`blm_ensure_dir` e `blm_ensure_symlink` partecipano al change tracking. Le operazioni tracciate impostano `BLM_LAST_CHANGED=1` solo quando modificano realmente il sistema. `BLM_CHANGED` è uno stato aggregato e resta impostato finché non viene chiamato `blm_change_reset`.
 
 Questa milestone è Linux-first. L'ispezione dei mode usa attualmente la semantica `stat -c` compatibile GNU/Linux.
+
+## M6B — Modello output ed errori
+
+Presentazione e diagnostica:
+
+- `blm_title <messaggio...>`
+- `blm_section <messaggio...>`
+- `blm_diagnostics`
+
+Segnalazione esplicita dei failure:
+
+- `blm_fail <status> <messaggio...>`
+- `blm_usage_error <messaggio...>`
+
+`blm_title` e `blm_section` rispettano `BLM_OUTPUT_MODE` e producono record deterministici human/plain/JSON. `blm_diagnostics` espone versione Bashloom, versione Bash, modalità output, capability TTY/colore e stato CI tramite il contratto key/value esistente.
+
+`blm_fail` restituisce uno status esplicito da 1 a 255 dopo aver renderizzato l'errore. `blm_usage_error` restituisce status `2`. Nessuno dei due helper chiama `exit`; il caller resta responsabile di terminazione del processo, rollback o recovery.
 
 ## Contratti dettagliati
 
@@ -129,6 +146,7 @@ Vedi:
 - `docs/it/consumption.md`
 - `docs/it/compatibility.md`
 - `docs/it/idempotency.md`
+- `docs/it/output-error-model.md`
 - `examples/README.md`
 
 ## Semantica degli exit code

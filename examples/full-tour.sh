@@ -20,6 +20,7 @@ examples=(
   03-system-safety.sh
   04-runtime-state.sh
   05-consumption.sh
+  06-idempotency.sh
 )
 
 printf '%s\n' '===================================================================='

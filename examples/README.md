@@ -18,6 +18,7 @@ The `examples/` directory is a maintained part of the Bashloom project. It is in
 - `05-consumption.sh` — M5 selective loading, prefix installation, vendoring and release metadata validation.
 - `06-idempotency.sh` — Linux-first idempotent convergence, aggregate change tracking, mode and exact-line ensures.
 - `07-output-error-model.sh` — M6B presentation helpers, runtime diagnostics and explicit non-exiting error statuses.
+- `08-advanced-system.sh` — M6C safe copy/move/backup, SHA-256, locking, ownership convergence and XDG paths.
 - `full-tour.sh` — non-destructive end-to-end tour of all currently maintained public capabilities.
 
 Run an example from the repository root:
@@ -31,6 +32,7 @@ bash examples/04-runtime-state.sh
 bash examples/05-consumption.sh
 bash examples/06-idempotency.sh
 bash examples/07-output-error-model.sh
+bash examples/08-advanced-system.sh
 bash examples/full-tour.sh
 ```
 
@@ -65,6 +67,11 @@ All filesystem-changing examples operate inside temporary workspaces and clean u
 | `blm_title` / `blm_section` | `07-output-error-model.sh` | yes |
 | runtime diagnostics | `07-output-error-model.sh` | yes |
 | explicit failure/usage statuses | `07-output-error-model.sh` | yes |
+| backup/safe copy/safe move | `08-advanced-system.sh` | yes |
+| SHA-256 checksum | `08-advanced-system.sh` | yes |
+| directory locking / `blm_with_lock` | `08-advanced-system.sh` | yes |
+| ownership convergence | `08-advanced-system.sh` | yes |
+| XDG path helpers | `08-advanced-system.sh` | yes |
 
 ### Maintenance rule
 
@@ -94,6 +101,7 @@ La directory `examples/` è una parte mantenuta del progetto Bashloom. Ha tre sc
 - `05-consumption.sh` — M5: caricamento selettivo, installazione sotto prefix, vendoring e validazione metadata release.
 - `06-idempotency.sh` — convergenza idempotente Linux-first, change tracking aggregato, mode e righe esatte.
 - `07-output-error-model.sh` — M6B: helper di presentazione, diagnostica runtime e status di errore espliciti senza exit impliciti.
+- `08-advanced-system.sh` — M6C: backup/copy/move sicuri, SHA-256, locking, convergenza ownership e path XDG.
 - `full-tour.sh` — tour end-to-end non distruttivo di tutte le capability pubbliche attualmente mantenute.
 
 Esecuzione dalla root del repository:
@@ -107,6 +115,7 @@ bash examples/04-runtime-state.sh
 bash examples/05-consumption.sh
 bash examples/06-idempotency.sh
 bash examples/07-output-error-model.sh
+bash examples/08-advanced-system.sh
 bash examples/full-tour.sh
 ```
 
@@ -141,6 +150,11 @@ Tutti gli esempi che modificano il filesystem lavorano dentro workspace temporan
 | `blm_title` / `blm_section` | `07-output-error-model.sh` | sì |
 | diagnostica runtime | `07-output-error-model.sh` | sì |
 | status failure/usage espliciti | `07-output-error-model.sh` | sì |
+| backup/safe copy/safe move | `08-advanced-system.sh` | sì |
+| checksum SHA-256 | `08-advanced-system.sh` | sì |
+| locking directory / `blm_with_lock` | `08-advanced-system.sh` | sì |
+| convergenza ownership | `08-advanced-system.sh` | sì |
+| helper path XDG | `08-advanced-system.sh` | sì |
 
 ### Regola di manutenzione
 

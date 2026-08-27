@@ -33,7 +33,10 @@ EOF
 while (($#)); do
   case $1 in
     --destination)
-      (($# >= 2)) || { printf 'Missing value for --destination\n' >&2; exit 2; }
+      (($# >= 2)) || {
+        printf 'Missing value for --destination\n' >&2
+        exit 2
+      }
       destination=$2
       shift 2
       ;;

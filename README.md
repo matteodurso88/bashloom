@@ -10,6 +10,16 @@ Bashloom is an **Italian open-source project** created and owned by **Matteo D'U
 
 Bashloom è un **progetto open source italiano** creato e di proprietà di **Matteo D'Urso** (`matteodurso88`) e sviluppato operativamente tramite l'account tecnico **Developer Oriqo** (`dev-oriqo`). Il progetto fa inoltre parte delle attività tecniche presentate su **matt88.it**.
 
+## Use Bashloom in your project / Usa Bashloom nel tuo progetto
+
+For repository-level integration, Bashloom recommends a **pinned vendored runtime** with integrity metadata, one project-local adapter, and the same validation scripts in local CI and GitHub Actions.
+
+Per l'integrazione in un repository, Bashloom raccomanda un **runtime vendorizzato e pinnato** con metadata di integrità, un unico adapter locale al progetto e gli stessi script di validazione in CI locale e GitHub Actions.
+
+- English: [`docs/en/consumer-contract.md`](docs/en/consumer-contract.md)
+- Italiano: [`docs/it/consumer-contract.md`](docs/it/consumer-contract.md)
+- Consumption model / Modello di utilizzo: [`docs/en/consumption.md`](docs/en/consumption.md) · [`docs/it/consumption.md`](docs/it/consumption.md)
+
 ---
 
 ## English

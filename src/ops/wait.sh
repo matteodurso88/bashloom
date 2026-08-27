@@ -1,7 +1,28 @@
 #!/usr/bin/env bash
 
-# Poll a command until success or timeout.
+# Polling primitive for readiness predicates and eventually-consistent systems.
+#
+# `blm_wait_for` is command-agnostic: success means only that the supplied
+# command eventually returned zero. Domain-specific adapters (systemd, HTTP,
+# etc.) can therefore reuse one timeout/status contract.
 
+# Public API: blm_wait_for
+# Purpose: Poll an argv-safe command until success or a wall-clock deadline.
+# Usage: blm_wait_for [--timeout S] [--interval S] [--] <command> [args...]
+# Defaults: timeout=30 seconds, interval=1 second.
+# Returns:
+#   0    Predicate succeeded before/at the deadline check.
+#   124  Bashloom timeout status when deadline expires.
+#   2    Invalid options/values or missing command.
+#   127  Required sleep operation failed.
+# Output:
+#   Predicate output passes through; timeout emits an error containing the last
+#   observed predicate status for diagnostics.
+# Side effects: Repeated command execution plus optional sleep intervals.
+# Timing model:
+#   Bash's SECONDS variable is sampled, avoiding an external `date` dependency.
+#   timeout=0 still performs one predicate attempt before deadline evaluation.
+# Errexit invariant: predicate execution occurs through blm_run in an if branch.
 blm_wait_for() {
   local timeout=30
   local interval=1

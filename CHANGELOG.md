@@ -88,10 +88,18 @@ Il progetto seguirà il Semantic Versioning a partire dalle release pubbliche ve
 - Semantica changed/no-op per ensure directory e symlink.
 - EN/IT idempotency documentation and maintained executable example.
 - Documentazione EN/IT sull'idempotenza ed esempio eseguibile mantenuto.
-- Maintained executable examples through Linux idempotency with CI full-tour execution.
-- Esempi eseguibili mantenuti fino all'idempotenza Linux con esecuzione full-tour in CI.
-- Bats contract tests for command runtime, reliability, system safety, runtime state, consumption and idempotency paths.
-- Test contrattuali Bats per command runtime, reliability, system safety, runtime state, consumption e percorsi di idempotenza.
+- `blm_title` and `blm_section` presentation helpers for human/plain/JSON output.
+- Helper di presentazione `blm_title` e `blm_section` per output human/plain/JSON.
+- `blm_diagnostics` runtime/version diagnostics using the configured output mode.
+- Diagnostica runtime/versione `blm_diagnostics` coerente con la modalità output configurata.
+- `blm_fail` and `blm_usage_error` explicit non-exiting error helpers.
+- Helper di errore espliciti senza exit impliciti `blm_fail` e `blm_usage_error`.
+- EN/IT output/error model documentation and maintained executable example.
+- Documentazione EN/IT del modello output/error ed esempio eseguibile mantenuto.
+- Maintained executable examples through M6B with CI full-tour execution.
+- Esempi eseguibili mantenuti fino a M6B con esecuzione full-tour in CI.
+- Bats contract tests for command runtime, reliability, system safety, runtime state, consumption, idempotency and output/error paths.
+- Test contrattuali Bats per command runtime, reliability, system safety, runtime state, consumption, idempotenza e percorsi output/error.
 - Bats smoke tests and CI foundation.
 - Smoke test Bats e foundation CI.
 

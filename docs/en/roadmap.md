@@ -112,18 +112,19 @@ Cross-distribution, macOS and WSL matrices are deferred until those environments
 
 ### M6C — Advanced System Primitives
 
-Planned next:
-
-- [ ] safe backup/replace helpers
-- [ ] file/directory locking
-- [ ] checksums
-- [ ] safe copy/move helpers
-- [ ] ownership helpers
-- [ ] XDG path helpers
+- [x] explicit safe backup helper
+- [x] non-overwriting safe copy/move helpers
+- [x] SHA-256 checksum helper
+- [x] atomic directory locking and `blm_with_lock`
+- [x] ownership convergence helper
+- [x] XDG config/data/cache/state/runtime path helpers
+- [x] Bats contract coverage for M6C
+- [x] maintained M6C example and full-tour coverage
+- [x] EN/IT advanced-system documentation
 
 ### M6D — Integrations
 
-Candidate first adapters:
+Next implementation block. Candidate first adapters:
 
 - [ ] Git
 - [ ] systemd
@@ -155,7 +156,7 @@ Before `v0.1.0`:
 - [x] ShellCheck clean for implemented public source
 - [x] shfmt clean for implemented public source
 - [x] Bats tests for implemented public APIs
-- [x] maintained executable examples through M6B
+- [x] maintained executable examples through M6C
 - [ ] Bash version matrix
 - [ ] cross-distribution matrix
 - [ ] documentation parity checks where practical

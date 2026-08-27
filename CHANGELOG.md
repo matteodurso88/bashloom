@@ -96,14 +96,28 @@ Il progetto seguirà il Semantic Versioning a partire dalle release pubbliche ve
 - Helper di errore espliciti senza exit impliciti `blm_fail` e `blm_usage_error`.
 - EN/IT output/error model documentation and maintained executable example.
 - Documentazione EN/IT del modello output/error ed esempio eseguibile mantenuto.
-- Maintained executable examples through M6B with CI full-tour execution.
-- Esempi eseguibili mantenuti fino a M6B con esecuzione full-tour in CI.
-- Bats contract tests for command runtime, reliability, system safety, runtime state, consumption, idempotency and output/error paths.
-- Test contrattuali Bats per command runtime, reliability, system safety, runtime state, consumption, idempotenza e percorsi output/error.
+- `blm_backup`, `blm_safe_copy` and `blm_safe_move` non-overwriting filesystem helpers.
+- Helper filesystem senza sovrascrittura `blm_backup`, `blm_safe_copy` e `blm_safe_move`.
+- `blm_checksum_sha256` digest helper with on-demand `sha256sum` dependency.
+- Helper digest `blm_checksum_sha256` con dipendenza `sha256sum` richiesta solo all'uso.
+- Atomic directory-lock primitives and `blm_with_lock` command wrapper.
+- Primitive di lock atomico tramite directory e wrapper comando `blm_with_lock`.
+- `blm_ensure_owner` ownership convergence helper.
+- Helper di convergenza ownership `blm_ensure_owner`.
+- XDG config/data/cache/state/runtime path helpers.
+- Helper path XDG config/data/cache/state/runtime.
+- EN/IT advanced-system documentation and maintained executable example.
+- Documentazione EN/IT advanced-system ed esempio eseguibile mantenuto.
+- Maintained executable examples through M6C with CI full-tour execution.
+- Esempi eseguibili mantenuti fino a M6C con esecuzione full-tour in CI.
+- Bats contract tests for command runtime, reliability, system safety, runtime state, consumption, idempotency, output/error and advanced-system paths.
+- Test contrattuali Bats per command runtime, reliability, system safety, runtime state, consumption, idempotenza, output/error e percorsi advanced-system.
 - Bats smoke tests and CI foundation.
 - Smoke test Bats e foundation CI.
 
 ### Changed / Modificato
 
-- Filesystem helpers now check `readlink` and `rm` explicitly when those utilities are required.
-- Gli helper filesystem verificano ora esplicitamente `readlink` e `rm` quando queste utility sono necessarie.
+- Filesystem helpers check `readlink` and `rm` explicitly when those utilities are required.
+- Gli helper filesystem verificano esplicitamente `readlink` e `rm` quando queste utility sono necessarie.
+- The `system` loader group now includes advanced filesystem, locking and XDG helpers.
+- Il gruppo loader `system` include ora helper filesystem avanzati, locking e XDG.

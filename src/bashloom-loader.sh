@@ -98,6 +98,9 @@ _blm_load_system() {
   _blm_source_module_file "$_BLM_ROOT/system/path.sh"
   _blm_source_module_file "$_BLM_ROOT/system/temp.sh"
   _blm_source_module_file "$_BLM_ROOT/system/fs.sh"
+  _blm_source_module_file "$_BLM_ROOT/system/advanced-fs.sh"
+  _blm_source_module_file "$_BLM_ROOT/system/lock.sh"
+  _blm_source_module_file "$_BLM_ROOT/system/xdg.sh"
   _blm_mark_module_loaded system
 }
 

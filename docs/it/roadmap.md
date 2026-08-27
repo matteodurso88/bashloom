@@ -120,11 +120,16 @@ Comportamenti TUI full-screen, mouse terminale e backend Gum/fzf obbligatori res
 
 Prima della `v0.1.0`:
 
-- [ ] integrare Bashloom in almeno un deployment reale
+- [x] definire protocollo di ownership e field validation
+- [x] registrare Oriqo Infrastructure come consumer candidato per il deployment
+- [x] richiedere che bug e miglioramenti emersi nei consumer vengano riportati upstream su Bashloom
+- [ ] completare almeno una validazione reale di deployment tramite il workflow del consumer owner
 - [ ] validare un workflow desktop/installer
 - [ ] validare un workflow system/provisioning
-- [ ] rivedere API instabili sulla base del feedback reale
+- [ ] rivedere le API instabili sulla base del feedback reale
 - [ ] taggare la prima `v0.1.0` utilizzabile
+
+Vedi `docs/it/production-validation.md` per il protocollo canonico M6F.
 
 ### Qualità
 
@@ -139,7 +144,7 @@ Prima della `v0.1.0`:
 
 ## v0.2 — Terminal UX
 
-Scope candidato dopo la prima release foundation utilizzabile: timer, prompt/select più evoluti, backend opzionali Gum/fzf e componenti full-screen/cursor-addressed solo quando giustificati da consumer reali.
+Scope candidato dopo la prima release foundation utilizzabile: style registry, varianti spinner/progress, varianti panel/table/tree, temi/preset UI, override stile per chiamata, stili custom definiti dal consumer, timer, prompt/select più evoluti, backend opzionali Gum/fzf e componenti full-screen/cursor-addressed solo quando giustificati da consumer reali.
 
 ## v0.3 — System & Integrations
 

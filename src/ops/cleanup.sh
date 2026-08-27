@@ -40,8 +40,11 @@ blm_cleanup_run() {
     local -n command_ref="$name"
 
     if ((${#command_ref[@]} > 0)); then
-      "${command_ref[@]}"
-      status=$?
+      if "${command_ref[@]}"; then
+        status=0
+      else
+        status=$?
+      fi
       if ((status != 0 && first_status == 0)); then
         first_status=$status
       fi
@@ -65,8 +68,12 @@ blm_cleanup_clear() {
 
 _blm_cleanup_signal() {
   local signal=$1
-  blm_cleanup_run
-  local cleanup_status=$?
+  local cleanup_status
+  if blm_cleanup_run; then
+    cleanup_status=0
+  else
+    cleanup_status=$?
+  fi
 
   trap - "$signal"
   if ((cleanup_status != 0)); then

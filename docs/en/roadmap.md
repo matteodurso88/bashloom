@@ -1,6 +1,6 @@
 # Roadmap
 
-Bashloom is currently in the foundation phase. The roadmap is intentionally capability-driven rather than date-driven.
+Bashloom is currently in the foundation / early v0.1 implementation phase. The roadmap is intentionally capability-driven rather than date-driven.
 
 ## pre-v0.1 — Foundation
 
@@ -14,52 +14,91 @@ Bashloom is currently in the foundation phase. The roadmap is intentionally capa
 - [x] basic requirement checks
 - [x] Bats smoke tests
 - [x] ShellCheck/shfmt/Bats CI
-- [ ] contributor issue and pull-request templates
-- [ ] API specification for v0.1 primitives
+- [x] contributor issue and pull-request templates
+- [x] draft API specification for v0.1 primitives
 - [ ] compatibility test matrix
 
 ## v0.1 — Reliable Shell Foundation
 
-Planned public capabilities:
+### M1 — Command Runtime
 
-### Core
+- [x] `blm_run`
+- [x] exact exit-status preservation
+- [x] caller `set -e` compatibility
+- [x] local `--dry-run`
+- [x] global `BLM_DRY_RUN=1`
+- [x] `blm_step`
+- [x] no `eval` / argv-safe execution
 
-- terminal capability model
-- output mode model
-- color and Unicode policy
-- runtime/version diagnostics
+### M2 — Reliability
 
-### UI
+- [x] `blm_retry`
+- [x] retry delay and integer backoff
+- [x] `blm_wait_for`
+- [x] timeout status `124`
+- [x] `blm_timeout`
+- [x] LIFO cleanup stack
+- [x] explicit cleanup trap installation
+- [x] refusal to overwrite caller traps
+- [x] LIFO rollback stack
+- [x] explicit begin/commit/rollback transactions
+- [x] Bats contract coverage for M1/M2
+- [x] EN/IT runtime/reliability documentation
 
-- info/success/warn/error
-- title/section
-- step lifecycle
-- key/value output
+### M3 — System Safety
 
-### Ops
+Next implementation block:
 
-- require command/file/directory/environment
-- command runner with exact exit-code preservation
-- retry
-- wait-until with timeout and interval
-- cleanup stack
-- explicit error/exit helpers
+- [ ] require root
+- [ ] permission checks
+- [ ] safe temporary directory/file helpers
+- [ ] ensure directory
+- [ ] ensure symlink
+- [ ] atomic file write
+- [ ] path helpers
 
-### System
+### M4 — Runtime State
 
-- safe temporary directory/file helpers
-- ensure directory
-- atomic file write
-- permission checks
-- path helpers
+- [ ] logging foundations
+- [ ] environment helpers
+- [ ] safe configuration helpers
+- [ ] state files
+- [ ] human/plain/machine-readable output model
+
+### M5 — Consumption
+
+- [ ] installation model
+- [ ] vendoring guidance
+- [ ] selective module loading
+- [ ] compatibility documentation
+- [ ] versioning/release workflow
+
+### M6 — Production Validation
+
+- [ ] integrate Bashloom primitives into at least one real deployment workflow
+- [ ] validate against a desktop/installer workflow
+- [ ] validate against a system/provisioning workflow
+- [ ] revise unstable APIs from field feedback
+- [ ] tag the first usable `v0.1.0`
+
+### Remaining v0.1 UI/Core work
+
+- [ ] richer terminal capability model
+- [ ] output mode model
+- [ ] color and Unicode policy hardening
+- [ ] runtime/version diagnostics
+- [ ] title/section helpers
+- [ ] key/value output
+- [ ] explicit error/exit helpers
 
 ### Quality
 
-- ShellCheck clean
-- shfmt clean
-- Bats tests for public APIs
-- Bash version matrix
-- documentation parity checks where practical
+- [x] ShellCheck clean for M1/M2
+- [x] shfmt clean for M1/M2
+- [x] Bats tests for implemented public APIs
+- [ ] Bash version matrix
+- [ ] cross-distribution matrix
+- [ ] documentation parity checks where practical
 
 ## v0.2 — Terminal UX
 
@@ -87,9 +126,7 @@ Candidate scope:
 
 ## Later exploration
 
-- transactional rollback stack
-- dry-run execution model
-- human/plain/JSON output modes
+- human/plain/JSON output refinements
 - vendorable module bundler
 - generated API reference
 - shell completion for a future Bashloom CLI

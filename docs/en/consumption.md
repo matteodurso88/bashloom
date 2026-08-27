@@ -8,6 +8,8 @@ Bashloom can be consumed in three supported ways during the pre-v0.1 phase:
 
 No supported flow downloads and executes remote shell code implicitly, and no installer attempts privilege escalation.
 
+For repository-level integration, including pinned vendoring, a project adapter, local CI, GitHub Actions and explicit repinning, see the canonical [Bashloom Consumer Contract](consumer-contract.md).
+
 ## Full runtime
 
 The simplest model is:

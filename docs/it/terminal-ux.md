@@ -15,8 +15,9 @@ M6E aggiunge primitive terminal UX leggere senza trasformare Bashloom in un fram
 - `blm_prompt <message> [default]`
 - `blm_confirm <message> [yes|no]`
 - `blm_password <message>`
+- `blm_select <message> [--default N] -- <option> [option...]`
 
-`blm_prompt` e `blm_confirm` possono usare default espliciti quando stdin non è interattivo. Senza default falliscono invece di inventare input. `blm_password` richiede sempre stdin interattivo e usa `read -s` di Bash per non mostrare il segreto digitato.
+`blm_prompt`, `blm_confirm` e `blm_select` possono usare default espliciti quando stdin non è interattivo. Senza default falliscono invece di inventare input. `blm_password` richiede sempre stdin interattivo e usa `read -s` di Bash per non mostrare il segreto digitato. `blm_select` restituisce il valore dell'opzione scelta, mentre il menu viene renderizzato su stderr.
 
 ## API rendering
 

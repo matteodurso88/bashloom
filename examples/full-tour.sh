@@ -24,6 +24,7 @@ examples=(
   07-output-error-model.sh
   08-advanced-system.sh
   09-integrations.sh
+  10-terminal-ux.sh
 )
 
 printf '%s\n' '===================================================================='

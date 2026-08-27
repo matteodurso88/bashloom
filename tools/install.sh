@@ -33,7 +33,10 @@ EOF
 while (($#)); do
   case $1 in
     --prefix)
-      (($# >= 2)) || { printf 'Missing value for --prefix\n' >&2; exit 2; }
+      (($# >= 2)) || {
+        printf 'Missing value for --prefix\n' >&2
+        exit 2
+      }
       prefix=$2
       shift 2
       ;;

@@ -39,13 +39,14 @@ jobs:
           set -Eeuo pipefail
           version=${GITHUB_REF_NAME#v}
           package="bashloom-$version"
-          mkdir -p "dist/$package"
-          cp -R src examples docs "$package.tmp"
-          rm -rf "$package.tmp"
-          cp -R src "dist/$package/src"
-          cp -R examples "dist/$package/examples"
-          cp -R docs "dist/$package/docs"
-          cp README.md LICENSE CHANGELOG.md "dist/$package/"
+          package_dir="dist/$package"
+
+          mkdir -p "$package_dir"
+          cp -R src "$package_dir/src"
+          cp -R examples "$package_dir/examples"
+          cp -R docs "$package_dir/docs"
+          cp README.md LICENSE CHANGELOG.md "$package_dir/"
+
           tar -C dist -czf "dist/$package.tar.gz" "$package"
           (cd dist && sha256sum "$package.tar.gz" >"$package.tar.gz.sha256")
 

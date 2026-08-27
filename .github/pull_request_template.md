@@ -4,6 +4,10 @@
 >
 > I contributi esterni sono proposte di integrazione nella codebase ufficiale di Bashloom e richiedono revisione finale da parte dei maintainer. I maintainer possono adattare, rifattorizzare o reimplementare i contributi accettati prima del merge. Vedi `GOVERNANCE.md`.
 
+> Documentation may be submitted in English or Italian only if you are not comfortable writing both. Maintainers will complete the missing counterpart before merge.
+>
+> La documentazione può essere inviata solo in inglese oppure solo in italiano se non conosci abbastanza bene entrambe le lingue. I maintainer completeranno la controparte mancante prima del merge.
+
 ## Summary / Riepilogo
 
 Describe what this change does and why it belongs in Bashloom.
@@ -20,11 +24,17 @@ Descrivi cosa fa questa modifica e perché appartiene a Bashloom.
 - [ ] Tests added or updated / Test aggiunti o aggiornati
 - [ ] ShellCheck passes / ShellCheck passa
 - [ ] shfmt passes / shfmt passa
-- [ ] EN documentation updated / Documentazione EN aggiornata
-- [ ] IT documentation updated / Documentazione IT aggiornata
+- [ ] EN documentation updated, or maintainer translation requested / Documentazione EN aggiornata, oppure traduzione richiesta ai maintainer
+- [ ] IT documentation updated, or maintainer translation requested / Documentazione IT aggiornata, oppure traduzione richiesta ai maintainer
 - [ ] Security implications considered / Implicazioni di sicurezza valutate
 - [ ] Exit-code semantics preserved where relevant / Semantica exit code preservata dove rilevante
 - [ ] I understand final integration is subject to maintainer review and may include adaptation/refactoring / Comprendo che l'integrazione finale è soggetta a revisione dei maintainer e può includere adattamenti/rifattorizzazioni
+
+## Documentation language / Lingua documentazione
+
+- [ ] EN provided / EN fornita
+- [ ] IT provided / IT fornita
+- [ ] Maintainer translation/adaptation needed / Necessaria traduzione/adattamento dei maintainer
 
 ## Notes / Note
 

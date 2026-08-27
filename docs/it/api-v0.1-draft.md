@@ -1,74 +1,98 @@
 # Specifica API v0.1 — Bozza
 
-> Stato: **Bozza**. Le funzioni elencate non sono ancora coperte da una garanzia stabile di compatibilità.
+> Stato: **Bozza**. Queste API pubbliche sono implementate ma non sono ancora coperte da una garanzia stabile di compatibilità.
 
-## API foundation attualmente presente
+## Foundation e capability terminale
 
-### `blm_has_command <name>`
+- `blm_has_command <name>`
+- `blm_is_tty`
+- `blm_color_enabled`
+- `blm_info <message...>`
+- `blm_success <message...>`
+- `blm_warn <message...>`
+- `blm_error <message...>`
 
-Restituisce successo quando `<name>` viene risolto tramite `PATH`.
+## M1 — Command runtime
 
-### `blm_is_tty`
+- `blm_run [--dry-run] [--] <command> [args...]`
+- `blm_step <label> <command> [args...]`
 
-Restituisce successo quando lo standard output è collegato a un terminale.
+`blm_run` preserva lo status del comando eseguito e supporta sia `--dry-run` locale sia `BLM_DRY_RUN=1` globale.
 
-### `blm_color_enabled`
+## M2 — Reliability
 
-Restituisce successo quando Bashloom considera appropriato l'uso del colore ANSI. Le condizioni attuali disabilitano il colore quando `NO_COLOR` è non vuoto, `TERM=dumb` oppure stdout non è un TTY.
+- `blm_retry [--attempts N] [--delay S] [--backoff N] [--] <command> [args...]`
+- `blm_wait_for [--timeout S] [--interval S] [--] <command> [args...]`
+- `blm_timeout [--timeout S] [--grace S] [--] <command> [args...]`
+- `blm_cleanup_add <command> [args...]`
+- `blm_cleanup_run`
+- `blm_cleanup_clear`
+- `blm_cleanup_enable_traps`
+- `blm_cleanup_disable_traps`
+- `blm_rollback_add <command> [args...]`
+- `blm_rollback_run`
+- `blm_rollback_clear`
+- `blm_transaction_begin`
+- `blm_transaction_commit`
+- `blm_transaction_rollback`
 
-### `blm_info <message...>`
+Le operazioni con deadline usano status `124` allo scadere del timeout. Cleanup e rollback usano ordine LIFO.
 
-Stampa una riga informativa su stdout.
+## M3 — System safety
 
-### `blm_success <message...>`
+- `blm_require_command <name>`
+- `blm_require_file <path>`
+- `blm_require_dir <path>`
+- `blm_require_env <name>`
+- `blm_require_root`
+- `blm_require_readable <path>`
+- `blm_require_writable <path>`
+- `blm_require_executable <path>`
+- `blm_temp_file [directory]`
+- `blm_temp_dir [directory]`
+- `blm_ensure_dir [--mode MODE] <path>`
+- `blm_ensure_symlink <target> <link>`
+- `blm_atomic_write <path> <producer-command> [args...]`
+- `blm_path_is_absolute <path>`
+- `blm_path_dirname <path>`
+- `blm_path_basename <path>`
+- `blm_path_join <part>...`
 
-Stampa una riga di successo su stdout.
+## M4 — Runtime state
 
-### `blm_warn <message...>`
+- `blm_output_mode`
+- `blm_kv <key> <value>`
+- `blm_log <debug|info|warn|error> <message...>`
+- `blm_env_get <NAME> [fallback]`
+- `blm_env_bool <NAME> [fallback]`
+- `blm_config_validate <file>`
+- `blm_config_get <file> <key> [fallback]`
+- `blm_config_has <file> <key>`
+- `blm_state_get <file> <key> [fallback]`
+- `blm_state_set <file> <key> <value>`
+- `blm_state_delete <file> <key>`
 
-Stampa un warning su stderr.
+`BLM_OUTPUT_MODE` accetta `human`, `plain` o `json`. `BLM_LOG_LEVEL` controlla il filtro dei log e `BLM_LOG_FILE` permette opzionalmente di persistere i record accettati.
 
-### `blm_error <message...>`
+Configurazione e stato usano dati letterali `key=value`. Non vengono mai caricati tramite `source` o `eval`.
 
-Stampa un errore su stderr.
+## Contratti dettagliati
 
-### `blm_require_command <name>`
+Vedi:
 
-Restituisce fallimento e scrive una diagnostica su stderr quando un comando non può essere risolto tramite `PATH`.
-
-### `blm_require_file <path>`
-
-Restituisce fallimento quando `<path>` non è un file regolare.
-
-### `blm_require_dir <path>`
-
-Restituisce fallimento quando `<path>` non è una directory.
-
-### `blm_require_env <name>`
-
-Restituisce fallimento quando la variabile d'ambiente indicata non è impostata o è vuota.
-
-## Candidate v0.1 non ancora implementate
-
-Le seguenti sono capability pianificate e non contratti API attuali:
-
-- `blm_run`
-- `blm_step`
-- `blm_retry`
-- `blm_wait_until`
-- primitive cleanup stack
-- output title/section
-- output key/value
-- helper sicuri per risorse temporanee
-- helper di scrittura atomica
-- controllo permessi
-
-Ogni candidata richiede specifica del comportamento, test e documentazione EN/IT prima di essere considerata parte dell'API pubblica v0.1.
+- `docs/it/runtime-reliability.md`
+- `docs/it/system-safety.md`
+- `docs/it/runtime-state.md`
+- `examples/README.md`
 
 ## Semantica degli exit code
 
-Salvo quando lo scopo di una funzione è esplicitamente trasformare un risultato, i wrapper Bashloom devono preservare o riportare fedelmente l'exit status dell'operazione avvolta. Il rendering di output successivo a un comando non deve sostituire accidentalmente lo status del comando.
+Salvo quando una funzione trasforma esplicitamente un risultato, i wrapper Bashloom preservano o riportano fedelmente lo status dell'operazione eseguita. Il rendering non deve sostituire accidentalmente un errore del comando.
+
+Lo status `2` viene generalmente usato per argomenti Bashloom o valori di configurazione non validi. Le operazioni di timeout usano `124` dove documentato.
 
 ## Effetti collaterali
 
-Il sourcing di `src/bashloom.sh` non deve abilitare implicitamente lo strict mode, sostituire trap, modificare `IFS`, eseguire comandi esterni diversi dalle primitive necessarie a risolvere il path dei sorgenti Bashloom, né produrre output visibile all'utente.
+Il sourcing di `src/bashloom.sh` non deve abilitare implicitamente lo strict mode, sostituire trap del caller, modificare `IFS`, produrre output visibile, leggere configurazione/stato, creare file di log o eseguire testo fornito dal caller.
+
+Le utility esterne specifiche di una feature possono essere richieste soltanto quando quella funzione viene invocata; il sourcing del runtime resta senza dipendenze obbligatorie oltre a Bash.

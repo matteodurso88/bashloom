@@ -32,67 +32,45 @@ Bashloom is currently in the foundation / early v0.1 implementation phase. The r
 
 ### M2 — Reliability
 
-- [x] `blm_retry`
-- [x] retry delay and integer backoff
-- [x] `blm_wait_for`
+- [x] retry/wait/timeout primitives
 - [x] timeout status `124`
-- [x] `blm_timeout`
-- [x] LIFO cleanup stack
-- [x] explicit cleanup trap installation
-- [x] refusal to overwrite caller traps
-- [x] LIFO rollback stack
-- [x] explicit begin/commit/rollback transactions
-- [x] Bats contract coverage for M1/M2
-- [x] EN/IT runtime/reliability documentation
+- [x] LIFO cleanup with explicit trap installation
+- [x] LIFO rollback and explicit transactions
+- [x] Bats coverage and EN/IT documentation
 
 ### M3 — System Safety
 
-- [x] require root
-- [x] readable/writable/executable permission checks
-- [x] safe temporary directory/file helpers
-- [x] ensure directory
-- [x] ensure symlink
-- [x] atomic file write
+- [x] root/permission requirements
+- [x] secure temporary resources
+- [x] directory/symlink ensures
+- [x] atomic file writes
 - [x] pure-Bash lexical path helpers
-- [x] dependency-free entrypoint path resolution
-- [x] Bats contract coverage for M3
-- [x] EN/IT system-safety documentation
+- [x] Bats coverage and EN/IT documentation
 
 ### M4 — Runtime State
 
-- [x] logging foundations
-- [x] environment helpers
-- [x] safe key/value configuration helpers
+- [x] logging and environment helpers
+- [x] safe literal configuration
 - [x] atomic state files
 - [x] human/plain/JSON output model
-- [x] key/value machine output
-- [x] Bats contract coverage for M4
-- [x] maintained M4 example and full-tour coverage
-- [x] EN/IT runtime-state documentation
+- [x] Bats coverage, maintained example and EN/IT documentation
 
 ### M5 — Consumption
 
-- [x] explicit prefix installation model
-- [x] vendoring helper and guidance
-- [x] dependency-aware selective module loading
+- [x] prefix installer and vendoring helper
+- [x] dependency-aware selective loader
 - [x] compatibility documentation
-- [x] version metadata release gate
-- [x] guarded tag-based release workflow with archive and SHA-256 checksum
-- [x] Bats contract coverage for consumption paths
-- [x] maintained M5 example
-- [x] EN/IT consumption documentation
+- [x] release metadata gate and tag workflow
+- [x] Bats coverage and maintained example
 
 ### M6A — Linux Hardening & Idempotency
 
-- [x] aggregate and last-operation change tracking
-- [x] idempotent directory change semantics
-- [x] idempotent symlink change semantics
+- [x] aggregate/per-operation change tracking
+- [x] change-aware directory/symlink semantics
 - [x] `blm_ensure_mode`
 - [x] `blm_ensure_line`
-- [x] explicit `readlink` and `rm` dependency checks where required
-- [x] Bats contract coverage for idempotency
-- [x] maintained idempotency example and full-tour coverage
-- [x] EN/IT idempotency documentation
+- [x] explicit filesystem dependency checks
+- [x] Bats coverage, maintained example and EN/IT documentation
 - [ ] process-group hardening for `blm_timeout`
 
 Cross-distribution, macOS and WSL matrices are deferred until those environments can be validated directly.
@@ -104,33 +82,35 @@ Cross-distribution, macOS and WSL matrices are deferred until those environments
 - [x] explicit non-exiting failure helpers
 - [x] deterministic human/plain/JSON presentation behavior
 - [x] documented stdout/stderr and machine-readable contracts
-- [x] Bats contract coverage for M6B
-- [x] maintained M6B example and full-tour coverage
-- [x] EN/IT output/error documentation
+- [x] Bats coverage, maintained example and EN/IT documentation
 - [ ] richer structured error context
 - [ ] color and Unicode policy hardening
 
 ### M6C — Advanced System Primitives
 
-- [x] explicit safe backup helper
-- [x] non-overwriting safe copy/move helpers
+- [x] safe backup and non-overwriting copy/move
 - [x] SHA-256 checksum helper
 - [x] atomic directory locking and `blm_with_lock`
-- [x] ownership convergence helper
-- [x] XDG config/data/cache/state/runtime path helpers
-- [x] Bats contract coverage for M6C
-- [x] maintained M6C example and full-tour coverage
-- [x] EN/IT advanced-system documentation
+- [x] ownership convergence
+- [x] XDG path helpers
+- [x] Bats coverage, maintained example and EN/IT documentation
 
 ### M6D — Integrations
 
-Next implementation block. Candidate first adapters:
+- [x] Git adapter
+- [x] systemd adapter
+- [x] Docker / Compose adapter
+- [x] DNS / HTTP network readiness checks
+- [x] selective integration loader groups
+- [x] Bats contract coverage
+- [x] maintained M6D example and full-tour coverage
+- [x] EN/IT integrations documentation
+- [x] deep source-documentation standard for public APIs
+- [x] CI source-documentation contract
+- [x] repository-wide source comment hardening pass
+- [ ] Debian / APT adapter
 
-- [ ] Git
-- [ ] systemd
-- [ ] Docker / Compose
-- [ ] Debian / APT
-- [ ] network checks
+APT remains deferred from the first M6D slice because package-management policy and environment variance are materially broader than the thin adapters above.
 
 ### M6E — Terminal UX
 
@@ -156,7 +136,8 @@ Before `v0.1.0`:
 - [x] ShellCheck clean for implemented public source
 - [x] shfmt clean for implemented public source
 - [x] Bats tests for implemented public APIs
-- [x] maintained executable examples through M6C
+- [x] maintained executable examples through M6D
+- [x] machine-enforced public API source documentation
 - [ ] Bash version matrix
 - [ ] cross-distribution matrix
 - [ ] documentation parity checks where practical
@@ -176,12 +157,9 @@ Candidate scope after the first usable foundation release:
 
 Candidate scope after the v0.1 foundation stabilizes:
 
-- expanded Git adapter
-- expanded Docker adapter
-- expanded systemd adapter
+- expanded Git/Docker/systemd adapters
 - Debian/APT helpers
-- XDG helpers
-- network checks
+- richer network checks
 
 ## Later exploration
 

@@ -115,9 +115,26 @@ Additional idempotent filesystem primitives:
 - `blm_ensure_mode <mode> <path>`
 - `blm_ensure_line <path> <line>`
 
-`blm_ensure_dir` and `blm_ensure_symlink` now participate in change tracking. Tracked operations set `BLM_LAST_CHANGED=1` only when they actually modify the system. `BLM_CHANGED` is aggregate state and remains set until `blm_change_reset` is called.
+`blm_ensure_dir` and `blm_ensure_symlink` participate in change tracking. Tracked operations set `BLM_LAST_CHANGED=1` only when they actually modify the system. `BLM_CHANGED` is aggregate state and remains set until `blm_change_reset` is called.
 
 This milestone is Linux-first. Mode inspection currently uses GNU/Linux-compatible `stat -c` semantics.
+
+## M6B — Output and error model
+
+Presentation and diagnostics:
+
+- `blm_title <message...>`
+- `blm_section <message...>`
+- `blm_diagnostics`
+
+Explicit failure signaling:
+
+- `blm_fail <status> <message...>`
+- `blm_usage_error <message...>`
+
+`blm_title` and `blm_section` honor `BLM_OUTPUT_MODE` and produce deterministic human/plain/JSON records. `blm_diagnostics` reports Bashloom version, Bash version, output mode, TTY/color capability and CI state through the existing key/value output contract.
+
+`blm_fail` returns an explicit status from 1 through 255 after rendering the error. `blm_usage_error` returns status `2`. Neither helper calls `exit`; the caller remains responsible for process termination, rollback or recovery.
 
 ## Detailed contracts
 
@@ -129,6 +146,7 @@ See:
 - `docs/en/consumption.md`
 - `docs/en/compatibility.md`
 - `docs/en/idempotency.md`
+- `docs/en/output-error-model.md`
 - `examples/README.md`
 
 ## Exit semantics

@@ -33,6 +33,8 @@ _blm_progress_bar() {
 # Side effects: None beyond stdout rendering.
 # Configuration: BLM_PROGRESS_WIDTH may set a positive integer bar width;
 #                default is 24 cells.
+# Invariant: Any valid render returns 0, including intermediate progress values.
+#            This makes the helper safe under caller `set -e`.
 blm_progress() {
   (($# >= 2 && $# <= 3)) || return 2
   _blm_is_nonnegative_integer "$1" || return 2
@@ -52,13 +54,19 @@ blm_progress() {
     local bar
     bar=$(_blm_progress_bar "$percent" "$width") || return $?
     printf '\r[%s] %3d%%  %s' "$bar" "$percent" "$label"
-    ((10#$current == 10#$total)) && printf '\n'
+    if ((10#$current == 10#$total)); then
+      printf '\n'
+    fi
   elif [[ $mode == human ]] && blm_is_tty; then
     printf '\r%s: %3d%% (%s/%s)' "$label" "$percent" "$current" "$total"
-    ((10#$current == 10#$total)) && printf '\n'
+    if ((10#$current == 10#$total)); then
+      printf '\n'
+    fi
   else
     printf '%s: %d%% (%s/%s)\n' "$label" "$percent" "$current" "$total"
   fi
+
+  return 0
 }
 
 # Public API: blm_spinner

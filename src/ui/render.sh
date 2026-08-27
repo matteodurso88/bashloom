@@ -24,7 +24,7 @@ blm_panel() {
       printf '+-- %s --+\n' "$title"
       local line
       for line in "$@"; do printf '| %s\n' "$line"; done
-      printf '+%*s+\n' "$(( ${#title} + 6 ))" '' | tr ' ' '-'
+      printf '+%*s+\n' "$((${#title} + 6))" '' | tr ' ' '-'
       ;;
     plain)
       printf 'panel: %s\n' "$title"

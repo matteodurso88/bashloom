@@ -49,15 +49,14 @@ blm_wait_for() {
   local status=1
 
   while :; do
-    blm_run -- "$@"
-    status=$?
-
-    if ((status == 0)); then
+    if blm_run -- "$@"; then
       return 0
+    else
+      status=$?
     fi
 
     if ((SECONDS - started >= timeout)); then
-      blm_error "Timed out after ${timeout}s waiting for command"
+      blm_error "Timed out after ${timeout}s waiting for command (last exit $status)"
       return 124
     fi
 

@@ -2,6 +2,9 @@
 
 setup() {
   REPO_ROOT=$(cd -- "$BATS_TEST_DIRNAME/.." && pwd)
+  # shellcheck source=src/core/version.sh
+  source "$REPO_ROOT/src/core/version.sh"
+  CURRENT_VERSION=$BLM_VERSION
   TEST_DIR=$(mktemp -d)
 }
 
@@ -59,7 +62,7 @@ teardown() {
 
   run bash -c 'source "$1/lib/bashloom/bashloom.sh"; printf "%s\n" "$BLM_VERSION"' _ "$prefix"
   [ "$status" -eq 0 ]
-  [ "$output" = "0.0.0-dev" ]
+  [ "$output" = "$CURRENT_VERSION" ]
 }
 
 @test "installer refuses overwrite unless force is explicit" {
@@ -83,14 +86,14 @@ teardown() {
 
   run bash -c 'source "$1/bashloom-loader.sh"; blm_load core; printf "%s\n" "$BLM_VERSION"' _ "$destination"
   [ "$status" -eq 0 ]
-  [ "$output" = "0.0.0-dev" ]
+  [ "$output" = "$CURRENT_VERSION" ]
 }
 
 @test "release gate validates metadata and rejects mismatched version" {
-  run bash "$REPO_ROOT/tools/release-check.sh" 0.0.0-dev
+  run bash "$REPO_ROOT/tools/release-check.sh" "$CURRENT_VERSION"
   [ "$status" -eq 0 ]
 
-  run bash "$REPO_ROOT/tools/release-check.sh" 0.1.0
+  run bash "$REPO_ROOT/tools/release-check.sh" 999.999.999
   [ "$status" -eq 1 ]
   [[ "$output" == *"Version mismatch"* ]]
 }

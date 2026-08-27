@@ -1,7 +1,27 @@
 #!/usr/bin/env bash
 
-# Idempotent filesystem helpers.
+# Idempotent and atomic filesystem helpers.
+#
+# Mutating ensure-functions participate in Bashloom change tracking: each call
+# resets BLM_LAST_CHANGED and marks it only after an actual successful mutation.
+# Aggregate BLM_CHANGED remains sticky until the caller resets its run scope.
+#
+# Linux-first note: mode inspection and mode preservation currently rely on GNU
+# `stat -c` and `chmod --reference` semantics.
 
+# Public API: blm_ensure_dir
+# Purpose: Ensure a directory exists and optionally converge its numeric mode.
+# Usage: blm_ensure_dir [--mode MODE] <path>
+# Returns:
+#   0  Directory exists after the call and requested mode (if any) is correct.
+#   1  Required utility or filesystem operation failed.
+#   2  Invalid Bashloom arguments.
+# Output: Native utility diagnostics plus Bashloom dependency errors as needed.
+# Side effects: May create parent directories and/or chmod the final directory.
+# Change tracking:
+#   Marks changed when the directory is newly created or its mode is corrected;
+#   an already-converged directory leaves BLM_LAST_CHANGED=0.
+# External dependencies: mkdir; stat/chmod only when --mode is supplied.
 blm_ensure_dir() {
   _blm_change_begin
 
@@ -27,6 +47,8 @@ blm_ensure_dir() {
 
     local current_mode requested_mode=$mode
     current_mode=$(command stat -c '%a' -- "$path") || return $?
+    # GNU stat emits modes without a leading zero. Strip one optional zero from
+    # caller notation only for comparison; chmod still receives the original.
     [[ $requested_mode == 0* ]] && requested_mode=${requested_mode#0}
 
     if [[ $current_mode != "$requested_mode" ]]; then
@@ -36,6 +58,20 @@ blm_ensure_dir() {
   fi
 }
 
+# Public API: blm_ensure_symlink
+# Purpose: Ensure a symlink exists with exactly the requested lexical target.
+# Usage: blm_ensure_symlink <target> <link>
+# Returns:
+#   0  Correct symlink already existed or was created.
+#   1  Conflicting path/target, missing dependency, or ln/readlink failure.
+#   2  Invalid arguments.
+# Output: Conflict/dependency errors to stderr; native command diagnostics remain.
+# Side effects: Creates the symlink only when link path is absent.
+# Change tracking: Creation marks changed; exact existing target is a no-op.
+# Safety:
+#   A symlink pointing elsewhere is never silently replaced, and a non-symlink
+#   path is never removed. Target comparison is lexical, not canonicalized.
+# External dependencies: ln for creation; readlink only for existing symlinks.
 blm_ensure_symlink() {
   _blm_change_begin
   (($# == 2)) || return 2
@@ -60,6 +96,18 @@ blm_ensure_symlink() {
   _blm_change_mark
 }
 
+# Public API: blm_ensure_mode
+# Purpose: Converge one existing path to an exact numeric permission mode.
+# Usage: blm_ensure_mode <mode> <path>
+# Returns:
+#   0  Mode already matched or chmod succeeded.
+#   1  Path missing, dependency unavailable, or stat/chmod failed.
+#   2  Invalid arguments.
+# Output: Bashloom errors/native utility diagnostics to stderr.
+# Side effects: May chmod the path; marks change only after successful chmod.
+# External dependencies: GNU/Linux stat (`-c`) and chmod.
+# Notes: Symlink behavior follows platform chmod semantics; callers needing link
+# ownership rather than target ownership should use blm_ensure_owner.
 blm_ensure_mode() {
   _blm_change_begin
   (($# == 2)) || {
@@ -87,6 +135,19 @@ blm_ensure_mode() {
   _blm_change_mark
 }
 
+# Public API: blm_ensure_line
+# Purpose: Ensure one exact literal line appears at least once in a regular file.
+# Usage: blm_ensure_line <path> <line>
+# Returns:
+#   0  Exact line already existed or was appended successfully.
+#   1  Parent missing, destination non-regular, or append failed.
+#   2  Invalid arguments.
+# Output: Bashloom validation errors to stderr.
+# Side effects: Creates/appends the file when the line is absent; marks change.
+# Matching semantics:
+#   Equality is literal Bash string equality. No regex, trimming, escaping or
+#   variable expansion is applied, so reruns converge on exactly caller data.
+# Safety: Parent directories are never created implicitly by this helper.
 blm_ensure_line() {
   _blm_change_begin
   (($# == 2)) || {
@@ -120,6 +181,28 @@ blm_ensure_line() {
   _blm_change_mark
 }
 
+# Public API: blm_atomic_write
+# Purpose: Replace/create one file from a producer command without exposing a
+# partially written destination.
+# Usage: blm_atomic_write <path> <producer-command> [args...]
+# Returns:
+#   0  Same-directory temporary file was renamed into place successfully.
+#   producer status when producer fails;
+#   1  Directory/dependency/mode-preservation operation failed;
+#   2  Invalid arguments.
+# Output:
+#   Producer stdout is captured into the temporary file; producer stderr remains
+#   visible. Bashloom/native filesystem errors remain on stderr.
+# Side effects:
+#   Creates a secure temporary file in the destination directory and atomically
+#   renames it over the destination on success. Existing destination mode is
+#   preserved with `chmod --reference` before rename.
+# Failure safety:
+#   Producer/mode failures remove the temp and leave the original destination
+#   untouched. Same-directory temp placement provides same-filesystem rename
+#   semantics. This is atomic replacement, not fsync/power-loss durability.
+# Security: Producer is invoked as original argv; no eval or shell text parsing.
+# External dependencies: rm, mv, mktemp; chmod only when destination exists.
 blm_atomic_write() {
   (($# >= 2)) || {
     blm_error "Usage: blm_atomic_write <path> <producer-command> [args...]"
@@ -139,6 +222,8 @@ blm_atomic_write() {
   blm_require_command rm || return 1
   blm_require_command mv || return 1
 
+  # The temporary file must be in the destination directory: cross-filesystem
+  # moves could otherwise lose rename atomicity.
   local tmp
   tmp=$(blm_temp_file "$directory") || return $?
 

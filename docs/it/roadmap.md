@@ -84,8 +84,6 @@ Bashloom è attualmente nella fase foundation / implementazione iniziale della v
 
 ### M6A — Hardening Linux & Idempotenza
 
-Blocco di implementazione corrente:
-
 - [x] change tracking aggregato e per ultima operazione
 - [x] semantica changed/no-op per directory idempotenti
 - [x] semantica changed/no-op per symlink idempotenti
@@ -101,16 +99,20 @@ Le matrici cross-distribution, macOS e WSL sono rimandate finché quegli ambient
 
 ### M6B — Output & Error Model
 
-Prossimo blocco pianificato:
-
-- [ ] diagnostica runtime/versione
-- [ ] helper title/section
-- [ ] helper espliciti error/exit
-- [ ] contesto errore strutturato
-- [ ] maggiore coerenza human/plain/JSON
+- [x] diagnostica runtime/versione
+- [x] helper title/section
+- [x] helper di failure espliciti senza exit impliciti
+- [x] comportamento di presentazione deterministico human/plain/JSON
+- [x] contratti stdout/stderr e machine-readable documentati
+- [x] copertura contrattuale Bats per M6B
+- [x] esempio M6B mantenuto e copertura full-tour
+- [x] documentazione output/error EN/IT
+- [ ] contesto errore strutturato più ricco
 - [ ] hardening policy colore e Unicode
 
 ### M6C — Primitive System avanzate
+
+Prossimo blocco pianificato:
 
 - [ ] helper backup/replace sicuri
 - [ ] locking file/directory
@@ -153,7 +155,7 @@ Prima della `v0.1.0`:
 - [x] ShellCheck clean per il sorgente pubblico implementato
 - [x] shfmt clean per il sorgente pubblico implementato
 - [x] test Bats per le API pubbliche implementate
-- [x] esempi eseguibili mantenuti fino all'idempotenza
+- [x] esempi eseguibili mantenuti fino a M6B
 - [ ] matrice versioni Bash
 - [ ] matrice cross-distribution
 - [ ] controllo parità documentale dove praticabile

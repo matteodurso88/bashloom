@@ -2,14 +2,6 @@
 
 # Retry a command without changing the caller's shell options.
 
-_blm_is_nonnegative_integer() {
-  [[ $1 =~ ^[0-9]+$ ]]
-}
-
-_blm_is_positive_integer() {
-  [[ $1 =~ ^[1-9][0-9]*$ ]]
-}
-
 blm_retry() {
   local attempts=3
   local delay=1

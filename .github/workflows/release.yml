@@ -45,6 +45,7 @@ jobs:
           cp -R src "$package_dir/src"
           cp -R examples "$package_dir/examples"
           cp -R docs "$package_dir/docs"
+          cp -R tools "$package_dir/tools"
           cp README.md LICENSE CHANGELOG.md "$package_dir/"
 
           tar -C dist -czf "dist/$package.tar.gz" "$package"

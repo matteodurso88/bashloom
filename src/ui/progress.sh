@@ -98,7 +98,7 @@ blm_spinner() {
   if [[ $charset == unicode && ${BLM_UI_STYLE:-rich} == rich ]]; then
     frames='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
   else
-    frames='|/-\'
+    frames="|/-\\"
   fi
 
   local frame_count=${#frames}

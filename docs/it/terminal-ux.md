@@ -1,12 +1,13 @@
 # Terminal UX
 
-M6E aggiunge primitive terminal UX leggere senza trasformare Bashloom in un framework TUI full-screen.
+M6E fornisce primitive terminal UX leggere senza trasformare Bashloom in un framework TUI full-screen. M6E.1 aggiunge un rendering più ricco per terminali human mantenendo fallback deterministici per CI, pipe e output machine-readable.
 
 ## Obiettivi
 
 - comportamento deterministico in CI e pipe;
 - nessuna risposta inventata per i prompt interattivi;
 - rendering stabile human/plain/JSON;
+- output visivamente più ricco sui terminali reali;
 - nessuna dipendenza UI third-party obbligatoria;
 - preservazione esatta dello status del comando eseguito.
 
@@ -25,16 +26,44 @@ M6E aggiunge primitive terminal UX leggere senza trasformare Bashloom in un fram
 - `blm_table <row> [row...]`
 - `blm_tree <depth> <label>`
 
-Queste primitive restano volutamente line-oriented. La modalità human aggiunge struttura minima, plain resta deterministica e JSON emette record machine-readable.
+La modalità human TTY ora renderizza panel auto-dimensionati, tabelle tab-delimited realmente allineate e tree con branch marker. La modalità plain resta deterministica e JSON resta machine-readable.
 
 ## API progress
 
 - `blm_progress <current> <total> [label]`
 - `blm_spinner <label> <command> [args...]`
 
-`blm_progress` usa aggiornamenti tramite carriage return solo su terminale human interattivo. Negli altri casi ogni chiamata emette una riga completa stabile oppure un record JSON.
+Su un terminale human reale, `blm_progress` renderizza una barra visiva a larghezza fissa, ad esempio:
 
-`blm_spinner` anima soltanto su terminale human interattivo. In contesti non interattivi/plain/JSON degrada a normali record di lifecycle e preserva sempre lo status del comando wrapped.
+```text
+[████████████░░░░░░░░░░░░]  50%  Building release
+```
+
+`BLM_PROGRESS_WIDTH` controlla la larghezza della barra e il default è 24 celle.
+
+`blm_spinner` usa uno spinner Unicode animato dove disponibile e uno spinner ASCII classico negli altri casi. Preserva comunque lo status esatto del comando wrapped. In contesti non interattivi/plain/JSON degrada a record lifecycle stabili.
+
+## Policy charset e stile
+
+`BLM_UI_CHARSET` accetta:
+
+- `auto` (default): Unicode quando la locale attiva dichiara UTF-8, altrimenti ASCII;
+- `unicode`: forza i glifi Unicode;
+- `ascii`: forza il rendering ASCII portabile.
+
+`BLM_UI_STYLE` accetta `rich` (default) o `minimal`. Il rendering rich viene usato soltanto per output human collegato a terminale. Plain/JSON non dipendono mai dalle capability grafiche del terminale.
+
+Questo evita di assumere la presenza di font emoji: il rendering rich usa normali simboli Unicode da terminale e glifi block/box, non emoji.
+
+## Demo
+
+`examples/10-terminal-ux.sh` resta l'esempio foundation CI-safe. `examples/11-rich-terminal.sh` è invece la showcase visuale da eseguire manualmente in un terminale reale:
+
+```bash
+bash examples/11-rich-terminal.sh
+```
+
+Con stdout collegato a un vero TTY mostra spinner animato, progress bar, tabella allineata, panel rich e tree. In pipe o CI lo stesso script resta non bloccante e deterministico.
 
 ## Caricamento selettivo
 
@@ -42,4 +71,4 @@ Il loader espone il gruppo modulo `terminal`. Il runtime completo `all` lo inclu
 
 ## Non-obiettivi
 
-M6E non introduce widget full-screen con cursor addressing, mouse terminale, layout engine ricchi, backend esterni Gum/fzf o decorazioni Unicode avanzate. Questi elementi potranno essere valutati dopo la stabilizzazione della foundation v0.1.
+M6E/M6E.1 non introducono ancora applicazioni full-screen con cursor addressing, mouse terminale, layout engine o backend Gum/fzf obbligatori. Restano possibili estensioni post-v0.1, non requisiti della foundation.

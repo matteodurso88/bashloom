@@ -1,7 +1,19 @@
 #!/usr/bin/env bash
 
 # Advanced Linux-first filesystem primitives.
+#
+# These helpers prefer explicit refusal over silent replacement. Copy/move/backup
+# destinations must not already exist, ownership changes never escalate
+# privileges implicitly, and every mutating helper participates in Bashloom's
+# aggregate/per-operation change tracking.
 
+# Public API: blm_checksum_sha256
+# Purpose: Print the SHA-256 digest of one regular file without filename suffix.
+# Usage: blm_checksum_sha256 <file>
+# Returns: 0 on successful digest, 1 for missing file/dependency/failure, 2 args.
+# Output: Exactly the hexadecimal digest plus newline; errors to stderr.
+# Side effects: Reads file only.
+# External dependencies: sha256sum, making this helper Linux/GNU-oriented today.
 blm_checksum_sha256() {
   (($# == 1)) || return 2
   local path=$1
@@ -13,9 +25,19 @@ blm_checksum_sha256() {
 
   local output
   output=$(command sha256sum -- "$path") || return $?
+  # sha256sum emits `<digest>  <filename>`; only the digest is part of the public
+  # Bashloom contract so paths/spaces never leak into machine use.
   printf '%s\n' "${output%% *}"
 }
 
+# Public API: blm_backup
+# Purpose: Archive-copy one existing path to a new, non-existing backup path.
+# Usage: blm_backup <source> <backup>
+# Returns: 0 on copy, 1 for missing source/existing destination/cp failure, 2 args.
+# Output: Bashloom errors plus native cp diagnostics.
+# Side effects: Creates destination using `cp -a`; marks change only on success.
+# Safety: Existing backup paths are never overwritten, including symlinks.
+# External dependencies: cp.
 blm_backup() {
   (($# == 2)) || return 2
   local source=$1
@@ -37,6 +59,14 @@ blm_backup() {
   _blm_change_mark
 }
 
+# Public API: blm_safe_copy
+# Purpose: Copy a file/tree/symlink only when destination does not already exist.
+# Usage: blm_safe_copy <source> <destination>
+# Returns: 0 on copy, 1 on precondition/cp failure, 2 invalid arguments.
+# Output: Errors to stderr; native cp output behavior otherwise preserved.
+# Side effects: Creates destination with archive semantics and marks change.
+# Safety: No implicit overwrite; callers wanting replacement must opt into a
+# separate atomic/backup workflow rather than depending on cp defaults.
 blm_safe_copy() {
   (($# == 2)) || return 2
   local source=$1
@@ -58,6 +88,13 @@ blm_safe_copy() {
   _blm_change_mark
 }
 
+# Public API: blm_safe_move
+# Purpose: Move one path only to an absent destination.
+# Usage: blm_safe_move <source> <destination>
+# Returns: 0 on move, 1 on precondition/mv failure, 2 invalid arguments.
+# Output: Errors to stderr; native mv diagnostics otherwise preserved.
+# Side effects: Relocates/renames source and marks change after success.
+# Safety: Explicit existence checks prevent mv overwrite semantics.
 blm_safe_move() {
   (($# == 2)) || return 2
   local source=$1
@@ -79,6 +116,18 @@ blm_safe_move() {
   _blm_change_mark
 }
 
+# Public API: blm_ensure_owner
+# Purpose: Converge one path's owner/group to an explicit `user:group` pair.
+# Usage: blm_ensure_owner <user:group> <path>
+# Returns:
+#   0  Already correct or chown succeeded.
+#   1  Missing path/dependency or stat/chown failure.
+#   2  Invalid arguments/owner form.
+# Output: Bashloom errors plus native command diagnostics.
+# Side effects: May change ownership and set BLM_LAST_CHANGED/BLM_CHANGED.
+# External dependencies: GNU/Linux stat (`-c`) and chown.
+# Security: Never invokes sudo; caller must already possess required privilege.
+# Symlink policy: `chown -h` changes the link object rather than its target.
 blm_ensure_owner() {
   (($# == 2)) || return 2
   local owner_group=$1

@@ -14,6 +14,7 @@ EXAMPLE_DIR=${BASH_SOURCE[0]%/*}
 EXAMPLE_DIR="$(cd -- "$EXAMPLE_DIR" && pwd)"
 
 examples=(
+  00-foundation.sh
   01-command-runtime.sh
   02-reliability.sh
   03-system-safety.sh

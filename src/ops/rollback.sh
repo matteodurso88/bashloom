@@ -15,6 +15,9 @@ blm_rollback_add() {
   local id=$_BLM_ROLLBACK_NEXT_ID
   local name="_BLM_ROLLBACK_CMD_${id}"
   declare -g -a "$name"
+  # SC2178 is a false positive here: command_ref is intentionally a nameref
+  # to a dynamically named array that preserves the original argv.
+  # shellcheck disable=SC2178
   local -n command_ref="$name"
   command_ref=("$@")
 
@@ -28,6 +31,8 @@ blm_rollback_run() {
 
   for ((index = ${#_BLM_ROLLBACK_STACK[@]} - 1; index >= 0; index--)); do
     name=${_BLM_ROLLBACK_STACK[$index]}
+    # See blm_rollback_add: this nameref targets an internal argv array.
+    # shellcheck disable=SC2178
     local -n command_ref="$name"
 
     if ((${#command_ref[@]} > 0)); then

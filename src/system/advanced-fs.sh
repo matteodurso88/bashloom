@@ -10,11 +10,10 @@ blm_checksum_sha256() {
     return 1
   }
   blm_require_command sha256sum || return 1
-  command sha256sum -- "$path" | {
-    local checksum _
-    read -r checksum _
-    printf '%s\n' "$checksum"
-  }
+
+  local output
+  output=$(command sha256sum -- "$path") || return $?
+  printf '%s\n' "${output%% *}"
 }
 
 blm_backup() {

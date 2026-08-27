@@ -76,6 +76,30 @@ Timeout-style operations use status `124` for an expired deadline. Cleanup and r
 
 Configuration and state use literal `key=value` data. They are never loaded through `source` or `eval`.
 
+## M5 — Consumption
+
+When `src/bashloom-loader.sh` is sourced directly, the following public loader API is available:
+
+- `blm_load <module> [module...]`
+
+Supported module groups are:
+
+- `core`
+- `status`
+- `logging`
+- `requirements`
+- `runtime`
+- `reliability`
+- `system`
+- `state`
+- `all`
+
+Module loading is dependency-aware and idempotent. Unknown module names return status `2`.
+
+The normal `src/bashloom.sh` entrypoint remains the complete-runtime interface and internally loads `all`.
+
+Installation, vendoring and release commands under `tools/` are project tooling rather than sourced public runtime APIs.
+
 ## Detailed contracts
 
 See:
@@ -83,6 +107,8 @@ See:
 - `docs/en/runtime-reliability.md`
 - `docs/en/system-safety.md`
 - `docs/en/runtime-state.md`
+- `docs/en/consumption.md`
+- `docs/en/compatibility.md`
 - `examples/README.md`
 
 ## Exit semantics
@@ -93,6 +119,6 @@ Status `2` is generally used for invalid Bashloom arguments or configuration val
 
 ## Side effects
 
-Sourcing `src/bashloom.sh` must not implicitly enable strict mode, replace caller traps, modify `IFS`, emit user-visible output, read configuration/state, create log files, or execute caller-provided text.
+Sourcing `src/bashloom.sh` or `src/bashloom-loader.sh` must not implicitly enable strict mode, replace caller traps, modify `IFS`, emit user-visible output, read configuration/state, create log files, or execute caller-provided text.
 
-Feature-specific external utilities may be required only when the corresponding function is invoked; sourcing the runtime itself remains dependency-free apart from Bash.
+Feature-specific external utilities may be required only when the corresponding function is invoked; sourcing the runtime or loader itself remains dependency-free apart from Bash.

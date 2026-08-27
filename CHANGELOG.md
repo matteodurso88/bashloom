@@ -68,9 +68,19 @@ Il progetto seguirà il Semantic Versioning a partire dalle release pubbliche ve
 - Primitive atomiche get/set/delete per stato persistente.
 - Runtime-state API documentation in English and Italian.
 - Documentazione API runtime-state in inglese e italiano.
-- Maintained executable examples through M4 with CI full-tour execution.
-- Esempi eseguibili mantenuti fino a M4 con esecuzione full-tour in CI.
-- Bats contract tests for command runtime, reliability, system safety and runtime state.
-- Test contrattuali Bats per command runtime, reliability, system safety e runtime state.
+- Dependency-aware selective module loader with `blm_load`.
+- Loader selettivo dei moduli con dipendenze dichiarate tramite `blm_load`.
+- Explicit prefix installer with no implicit privilege escalation.
+- Installer sotto prefix esplicito senza escalation implicita dei privilegi.
+- Vendoring helper for pinned self-contained runtime copies.
+- Helper di vendoring per copie runtime autosufficienti e fissate nel progetto consumer.
+- EN/IT consumption and compatibility documentation.
+- Documentazione EN/IT su consumption e compatibilità.
+- Version metadata release gate and guarded tag-based GitHub Release workflow with SHA-256 checksums.
+- Release gate sui metadata di versione e workflow GitHub Release su tag con checksum SHA-256.
+- Maintained executable examples through M5 with CI full-tour execution.
+- Esempi eseguibili mantenuti fino a M5 con esecuzione full-tour in CI.
+- Bats contract tests for command runtime, reliability, system safety, runtime state and consumption paths.
+- Test contrattuali Bats per command runtime, reliability, system safety, runtime state e percorsi di consumo.
 - Bats smoke tests and CI foundation.
 - Smoke test Bats e foundation CI.

@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Validate and publish release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install shell tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck shfmt bats
+
+      - name: Quality gates
+        run: |
+          find src examples tools -type f -name '*.sh' -print0 | xargs -0 -n1 bash -n
+          find src examples tools -type f -name '*.sh' -print0 | xargs -0 shellcheck
+          shfmt -d -i 2 -ci src examples tools
+          bats tests
+          bash examples/full-tour.sh
+
+      - name: Validate release metadata
+        run: bash tools/release-check.sh "$GITHUB_REF_NAME"
+
+      - name: Build release archive
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          version=${GITHUB_REF_NAME#v}
+          package="bashloom-$version"
+          package_dir="dist/$package"
+
+          mkdir -p "$package_dir"
+          cp -R src "$package_dir/src"
+          cp -R examples "$package_dir/examples"
+          cp -R docs "$package_dir/docs"
+          cp -R tools "$package_dir/tools"
+          cp README.md LICENSE CHANGELOG.md "$package_dir/"
+
+          tar -C dist -czf "dist/$package.tar.gz" "$package"
+          (cd dist && sha256sum "$package.tar.gz" >"$package.tar.gz.sha256")
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=${GITHUB_REF_NAME#v}
+          gh release create "$GITHUB_REF_NAME" \
+            "dist/bashloom-$version.tar.gz" \
+            "dist/bashloom-$version.tar.gz.sha256" \
+            --title "Bashloom $version" \
+            --generate-notes

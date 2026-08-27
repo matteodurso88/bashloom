@@ -24,14 +24,14 @@ jobs:
 
       - name: Bash syntax
         run: |
-          find src examples -type f -name '*.sh' -print0 | xargs -0 -n1 bash -n
+          find src examples tools -type f -name '*.sh' -print0 | xargs -0 -n1 bash -n
 
       - name: ShellCheck
         run: |
-          find src examples -type f -name '*.sh' -print0 | xargs -0 shellcheck
+          find src examples tools -type f -name '*.sh' -print0 | xargs -0 shellcheck
 
       - name: Formatting
-        run: shfmt -d -i 2 -ci src examples
+        run: shfmt -d -i 2 -ci src examples tools
 
       - name: Bats
         run: bats tests

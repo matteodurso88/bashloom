@@ -12,8 +12,13 @@ blm_step() {
   shift
 
   blm_info "$label"
-  blm_run -- "$@"
-  local status=$?
+
+  local status
+  if blm_run -- "$@"; then
+    status=0
+  else
+    status=$?
+  fi
 
   if ((status == 0)); then
     blm_success "$label"

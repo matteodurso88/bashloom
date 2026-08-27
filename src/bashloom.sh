@@ -18,8 +18,14 @@ source "$_BLM_ROOT/core/version.sh"
 source "$_BLM_ROOT/core/capabilities.sh"
 # shellcheck source=src/core/validate.sh
 source "$_BLM_ROOT/core/validate.sh"
+# shellcheck source=src/core/output.sh
+source "$_BLM_ROOT/core/output.sh"
 # shellcheck source=src/ui/status.sh
 source "$_BLM_ROOT/ui/status.sh"
+# shellcheck source=src/core/log.sh
+source "$_BLM_ROOT/core/log.sh"
+# shellcheck source=src/core/env.sh
+source "$_BLM_ROOT/core/env.sh"
 # shellcheck source=src/ops/require.sh
 source "$_BLM_ROOT/ops/require.sh"
 # shellcheck source=src/ops/run.sh
@@ -42,3 +48,7 @@ source "$_BLM_ROOT/system/path.sh"
 source "$_BLM_ROOT/system/temp.sh"
 # shellcheck source=src/system/fs.sh
 source "$_BLM_ROOT/system/fs.sh"
+# shellcheck source=src/core/config.sh
+source "$_BLM_ROOT/core/config.sh"
+# shellcheck source=src/core/state.sh
+source "$_BLM_ROOT/core/state.sh"

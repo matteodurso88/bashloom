@@ -136,6 +136,36 @@ Segnalazione esplicita dei failure:
 
 `blm_fail` restituisce uno status esplicito da 1 a 255 dopo aver renderizzato l'errore. `blm_usage_error` restituisce status `2`. Nessuno dei due helper chiama `exit`; il caller resta responsabile di terminazione del processo, rollback o recovery.
 
+## M6C — Primitive system avanzate
+
+Filesystem e integrità:
+
+- `blm_backup <source> <backup>`
+- `blm_safe_copy <source> <destination>`
+- `blm_safe_move <source> <destination>`
+- `blm_checksum_sha256 <file>`
+- `blm_ensure_owner <user:group> <path>`
+
+Locking:
+
+- `blm_lock_acquire <lock-path>`
+- `blm_lock_release <lock-path>`
+- `blm_with_lock <lock-path> <command> [args...]`
+
+Path XDG:
+
+- `blm_xdg_config_home`
+- `blm_xdg_data_home`
+- `blm_xdg_cache_home`
+- `blm_xdg_state_home`
+- `blm_xdg_runtime_dir`
+
+Gli helper safe copy/move/backup rifiutano di sovrascrivere destinazioni esistenti. `blm_backup`, `blm_safe_copy`, `blm_safe_move` e `blm_ensure_owner` partecipano al change tracking quando eseguono una modifica con successo.
+
+I lock usano acquisizione atomica tramite `mkdir` e sono non bloccanti. `blm_with_lock` preserva lo status del comando eseguito e tenta il rilascio del lock prima di restituire. Il recupero di stale lock resta una policy del caller.
+
+Gli helper XDG rispettano le variabili environment esplicite e usano i default standard basati su HOME dove definiti. `blm_xdg_runtime_dir` richiede `XDG_RUNTIME_DIR` e non inventa fallback.
+
 ## Contratti dettagliati
 
 Vedi:
@@ -147,6 +177,7 @@ Vedi:
 - `docs/it/compatibility.md`
 - `docs/it/idempotency.md`
 - `docs/it/output-error-model.md`
+- `docs/it/advanced-system.md`
 - `examples/README.md`
 
 ## Semantica degli exit code

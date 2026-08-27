@@ -31,8 +31,11 @@ blm_rollback_run() {
     local -n command_ref="$name"
 
     if ((${#command_ref[@]} > 0)); then
-      "${command_ref[@]}"
-      status=$?
+      if "${command_ref[@]}"; then
+        status=0
+      else
+        status=$?
+      fi
       if ((status != 0 && first_status == 0)); then
         first_status=$status
       fi

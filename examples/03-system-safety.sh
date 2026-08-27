@@ -20,7 +20,7 @@ else
   printf 'Running as a non-root user, as expected for this example.\n'
 fi
 
-workdir=$(blm_temp_dir)
+workdir=$(blm_temp_dir "${TMPDIR:-/tmp}")
 cleanup_workspace() { rm -rf -- "$workdir"; }
 blm_cleanup_add cleanup_workspace
 blm_cleanup_enable_traps

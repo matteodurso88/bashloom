@@ -46,6 +46,7 @@ _blm_load_core() {
   _blm_source_module_file "$_BLM_ROOT/core/change.sh"
   _blm_source_module_file "$_BLM_ROOT/core/output.sh"
   _blm_source_module_file "$_BLM_ROOT/core/env.sh"
+  _blm_source_module_file "$_BLM_ROOT/core/diagnostics.sh"
   _blm_mark_module_loaded core
 }
 
@@ -53,6 +54,8 @@ _blm_load_status() {
   _blm_module_loaded status && return 0
   _blm_load_core || return $?
   _blm_source_module_file "$_BLM_ROOT/ui/status.sh"
+  _blm_source_module_file "$_BLM_ROOT/ui/error.sh"
+  _blm_source_module_file "$_BLM_ROOT/ui/presentation.sh"
   _blm_mark_module_loaded status
 }
 

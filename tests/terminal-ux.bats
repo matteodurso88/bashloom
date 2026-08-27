@@ -22,6 +22,12 @@ setup() {
   [ "$status" -eq 1 ]
 }
 
+@test "select uses explicit default index when non-interactive" {
+  run bash -c 'source "$1"; blm_select Mode --default 2 -- safe fast </dev/null' _ "$BASHLOOM_ENTRYPOINT"
+  [ "$status" -eq 0 ]
+  [ "$output" = "fast" ]
+}
+
 @test "progress degrades to deterministic non-TTY text" {
   run bash -c 'source "$1"; BLM_OUTPUT_MODE=plain blm_progress 2 4 build' _ "$BASHLOOM_ENTRYPOINT"
   [ "$status" -eq 0 ]
@@ -32,6 +38,14 @@ setup() {
   run bash -c 'source "$1"; BLM_OUTPUT_MODE=json blm_progress 1 4 sync' _ "$BASHLOOM_ENTRYPOINT"
   [ "$status" -eq 0 ]
   [ "$output" = '{"type":"progress","label":"sync","current":1,"total":4,"percent":25}' ]
+}
+
+@test "panel plain output is deterministic" {
+  run bash -c 'source "$1"; BLM_OUTPUT_MODE=plain blm_panel Runtime one two' _ "$BASHLOOM_ENTRYPOINT"
+  [ "$status" -eq 0 ]
+  [ "${lines[0]}" = "panel: Runtime" ]
+  [ "${lines[1]}" = "  one" ]
+  [ "${lines[2]}" = "  two" ]
 }
 
 @test "table and tree render deterministic plain output" {

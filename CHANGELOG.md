@@ -44,7 +44,19 @@ Il progetto seguirà il Semantic Versioning a partire dalle release pubbliche ve
 - Rollback stack LIFO e primitive esplicite begin/commit/rollback per le transazioni.
 - Runtime/reliability API documentation in English and Italian.
 - Documentazione API runtime/reliability in inglese e italiano.
-- Bats contract tests for command runtime, retry/wait, timeout, cleanup and rollback.
-- Test contrattuali Bats per command runtime, retry/wait, timeout, cleanup e rollback.
+- `blm_require_root` and readable/writable/executable permission checks.
+- `blm_require_root` e controlli permessi readable/writable/executable.
+- Secure temporary file and directory helpers with restrictive permissions.
+- Helper sicuri per file e directory temporanei con permessi restrittivi.
+- Idempotent directory and symlink helpers.
+- Helper idempotenti per directory e symlink.
+- Atomic file replacement with producer-failure protection and existing-mode preservation on GNU/Linux.
+- Sostituzione atomica dei file con protezione dai fallimenti del producer e preservazione dei permessi esistenti su GNU/Linux.
+- Pure-Bash lexical path helpers and dependency-free entrypoint path resolution.
+- Helper path lessicali pure-Bash e risoluzione path dell'entrypoint senza dipendenze esterne.
+- System-safety API documentation in English and Italian.
+- Documentazione API system-safety in inglese e italiano.
+- Bats contract tests for command runtime, reliability and system safety.
+- Test contrattuali Bats per command runtime, reliability e system safety.
 - Bats smoke tests and CI foundation.
 - Smoke test Bats e foundation CI.

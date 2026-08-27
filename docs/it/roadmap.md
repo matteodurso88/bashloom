@@ -47,17 +47,20 @@ Bashloom è attualmente nella fase foundation / implementazione iniziale della v
 
 ### M3 — System Safety
 
-Prossimo blocco di implementazione:
-
-- [ ] require root
-- [ ] controlli permessi
-- [ ] helper sicuri per file/directory temporanei
-- [ ] ensure directory
-- [ ] ensure symlink
-- [ ] scrittura atomica file
-- [ ] helper path
+- [x] require root
+- [x] controlli permessi readable/writable/executable
+- [x] helper sicuri per file/directory temporanei
+- [x] ensure directory
+- [x] ensure symlink
+- [x] scrittura atomica file
+- [x] helper path lessicali pure-Bash
+- [x] risoluzione path dell'entrypoint senza dipendenze esterne
+- [x] copertura contrattuale Bats per M3
+- [x] documentazione system-safety EN/IT
 
 ### M4 — Runtime State
+
+Prossimo blocco di implementazione:
 
 - [ ] fondamenta logging
 - [ ] helper environment
@@ -93,8 +96,8 @@ Prossimo blocco di implementazione:
 
 ### Qualità
 
-- [x] ShellCheck clean per M1/M2
-- [x] shfmt clean per M1/M2
+- [x] ShellCheck clean per la baseline M1/M2 implementata
+- [x] shfmt clean per la baseline M1/M2 implementata
 - [x] test Bats per le API pubbliche implementate
 - [ ] matrice versioni Bash
 - [ ] matrice cross-distribution

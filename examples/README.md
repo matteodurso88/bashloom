@@ -10,6 +10,7 @@ The `examples/` directory is a maintained part of the Bashloom project. It is in
 
 ### Examples
 
+- `00-foundation.sh` — version metadata, command/TTY/color capabilities and basic status output.
 - `01-command-runtime.sh` — M1 command execution, exit-code preservation, steps and dry-run.
 - `02-reliability.sh` — M2 retry, polling, timeout, cleanup and rollback/transactions.
 - `03-system-safety.sh` — M3 requirements, permissions, temp resources, idempotent filesystem helpers, atomic writes and paths.
@@ -20,6 +21,7 @@ The `examples/` directory is a maintained part of the Bashloom project. It is in
 Run an example from the repository root:
 
 ```bash
+bash examples/00-foundation.sh
 bash examples/01-command-runtime.sh
 bash examples/02-reliability.sh
 bash examples/03-system-safety.sh
@@ -34,7 +36,7 @@ All filesystem-changing examples operate inside temporary workspaces and clean u
 
 | Capability | Focused example | Full tour |
 | --- | --- | --- |
-| version/capabilities/status | — | yes |
+| version/capabilities/status | `00-foundation.sh` | yes |
 | `blm_run`, dry-run, `blm_step` | `01-command-runtime.sh` | yes |
 | retry/wait/timeout | `02-reliability.sh` | yes |
 | cleanup/rollback/transactions | `02-reliability.sh` | yes |
@@ -73,6 +75,7 @@ La directory `examples/` è una parte mantenuta del progetto Bashloom. Ha tre sc
 
 ### Esempi
 
+- `00-foundation.sh` — metadata versione, capability comando/TTY/colore e output di stato di base.
 - `01-command-runtime.sh` — M1: esecuzione comandi, preservazione exit code, step e dry-run.
 - `02-reliability.sh` — M2: retry, polling, timeout, cleanup e rollback/transazioni.
 - `03-system-safety.sh` — M3: requisiti, permessi, risorse temporanee, filesystem idempotente, atomic write e path.
@@ -83,6 +86,7 @@ La directory `examples/` è una parte mantenuta del progetto Bashloom. Ha tre sc
 Esecuzione dalla root del repository:
 
 ```bash
+bash examples/00-foundation.sh
 bash examples/01-command-runtime.sh
 bash examples/02-reliability.sh
 bash examples/03-system-safety.sh
@@ -97,7 +101,7 @@ Tutti gli esempi che modificano il filesystem lavorano dentro workspace temporan
 
 | Capability | Esempio focalizzato | Full tour |
 | --- | --- | --- |
-| versione/capability/status | — | sì |
+| versione/capability/status | `00-foundation.sh` | sì |
 | `blm_run`, dry-run, `blm_step` | `01-command-runtime.sh` | sì |
 | retry/wait/timeout | `02-reliability.sh` | sì |
 | cleanup/rollback/transazioni | `02-reliability.sh` | sì |

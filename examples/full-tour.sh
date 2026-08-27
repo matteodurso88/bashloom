@@ -21,6 +21,7 @@ examples=(
   04-runtime-state.sh
   05-consumption.sh
   06-idempotency.sh
+  07-output-error-model.sh
 )
 
 printf '%s\n' '===================================================================='

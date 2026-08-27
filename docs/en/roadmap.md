@@ -84,8 +84,6 @@ Bashloom is currently in the foundation / early v0.1 implementation phase. The r
 
 ### M6A — Linux Hardening & Idempotency
 
-Current implementation block:
-
 - [x] aggregate and last-operation change tracking
 - [x] idempotent directory change semantics
 - [x] idempotent symlink change semantics
@@ -101,16 +99,20 @@ Cross-distribution, macOS and WSL matrices are deferred until those environments
 
 ### M6B — Output & Error Model
 
-Planned next:
-
-- [ ] runtime/version diagnostics
-- [ ] title/section helpers
-- [ ] explicit error/exit helpers
-- [ ] structured error context
-- [ ] tighter human/plain/JSON consistency
+- [x] runtime/version diagnostics
+- [x] title/section helpers
+- [x] explicit non-exiting failure helpers
+- [x] deterministic human/plain/JSON presentation behavior
+- [x] documented stdout/stderr and machine-readable contracts
+- [x] Bats contract coverage for M6B
+- [x] maintained M6B example and full-tour coverage
+- [x] EN/IT output/error documentation
+- [ ] richer structured error context
 - [ ] color and Unicode policy hardening
 
 ### M6C — Advanced System Primitives
+
+Planned next:
 
 - [ ] safe backup/replace helpers
 - [ ] file/directory locking
@@ -153,7 +155,7 @@ Before `v0.1.0`:
 - [x] ShellCheck clean for implemented public source
 - [x] shfmt clean for implemented public source
 - [x] Bats tests for implemented public APIs
-- [x] maintained executable examples through idempotency
+- [x] maintained executable examples through M6B
 - [ ] Bash version matrix
 - [ ] cross-distribution matrix
 - [ ] documentation parity checks where practical

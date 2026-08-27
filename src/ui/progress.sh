@@ -50,13 +50,21 @@ blm_spinner() {
   if [[ $mode != human ]] || ! blm_is_tty; then
     blm_info "$label"
     local status
-    if "$@"; then status=0; else status=$?; fi
-    if ((status == 0)); then blm_success "$label"; else blm_error "$label (exit $status)"; fi
+    if "$@"; then
+      status=0
+    else
+      status=$?
+    fi
+    if ((status == 0)); then
+      blm_success "$label"
+    else
+      blm_error "$label (exit $status)"
+    fi
     return "$status"
   fi
 
   "$@" &
-  local pid=$! frame=0 frames='|/-\\'
+  local pid=$! frame=0 frames="|/-\\"
   while kill -0 "$pid" 2>/dev/null; do
     printf '\r[%s] %s' "${frames:frame%4:1}" "$label" >&2
     frame=$((frame + 1))
@@ -64,7 +72,11 @@ blm_spinner() {
   done
 
   local status
-  if wait "$pid"; then status=0; else status=$?; fi
+  if wait "$pid"; then
+    status=0
+  else
+    status=$?
+  fi
   if ((status == 0)); then
     printf '\r[OK] %s\n' "$label" >&2
   else

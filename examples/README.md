@@ -14,7 +14,8 @@ The `examples/` directory is a maintained part of the Bashloom project. It is in
 - `02-reliability.sh` — M2 retry, polling, timeout, cleanup and rollback/transactions.
 - `03-system-safety.sh` — M3 requirements, permissions, temp resources, idempotent filesystem helpers, atomic writes and paths.
 - `04-runtime-state.sh` — M4 output modes, logging, environment helpers, safe config and persistent state.
-- `full-tour.sh` — non-destructive end-to-end tour of all public primitives implemented through M4.
+- `05-consumption.sh` — M5 selective loading, prefix installation, vendoring and release metadata validation.
+- `full-tour.sh` — non-destructive end-to-end tour of all public primitives implemented through M5.
 
 Run an example from the repository root:
 
@@ -23,6 +24,7 @@ bash examples/01-command-runtime.sh
 bash examples/02-reliability.sh
 bash examples/03-system-safety.sh
 bash examples/04-runtime-state.sh
+bash examples/05-consumption.sh
 bash examples/full-tour.sh
 ```
 
@@ -46,12 +48,16 @@ All filesystem-changing examples operate inside temporary workspaces and clean u
 | environment helpers | `04-runtime-state.sh` | yes |
 | safe config | `04-runtime-state.sh` | yes |
 | persistent state | `04-runtime-state.sh` | yes |
+| selective module loading | `05-consumption.sh` | yes |
+| prefix installation | `05-consumption.sh` | yes |
+| vendoring | `05-consumption.sh` | yes |
+| release metadata gate | `05-consumption.sh` | yes |
 
 ### Maintenance rule
 
 Examples are part of the public feature contract. A pull request that adds, removes or changes a public Bashloom API must update the relevant example(s) and this coverage matrix when applicable.
 
-CI checks Bash syntax, ShellCheck and shfmt for the examples and executes `full-tour.sh`. A public API change is therefore not considered complete if the maintained examples no longer work.
+CI checks Bash syntax, ShellCheck and shfmt for `src/`, `examples/` and `tools/`, runs the Bats suites, and executes `full-tour.sh`. A public API or consumption change is therefore not considered complete if the maintained examples no longer work.
 
 Source comments remain in English according to the repository contribution policy. Canonical explanatory documentation is maintained in both English and Italian.
 
@@ -71,7 +77,8 @@ La directory `examples/` è una parte mantenuta del progetto Bashloom. Ha tre sc
 - `02-reliability.sh` — M2: retry, polling, timeout, cleanup e rollback/transazioni.
 - `03-system-safety.sh` — M3: requisiti, permessi, risorse temporanee, filesystem idempotente, atomic write e path.
 - `04-runtime-state.sh` — M4: modalità output, logging, helper environment, config sicura e stato persistente.
-- `full-tour.sh` — tour end-to-end non distruttivo di tutte le primitive pubbliche implementate fino a M4.
+- `05-consumption.sh` — M5: caricamento selettivo, installazione sotto prefix, vendoring e validazione metadata release.
+- `full-tour.sh` — tour end-to-end non distruttivo di tutte le primitive pubbliche implementate fino a M5.
 
 Esecuzione dalla root del repository:
 
@@ -80,6 +87,7 @@ bash examples/01-command-runtime.sh
 bash examples/02-reliability.sh
 bash examples/03-system-safety.sh
 bash examples/04-runtime-state.sh
+bash examples/05-consumption.sh
 bash examples/full-tour.sh
 ```
 
@@ -103,11 +111,15 @@ Tutti gli esempi che modificano il filesystem lavorano dentro workspace temporan
 | helper environment | `04-runtime-state.sh` | sì |
 | config sicura | `04-runtime-state.sh` | sì |
 | stato persistente | `04-runtime-state.sh` | sì |
+| caricamento selettivo moduli | `05-consumption.sh` | sì |
+| installazione sotto prefix | `05-consumption.sh` | sì |
+| vendoring | `05-consumption.sh` | sì |
+| release metadata gate | `05-consumption.sh` | sì |
 
 ### Regola di manutenzione
 
 Gli esempi fanno parte del contratto pubblico delle feature. Una pull request che aggiunge, rimuove o modifica un'API pubblica Bashloom deve aggiornare gli esempi pertinenti e, quando necessario, questa matrice di copertura.
 
-La CI verifica sintassi Bash, ShellCheck e shfmt sugli esempi ed esegue `full-tour.sh`. Una modifica dell'API pubblica non è quindi considerata completa se gli esempi mantenuti non funzionano più.
+La CI verifica sintassi Bash, ShellCheck e shfmt su `src/`, `examples/` e `tools/`, esegue i test Bats ed esegue `full-tour.sh`. Una modifica delle API o del modello di consumo non è quindi considerata completa se gli esempi mantenuti non funzionano più.
 
 I commenti nei sorgenti restano in inglese secondo la policy di contribuzione del repository. La documentazione esplicativa canonica viene mantenuta sia in inglese sia in italiano.

@@ -53,7 +53,12 @@ blm_run() {
     return 0
   fi
 
-  "$@"
-  local status=$?
+  local status
+  if "$@"; then
+    status=0
+  else
+    status=$?
+  fi
+
   return "$status"
 }

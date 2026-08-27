@@ -56,7 +56,7 @@ else
 fi
 
 section "Temporary resources and cleanup"
-workdir=$(blm_temp_dir)
+workdir=$(blm_temp_dir "${TMPDIR:-/tmp}")
 printf 'workspace: %s\n' "$workdir"
 cleanup_workspace() { rm -rf -- "$workdir"; }
 blm_cleanup_add cleanup_workspace

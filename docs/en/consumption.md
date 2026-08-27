@@ -29,21 +29,7 @@ blm_load runtime system
 
 `blm_load` is idempotent and resolves declared dependencies automatically.
 
-Supported module groups:
-
-| Module | Purpose |
-| --- | --- |
-| `core` | version, capabilities, validation, output and environment helpers |
-| `status` | core plus status rendering |
-| `logging` | status plus logging |
-| `requirements` | status plus requirement checks |
-| `runtime` | requirements plus command execution and steps |
-| `reliability` | runtime plus retry, wait, timeout, cleanup and rollback |
-| `system` | requirements plus path, temporary-resource and filesystem helpers |
-| `state` | system plus safe configuration and persistent state |
-| `all` | complete public runtime |
-
-Unknown module names return status `2`.
+Supported module groups include `core`, `status`, `terminal`, `logging`, `requirements`, `runtime`, `reliability`, `system`, `state`, `git`, `systemd`, `docker`, `network`, `integrations` and `all`. Unknown module names return status `2`.
 
 ## Prefix installation
 
@@ -71,58 +57,80 @@ An alternate prefix can be selected explicitly:
 bash tools/install.sh --prefix /opt/example
 ```
 
-Existing installations are never replaced unless `--force` is provided.
+Existing installations are never replaced unless `--force` is provided. Bashloom never invokes `sudo`; privilege elevation remains application/operator policy.
 
-For a system-wide install, privilege elevation is deliberately outside Bashloom:
+## Pinned vendoring
+
+For applications that carry Bashloom inside their own repository, pinned vendoring is the recommended pre-v1.0 model.
+
+From an approved Bashloom checkout/tag/commit:
 
 ```bash
-sudo bash tools/install.sh --prefix /usr/local
+bash tools/vendor.sh \
+  --destination /path/to/consumer/vendor/bashloom \
+  --pin b6a096ba1feb31f41a639856b29ae07e25ba3676
 ```
 
-Bashloom itself never invokes `sudo`.
+When `--pin` is omitted, the helper resolves the current Bashloom Git `HEAD`. If Git metadata is unavailable, callers must provide `--pin` explicitly.
 
-## Vendoring
+The resulting bundle is:
 
-For applications that should carry a pinned Bashloom copy in their own repository:
-
-```bash
-bash /path/to/bashloom/tools/vendor.sh \
-  --destination vendor/bashloom
+```text
+vendor/bashloom/
+├── PIN
+├── LICENSE
+├── SHA256SUMS
+└── src/
+    ├── bashloom.sh
+    ├── bashloom-loader.sh
+    └── ...
 ```
 
-The resulting project can use:
+Consumers source from the vendored `src/` tree:
 
 ```bash
-source "$PROJECT_ROOT/vendor/bashloom/bashloom.sh"
+source "$PROJECT_ROOT/vendor/bashloom/src/bashloom.sh"
 ```
 
-or selective loading:
+or:
 
 ```bash
-source "$PROJECT_ROOT/vendor/bashloom/bashloom-loader.sh"
+source "$PROJECT_ROOT/vendor/bashloom/src/bashloom-loader.sh"
 blm_load runtime reliability
 ```
 
-Vendoring copies the complete `src/` runtime so that dependency resolution remains self-contained. Existing vendored copies require explicit `--force` replacement.
+The vendor bundle is intended to remain byte-identical to the approved upstream material. Consumer-specific changes belong outside `vendor/bashloom/src/`.
+
+### Integrity verification
+
+Consumer CI can verify the vendored bundle without network access:
+
+```bash
+bash /path/to/bashloom/tools/vendor-verify.sh \
+  "$PROJECT_ROOT/vendor/bashloom"
+```
+
+The verifier requires a non-empty `PIN`, validates the expected bundle shape and checks `LICENSE` plus every file under `src/` against `SHA256SUMS`. A modified or missing runtime file fails verification.
+
+The intended lifecycle is:
+
+```text
+approved upstream commit/tag
+→ explicit vendor update
+→ PIN + SHA256SUMS committed with consumer
+→ consumer CI integrity verification
+→ deploy uses only the local vendored copy
+```
+
+There is no automatic tracking of upstream `main`, no runtime clone/download and no automatic repin. Rollback is a normal consumer revert or explicit repin to a previously approved Bashloom version.
+
+Existing vendor destinations are never replaced unless `--force` is supplied.
 
 ## Release workflow
 
-Bashloom release tags use the `vMAJOR.MINOR.PATCH` convention.
+Bashloom release tags use the `vMAJOR.MINOR.PATCH` convention. Before a tagged release can be published, `tools/release-check.sh` verifies that the requested tag version exactly matches `BLM_VERSION` in `src/core/version.sh`.
 
-Before a tagged release can be published, `tools/release-check.sh` verifies that the requested tag version exactly matches `BLM_VERSION` in `src/core/version.sh`.
-
-A `v*` tag triggers the release workflow, which runs:
-
-- Bash syntax checks;
-- ShellCheck;
-- shfmt verification;
-- Bats tests;
-- the maintained full feature tour;
-- release metadata validation;
-- archive creation and SHA-256 checksum generation;
-- GitHub Release publication.
-
-The release archive contains `src/`, `examples/`, `docs/`, `tools/`, `README.md`, `LICENSE` and `CHANGELOG.md`.
+A `v*` tag triggers the release workflow, which reruns syntax, ShellCheck, shfmt, Bats, maintained examples and release metadata gates before publishing the release archive and SHA-256 checksum.
 
 No `v0.1.0` tag should be created until the production-validation milestone is complete.
 

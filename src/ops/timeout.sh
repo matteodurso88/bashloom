@@ -1,8 +1,31 @@
 #!/usr/bin/env bash
 
-# Execute a command in an isolated child process and stop it after a timeout.
-# Shell functions therefore run in a subshell and cannot mutate caller state.
+# Isolated command deadline primitive.
+#
+# The wrapped command runs in a subshell/background child so Bashloom can signal
+# it independently from the caller shell. Consequently shell functions executed
+# through this API cannot propagate variable/cwd mutations back to the caller.
+#
+# Current scope is direct-child termination. Process-group/descendant hardening
+# remains a separately tracked Linux hardening item and is not implied here.
 
+# Public API: blm_timeout
+# Purpose: Run one command and enforce TERM -> grace -> KILL after a deadline.
+# Usage: blm_timeout [--timeout S] [--grace S] [--] <command> [args...]
+# Defaults: timeout=30 seconds, grace=1 second.
+# Returns:
+#   exact wrapped-command status when it finishes before the deadline;
+#   124 when Bashloom enforces the timeout;
+#   2 for invalid options/values or missing command;
+#   127 when required sleep support fails during normal deadline polling.
+# Output:
+#   Wrapped command output is inherited. A timeout emits one Bashloom error.
+# Side effects:
+#   Starts a child process and may send TERM/KILL to that direct child.
+# Isolation:
+#   The child clears inherited INT/TERM traps before running caller code so
+#   Bashloom's own cleanup trap configuration is not accidentally reused there.
+# Timing model: Bash SECONDS is used; polling resolution is one second.
 blm_timeout() {
   local timeout=30
   local grace=1
@@ -46,6 +69,8 @@ blm_timeout() {
     return 2
   }
 
+  # `sleep` is a call-time dependency only. It is not required merely to source
+  # Bashloom, preserving the dependency-free runtime import contract.
   if ((timeout > 0 || grace > 0)); then
     blm_require_command sleep || return 127
   fi
@@ -62,6 +87,8 @@ blm_timeout() {
       kill -TERM "$pid" 2>/dev/null || true
 
       if ((grace > 0)); then
+        # Failure during grace sleeping does not prevent escalation; timeout has
+        # already occurred and the priority is to complete termination safely.
         command sleep "$grace" || true
       fi
 
@@ -69,12 +96,15 @@ blm_timeout() {
         kill -KILL "$pid" 2>/dev/null || true
       fi
 
+      # Reap the child regardless of signal-derived status; public timeout
+      # semantics intentionally normalize this path to status 124.
       wait "$pid" 2>/dev/null || true
       blm_error "Command timed out after ${timeout}s"
       return 124
     fi
 
     command sleep 1 || {
+      # A polling infrastructure failure must not orphan the managed child.
       kill -TERM "$pid" 2>/dev/null || true
       wait "$pid" 2>/dev/null || true
       return 127

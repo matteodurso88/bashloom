@@ -64,7 +64,10 @@ blm_confirm() {
 #           only for the duration of Bash read -s.
 blm_password() {
   (($# == 1)) || return 2
-  [[ -t 0 ]] || { blm_error "Interactive secret input is unavailable: $1"; return 1; }
+  [[ -t 0 ]] || {
+    blm_error "Interactive secret input is unavailable: $1"
+    return 1
+  }
   local answer
   printf '%s: ' "$1" >&2
   IFS= read -r -s answer || return 1

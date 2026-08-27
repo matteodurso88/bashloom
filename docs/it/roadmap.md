@@ -72,15 +72,19 @@ Bashloom è attualmente nella fase foundation / implementazione iniziale della v
 
 ### M5 — Consumption
 
-Prossimo blocco di implementazione:
-
-- [ ] modello di installazione
-- [ ] guida al vendoring
-- [ ] caricamento selettivo moduli
-- [ ] documentazione compatibilità
-- [ ] workflow versioning/release
+- [x] modello esplicito di installazione sotto prefix
+- [x] helper e guida al vendoring
+- [x] caricamento selettivo dei moduli con dipendenze dichiarate
+- [x] documentazione compatibilità
+- [x] release gate sui metadata di versione
+- [x] workflow di release su tag con archivio e checksum SHA-256
+- [x] copertura contrattuale Bats dei percorsi di consumo
+- [x] esempio M5 mantenuto
+- [x] documentazione consumption EN/IT
 
 ### M6 — Production Validation
+
+Prossimo blocco di implementazione:
 
 - [ ] integrare primitive Bashloom in almeno un workflow reale di deployment
 - [ ] validare su un workflow desktop/installer
@@ -103,7 +107,7 @@ Prossimo blocco di implementazione:
 - [x] ShellCheck clean per il sorgente pubblico implementato
 - [x] shfmt clean per il sorgente pubblico implementato
 - [x] test Bats per le API pubbliche implementate
-- [x] esempi eseguibili mantenuti fino a M4
+- [x] esempi eseguibili mantenuti fino a M5
 - [ ] matrice versioni Bash
 - [ ] matrice cross-distribution
 - [ ] controllo parità documentale dove praticabile

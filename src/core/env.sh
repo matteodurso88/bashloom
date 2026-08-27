@@ -31,6 +31,11 @@ blm_env_bool() {
   local fallback=${2-}
   local value
 
+  _blm_valid_env_name "$name" || {
+    blm_error "Invalid environment variable name: $name"
+    return 2
+  }
+
   if [[ -v $name ]]; then
     value=${!name}
   elif (($# == 2)); then

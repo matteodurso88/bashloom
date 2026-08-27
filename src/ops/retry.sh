@@ -60,11 +60,10 @@ blm_retry() {
   local current_delay=$delay
 
   while ((attempt <= attempts)); do
-    blm_run -- "$@"
-    status=$?
-
-    if ((status == 0)); then
+    if blm_run -- "$@"; then
       return 0
+    else
+      status=$?
     fi
 
     if ((attempt == attempts)); then

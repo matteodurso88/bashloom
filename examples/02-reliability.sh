@@ -12,7 +12,7 @@ EXAMPLE_DIR=${BASH_SOURCE[0]%/*}
 REPO_ROOT="$(cd -- "$EXAMPLE_DIR/.." && pwd)"
 source "$REPO_ROOT/src/bashloom.sh"
 
-workdir=$(blm_temp_dir)
+workdir=$(blm_temp_dir "${TMPDIR:-/tmp}")
 cleanup_workspace() { rm -rf -- "$workdir"; }
 blm_cleanup_add cleanup_workspace
 blm_cleanup_enable_traps

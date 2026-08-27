@@ -9,127 +9,118 @@ Bashloom is currently in the foundation / early v0.1 implementation phase. The r
 - [x] architecture baseline
 - [x] source-safe runtime entrypoint
 - [x] version metadata
-- [x] basic capability detection
-- [x] basic status output
-- [x] basic requirement checks
+- [x] basic capability detection/status/requirements
 - [x] Bats smoke tests
 - [x] ShellCheck/shfmt/Bats CI
-- [x] contributor issue and pull-request templates
-- [x] draft API specification for v0.1 primitives
+- [x] contributor templates
+- [x] draft v0.1 API specification
 - [ ] compatibility test matrix
 
 ## v0.1 — Reliable Shell Foundation
 
 ### M1 — Command Runtime
 
-- [x] `blm_run`
-- [x] exact exit-status preservation
+- [x] `blm_run`, exact exit status, dry-run and `blm_step`
 - [x] caller `set -e` compatibility
-- [x] local `--dry-run`
-- [x] global `BLM_DRY_RUN=1`
-- [x] `blm_step`
 - [x] no `eval` / argv-safe execution
 
 ### M2 — Reliability
 
-- [x] retry/wait/timeout primitives
-- [x] timeout status `124`
-- [x] LIFO cleanup with explicit trap installation
-- [x] LIFO rollback and explicit transactions
+- [x] retry/wait/timeout
+- [x] LIFO cleanup/rollback and explicit transactions
 - [x] Bats coverage and EN/IT documentation
 
 ### M3 — System Safety
 
 - [x] root/permission requirements
-- [x] secure temporary resources
-- [x] directory/symlink ensures
-- [x] atomic file writes
-- [x] pure-Bash lexical path helpers
+- [x] secure temp resources
+- [x] directory/symlink convergence and atomic writes
+- [x] lexical path helpers
 - [x] Bats coverage and EN/IT documentation
 
 ### M4 — Runtime State
 
-- [x] logging and environment helpers
-- [x] safe literal configuration
-- [x] atomic state files
-- [x] human/plain/JSON output model
-- [x] Bats coverage, maintained example and EN/IT documentation
+- [x] logging/environment helpers
+- [x] safe literal config and atomic state
+- [x] human/plain/JSON output
+- [x] tests, example and EN/IT docs
 
 ### M5 — Consumption
 
-- [x] prefix installer and vendoring helper
-- [x] dependency-aware selective loader
-- [x] compatibility documentation
-- [x] release metadata gate and tag workflow
-- [x] Bats coverage and maintained example
+- [x] installer/vendoring
+- [x] selective loader
+- [x] compatibility docs and release gate/workflow
+- [x] tests and maintained example
 
 ### M6A — Linux Hardening & Idempotency
 
 - [x] aggregate/per-operation change tracking
 - [x] change-aware directory/symlink semantics
-- [x] `blm_ensure_mode`
-- [x] `blm_ensure_line`
+- [x] `blm_ensure_mode`, `blm_ensure_line`
 - [x] explicit filesystem dependency checks
-- [x] Bats coverage, maintained example and EN/IT documentation
+- [x] tests/example/docs
 - [ ] process-group hardening for `blm_timeout`
 
 Cross-distribution, macOS and WSL matrices are deferred until those environments can be validated directly.
 
 ### M6B — Output & Error Model
 
-- [x] runtime/version diagnostics
-- [x] title/section helpers
+- [x] diagnostics and title/section helpers
 - [x] explicit non-exiting failure helpers
-- [x] deterministic human/plain/JSON presentation behavior
-- [x] documented stdout/stderr and machine-readable contracts
-- [x] Bats coverage, maintained example and EN/IT documentation
+- [x] deterministic human/plain/JSON contracts
+- [x] tests/example/docs
 - [ ] richer structured error context
-- [ ] color and Unicode policy hardening
 
 ### M6C — Advanced System Primitives
 
-- [x] safe backup and non-overwriting copy/move
-- [x] SHA-256 checksum helper
-- [x] atomic directory locking and `blm_with_lock`
-- [x] ownership convergence
-- [x] XDG path helpers
-- [x] Bats coverage, maintained example and EN/IT documentation
+- [x] safe backup/copy/move and SHA-256
+- [x] directory locking / `blm_with_lock`
+- [x] ownership convergence and XDG paths
+- [x] tests/example/docs
 
 ### M6D — Integrations
 
 - [x] Git adapter
 - [x] systemd adapter
 - [x] Docker / Compose adapter
-- [x] DNS / HTTP network readiness checks
-- [x] selective integration loader groups
-- [x] Bats contract coverage
-- [x] maintained M6D example and full-tour coverage
-- [x] EN/IT integrations documentation
-- [x] deep source-documentation standard for public APIs
-- [x] CI source-documentation contract
-- [x] repository-wide source comment hardening pass
+- [x] DNS / HTTP readiness
+- [x] selective integration groups
+- [x] deep source-documentation standard and CI contract
+- [x] repository-wide source comment hardening
 - [ ] Debian / APT adapter
 
-APT remains deferred from the first M6D slice because package-management policy and environment variance are materially broader than the thin adapters above.
+APT remains deferred because package-management policy and environment variance are materially broader than the thin adapters above.
 
-### M6E — Terminal UX
+### M6E — Terminal UX Foundation
 
 - [x] spinner/progress
 - [x] confirm/input/password/select
-- [x] panels/tables/tree rendering
-- [x] graceful degradation for non-interactive environments
+- [x] panels/tables/tree
+- [x] deterministic non-interactive degradation
 - [x] selective `terminal` loader group
-- [x] Bats contract coverage
-- [x] maintained M6E example and full-tour coverage
-- [x] EN/IT terminal UX documentation
+- [x] tests/example/full-tour/docs
 
-Advanced full-screen TUI behavior, external Gum/fzf backends and richer Unicode decoration remain post-v0.1 candidates.
+### M6E.1 — Rich Terminal Rendering
+
+- [x] visual fixed-width progress bar
+- [x] animated Unicode/ASCII spinner
+- [x] auto-sized rich panels
+- [x] aligned tab-delimited tables
+- [x] branch-marked tree rendering
+- [x] `BLM_UI_CHARSET=auto|ascii|unicode`
+- [x] `BLM_UI_STYLE=rich|minimal`
+- [x] `BLM_PROGRESS_WIDTH`
+- [x] dedicated interactive showcase `examples/11-rich-terminal.sh`
+- [x] CI-safe degradation retained
+- [x] EN/IT documentation and Bats coverage
+
+Full-screen TUI behavior, terminal mouse handling and mandatory Gum/fzf backends remain post-v0.1 candidates.
 
 ### M6F — Production Validation
 
 Before `v0.1.0`:
 
-- [ ] integrate Bashloom primitives into at least one real deployment workflow
+- [ ] integrate Bashloom into at least one real deployment workflow
 - [ ] validate against a desktop/installer workflow
 - [ ] validate against a system/provisioning workflow
 - [ ] revise unstable APIs from field feedback
@@ -140,7 +131,7 @@ Before `v0.1.0`:
 - [x] ShellCheck clean for implemented public source
 - [x] shfmt clean for implemented public source
 - [x] Bats tests for implemented public APIs
-- [x] maintained executable examples through M6E
+- [x] maintained executable examples through M6E.1
 - [x] machine-enforced public API source documentation
 - [ ] Bash version matrix
 - [ ] cross-distribution matrix
@@ -148,26 +139,15 @@ Before `v0.1.0`:
 
 ## v0.2 — Terminal UX
 
-Candidate scope after the first usable foundation release:
-
-- richer panels and tables
-- advanced spinners/progress
-- timers
-- richer prompt/select flows
-- optional enhanced backends such as Gum/fzf
-- full-screen/cursor-addressed components only if real consumers justify them
+Candidate scope after the first usable foundation release: timers, richer prompt/select flows, optional Gum/fzf backends and full-screen/cursor-addressed components only when real consumers justify them.
 
 ## v0.3 — System & Integrations
 
-Candidate scope after the v0.1 foundation stabilizes:
-
-- expanded Git/Docker/systemd adapters
-- Debian/APT helpers
-- richer network checks
+Candidate scope after v0.1 stabilizes: expanded Git/Docker/systemd adapters, Debian/APT helpers and richer network checks.
 
 ## Later exploration
 
-- human/plain/JSON output refinements
+- human/plain/JSON refinements
 - vendorable module bundler
 - generated API reference
 - shell completion for a future Bashloom CLI

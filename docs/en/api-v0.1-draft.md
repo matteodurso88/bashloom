@@ -1,74 +1,98 @@
 # Draft v0.1 API Specification
 
-> Status: **Draft**. The functions below are not yet covered by a stable compatibility guarantee.
+> Status: **Draft**. These public APIs are implemented but are not yet covered by a stable compatibility guarantee.
 
-## Current foundation API
+## Foundation and terminal capability
 
-### `blm_has_command <name>`
+- `blm_has_command <name>`
+- `blm_is_tty`
+- `blm_color_enabled`
+- `blm_info <message...>`
+- `blm_success <message...>`
+- `blm_warn <message...>`
+- `blm_error <message...>`
 
-Returns success when `<name>` resolves through `PATH`.
+## M1 — Command runtime
 
-### `blm_is_tty`
+- `blm_run [--dry-run] [--] <command> [args...]`
+- `blm_step <label> <command> [args...]`
 
-Returns success when standard output is connected to a terminal.
+`blm_run` preserves the wrapped command status and supports both local `--dry-run` and global `BLM_DRY_RUN=1`.
 
-### `blm_color_enabled`
+## M2 — Reliability
 
-Returns success when Bashloom considers ANSI color appropriate. Current conditions disable color when `NO_COLOR` is non-empty, `TERM=dumb`, or stdout is not a TTY.
+- `blm_retry [--attempts N] [--delay S] [--backoff N] [--] <command> [args...]`
+- `blm_wait_for [--timeout S] [--interval S] [--] <command> [args...]`
+- `blm_timeout [--timeout S] [--grace S] [--] <command> [args...]`
+- `blm_cleanup_add <command> [args...]`
+- `blm_cleanup_run`
+- `blm_cleanup_clear`
+- `blm_cleanup_enable_traps`
+- `blm_cleanup_disable_traps`
+- `blm_rollback_add <command> [args...]`
+- `blm_rollback_run`
+- `blm_rollback_clear`
+- `blm_transaction_begin`
+- `blm_transaction_commit`
+- `blm_transaction_rollback`
 
-### `blm_info <message...>`
+Timeout-style operations use status `124` for an expired deadline. Cleanup and rollback stacks use LIFO order.
 
-Prints an informational status line to stdout.
+## M3 — System safety
 
-### `blm_success <message...>`
+- `blm_require_command <name>`
+- `blm_require_file <path>`
+- `blm_require_dir <path>`
+- `blm_require_env <name>`
+- `blm_require_root`
+- `blm_require_readable <path>`
+- `blm_require_writable <path>`
+- `blm_require_executable <path>`
+- `blm_temp_file [directory]`
+- `blm_temp_dir [directory]`
+- `blm_ensure_dir [--mode MODE] <path>`
+- `blm_ensure_symlink <target> <link>`
+- `blm_atomic_write <path> <producer-command> [args...]`
+- `blm_path_is_absolute <path>`
+- `blm_path_dirname <path>`
+- `blm_path_basename <path>`
+- `blm_path_join <part>...`
 
-Prints a success status line to stdout.
+## M4 — Runtime state
 
-### `blm_warn <message...>`
+- `blm_output_mode`
+- `blm_kv <key> <value>`
+- `blm_log <debug|info|warn|error> <message...>`
+- `blm_env_get <NAME> [fallback]`
+- `blm_env_bool <NAME> [fallback]`
+- `blm_config_validate <file>`
+- `blm_config_get <file> <key> [fallback]`
+- `blm_config_has <file> <key>`
+- `blm_state_get <file> <key> [fallback]`
+- `blm_state_set <file> <key> <value>`
+- `blm_state_delete <file> <key>`
 
-Prints a warning status line to stderr.
+`BLM_OUTPUT_MODE` accepts `human`, `plain`, or `json`. `BLM_LOG_LEVEL` controls log filtering and `BLM_LOG_FILE` optionally persists accepted records.
 
-### `blm_error <message...>`
+Configuration and state use literal `key=value` data. They are never loaded through `source` or `eval`.
 
-Prints an error status line to stderr.
+## Detailed contracts
 
-### `blm_require_command <name>`
+See:
 
-Returns failure and writes a diagnostic to stderr when a command cannot be resolved through `PATH`.
-
-### `blm_require_file <path>`
-
-Returns failure when `<path>` is not a regular file.
-
-### `blm_require_dir <path>`
-
-Returns failure when `<path>` is not a directory.
-
-### `blm_require_env <name>`
-
-Returns failure when the named environment variable is unset or empty.
-
-## v0.1 candidates not yet implemented
-
-The following are planned capabilities, not current API contracts:
-
-- `blm_run`
-- `blm_step`
-- `blm_retry`
-- `blm_wait_until`
-- cleanup stack primitives
-- title/section output
-- key/value output
-- safe temporary-resource helpers
-- atomic write helpers
-- permission checks
-
-Each candidate requires behavior specification, tests and EN/IT documentation before being considered part of the v0.1 public API.
+- `docs/en/runtime-reliability.md`
+- `docs/en/system-safety.md`
+- `docs/en/runtime-state.md`
+- `examples/README.md`
 
 ## Exit semantics
 
-Unless a function's purpose is explicitly to transform an outcome, Bashloom wrappers must preserve or faithfully report the exit status of the operation they wrap. Rendering output after a command must not accidentally replace that command's status.
+Unless a function explicitly transforms an outcome, Bashloom wrappers preserve or faithfully report the status of the operation they wrap. Rendering must not accidentally replace command failures.
+
+Status `2` is generally used for invalid Bashloom arguments or configuration values. Timeout operations use `124` where documented.
 
 ## Side effects
 
-Sourcing `src/bashloom.sh` must not implicitly enable shell strict mode, replace traps, modify `IFS`, execute external commands other than the shell built-ins required to resolve the Bashloom source path, or emit user-visible output.
+Sourcing `src/bashloom.sh` must not implicitly enable strict mode, replace caller traps, modify `IFS`, emit user-visible output, read configuration/state, create log files, or execute caller-provided text.
+
+Feature-specific external utilities may be required only when the corresponding function is invoked; sourcing the runtime itself remains dependency-free apart from Bash.

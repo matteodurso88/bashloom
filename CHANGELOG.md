@@ -12,112 +12,48 @@ Il progetto seguirà il Semantic Versioning a partire dalle release pubbliche ve
 
 ### Added / Aggiunto
 
-- Project identity, ownership and technical-account model.
-- Identità del progetto, ownership e modello di account tecnico.
-- MIT license.
-- Licenza MIT.
-- Bilingual EN/IT documentation policy with contributor language accessibility and optional community translations.
-- Policy documentale bilingue EN/IT con accessibilità linguistica per i contributor e traduzioni community opzionali.
-- Architecture, governance and design principles documentation.
-- Documentazione di architettura, governance e principi di progettazione.
-- Initial source-safe runtime entrypoint.
-- Runtime entrypoint iniziale source-safe.
-- Version and terminal capability primitives.
-- Primitive iniziali di versione e capability terminale.
-- Basic status rendering and requirement checks.
-- Rendering base degli status e requirement check.
-- Contributor issue and pull-request templates with maintainer final-review policy.
-- Template contributor per issue e pull request con policy di revisione finale dei maintainer.
-- `blm_run` with exact exit-status preservation and dry-run support.
-- `blm_run` con preservazione esatta dell'exit status e supporto dry-run.
-- `blm_step` command lifecycle helper.
-- Helper `blm_step` per il lifecycle dei comandi.
-- `blm_retry` with attempts, delay and integer backoff.
-- `blm_retry` con tentativi, delay e backoff intero.
-- `blm_wait_for` polling with timeout status `124`.
-- Polling `blm_wait_for` con status timeout `124`.
-- `blm_timeout` with TERM/grace/KILL lifecycle and documented subshell isolation.
-- `blm_timeout` con lifecycle TERM/grace/KILL e isolamento in subshell documentato.
-- LIFO cleanup stack with explicit trap installation and caller-trap protection.
-- Cleanup stack LIFO con installazione esplicita delle trap e protezione delle trap del caller.
-- LIFO rollback stack and explicit transaction begin/commit/rollback primitives.
-- Rollback stack LIFO e primitive esplicite begin/commit/rollback per le transazioni.
-- Runtime/reliability API documentation in English and Italian.
-- Documentazione API runtime/reliability in inglese e italiano.
-- `blm_require_root` and readable/writable/executable permission checks.
-- `blm_require_root` e controlli permessi readable/writable/executable.
-- Secure temporary file and directory helpers with restrictive permissions.
-- Helper sicuri per file e directory temporanei con permessi restrittivi.
-- Idempotent directory and symlink helpers.
-- Helper idempotenti per directory e symlink.
-- Atomic file replacement with producer-failure protection and existing-mode preservation on GNU/Linux.
-- Sostituzione atomica dei file con protezione dai fallimenti del producer e preservazione dei permessi esistenti su GNU/Linux.
-- Pure-Bash lexical path helpers and dependency-free entrypoint path resolution.
-- Helper path lessicali pure-Bash e risoluzione path dell'entrypoint senza dipendenze esterne.
-- System-safety API documentation in English and Italian.
-- Documentazione API system-safety in inglese e italiano.
-- Human/plain/JSON output modes and key/value machine output.
-- Modalità output human/plain/JSON e output key/value machine-readable.
-- Filtered logging with optional timestamped file persistence.
-- Logging filtrato con persistenza opzionale su file con timestamp.
-- Safe environment helpers for exact values and booleans.
-- Helper environment sicuri per valori esatti e booleani.
-- Safe literal `key=value` configuration parsing without `source` or `eval`.
-- Parsing sicuro della configurazione letterale `key=value` senza `source` o `eval`.
-- Atomic persistent state get/set/delete primitives.
-- Primitive atomiche get/set/delete per stato persistente.
-- Runtime-state API documentation in English and Italian.
-- Documentazione API runtime-state in inglese e italiano.
-- Dependency-aware selective module loader with `blm_load`.
-- Loader selettivo dei moduli con dipendenze dichiarate tramite `blm_load`.
-- Explicit prefix installer with no implicit privilege escalation.
-- Installer sotto prefix esplicito senza escalation implicita dei privilegi.
-- Vendoring helper for pinned self-contained runtime copies.
-- Helper di vendoring per copie runtime autosufficienti e fissate nel progetto consumer.
-- EN/IT consumption and compatibility documentation.
-- Documentazione EN/IT su consumption e compatibilità.
-- Version metadata release gate and guarded tag-based GitHub Release workflow with SHA-256 checksums.
-- Release gate sui metadata di versione e workflow GitHub Release su tag con checksum SHA-256.
-- Aggregate and per-operation change tracking with `BLM_CHANGED` and `BLM_LAST_CHANGED`.
-- Change tracking aggregato e per singola operazione tramite `BLM_CHANGED` e `BLM_LAST_CHANGED`.
-- `blm_change_reset`, `blm_changed` and `blm_last_changed` convergence helpers.
-- Helper di convergenza `blm_change_reset`, `blm_changed` e `blm_last_changed`.
-- `blm_ensure_mode` and exact-line `blm_ensure_line` idempotency primitives.
-- Primitive idempotenti `blm_ensure_mode` e `blm_ensure_line` per righe esatte.
-- Change-aware directory and symlink ensure semantics.
-- Semantica changed/no-op per ensure directory e symlink.
-- EN/IT idempotency documentation and maintained executable example.
-- Documentazione EN/IT sull'idempotenza ed esempio eseguibile mantenuto.
-- `blm_title` and `blm_section` presentation helpers for human/plain/JSON output.
-- Helper di presentazione `blm_title` e `blm_section` per output human/plain/JSON.
-- `blm_diagnostics` runtime/version diagnostics using the configured output mode.
-- Diagnostica runtime/versione `blm_diagnostics` coerente con la modalità output configurata.
-- `blm_fail` and `blm_usage_error` explicit non-exiting error helpers.
-- Helper di errore espliciti senza exit impliciti `blm_fail` e `blm_usage_error`.
-- EN/IT output/error model documentation and maintained executable example.
-- Documentazione EN/IT del modello output/error ed esempio eseguibile mantenuto.
-- `blm_backup`, `blm_safe_copy` and `blm_safe_move` non-overwriting filesystem helpers.
-- Helper filesystem senza sovrascrittura `blm_backup`, `blm_safe_copy` e `blm_safe_move`.
-- `blm_checksum_sha256` digest helper with on-demand `sha256sum` dependency.
-- Helper digest `blm_checksum_sha256` con dipendenza `sha256sum` richiesta solo all'uso.
-- Atomic directory-lock primitives and `blm_with_lock` command wrapper.
-- Primitive di lock atomico tramite directory e wrapper comando `blm_with_lock`.
-- `blm_ensure_owner` ownership convergence helper.
-- Helper di convergenza ownership `blm_ensure_owner`.
-- XDG config/data/cache/state/runtime path helpers.
-- Helper path XDG config/data/cache/state/runtime.
-- EN/IT advanced-system documentation and maintained executable example.
-- Documentazione EN/IT advanced-system ed esempio eseguibile mantenuto.
-- Maintained executable examples through M6C with CI full-tour execution.
-- Esempi eseguibili mantenuti fino a M6C con esecuzione full-tour in CI.
-- Bats contract tests for command runtime, reliability, system safety, runtime state, consumption, idempotency, output/error and advanced-system paths.
-- Test contrattuali Bats per command runtime, reliability, system safety, runtime state, consumption, idempotenza, output/error e percorsi advanced-system.
-- Bats smoke tests and CI foundation.
-- Smoke test Bats e foundation CI.
+- Project identity, governance, MIT license and bilingual EN/IT documentation policy.
+- Identità del progetto, governance, licenza MIT e policy documentale bilingue EN/IT.
+- Source-safe runtime entrypoint, version metadata, capability/status/requirement primitives and CI foundation.
+- Runtime entrypoint source-safe, metadata versione, primitive capability/status/requirement e foundation CI.
+- M1 command runtime: `blm_run`, dry-run, exact exit-status preservation and `blm_step`.
+- M1 command runtime: `blm_run`, dry-run, preservazione esatta exit status e `blm_step`.
+- M2 reliability: retry, wait, timeout, cleanup, rollback and explicit transactions.
+- M2 reliability: retry, wait, timeout, cleanup, rollback e transazioni esplicite.
+- M3 system safety: permission/root checks, secure temp resources, idempotent filesystem, atomic writes and lexical paths.
+- M3 system safety: controlli permessi/root, risorse temporanee sicure, filesystem idempotente, atomic write e path lessicali.
+- M4 runtime state: human/plain/JSON output, logging, environment helpers, literal config and atomic persistent state.
+- M4 runtime state: output human/plain/JSON, logging, helper environment, config letterale e stato persistente atomico.
+- M5 consumption: selective module loader, prefix installer, vendoring, compatibility docs and guarded tag release workflow.
+- M5 consumption: loader selettivo, installer prefix, vendoring, documentazione compatibilità e workflow release tag protetto.
+- M6A idempotency: aggregate/per-operation change tracking, `blm_ensure_mode` and `blm_ensure_line`.
+- M6A idempotenza: change tracking aggregato/per operazione, `blm_ensure_mode` e `blm_ensure_line`.
+- M6B output/error model: title/section, diagnostics, `blm_fail` and `blm_usage_error`.
+- M6B output/error model: title/section, diagnostica, `blm_fail` e `blm_usage_error`.
+- M6C advanced system: non-overwriting backup/copy/move, SHA-256, directory locks, ownership convergence and XDG paths.
+- M6C advanced system: backup/copy/move senza sovrascrittura, SHA-256, lock directory, convergenza ownership e path XDG.
+- M6D Git integration: repository root/current branch/clean-state queries and clean-worktree enforcement.
+- M6D integrazione Git: root repository/branch corrente/stato clean e enforcement worktree pulita.
+- M6D systemd integration: active predicate, readiness wait, restart and reload without implicit privilege escalation.
+- M6D integrazione systemd: predicato active, wait readiness, restart e reload senza escalation implicita.
+- M6D Docker Compose integration using the modern `docker compose` plugin with argv-safe forwarding.
+- M6D integrazione Docker Compose basata sul moderno plugin `docker compose` con forwarding argv-safe.
+- M6D network readiness: NSS-aware DNS resolution and curl-based HTTP readiness/wait primitives.
+- M6D readiness rete: risoluzione DNS conforme a NSS e primitive readiness/wait HTTP basate su curl.
+- Selective loader groups `git`, `systemd`, `docker`, `network` and aggregate `integrations`.
+- Gruppi loader selettivi `git`, `systemd`, `docker`, `network` e aggregato `integrations`.
+- Repository-wide deep source-documentation standard for public APIs, with EN/IT policy and CI enforcement through `tools/check-source-docs.sh`.
+- Standard repository-wide di documentazione profonda in-source per API pubbliche, con policy EN/IT e gate CI tramite `tools/check-source-docs.sh`.
+- Maintained executable examples through M6D and Bats contract coverage for implemented integration paths.
+- Esempi eseguibili mantenuti fino a M6D e copertura contrattuale Bats per le integrazioni implementate.
 
 ### Changed / Modificato
 
-- Filesystem helpers check `readlink` and `rm` explicitly when those utilities are required.
-- Gli helper filesystem verificano esplicitamente `readlink` e `rm` quando queste utility sono necessarie.
-- The `system` loader group now includes advanced filesystem, locking and XDG helpers.
-- Il gruppo loader `system` include ora helper filesystem avanzati, locking e XDG.
+- Filesystem helpers check feature-specific dependencies such as `readlink` and `rm` explicitly when needed.
+- Gli helper filesystem verificano esplicitamente dipendenze feature-specific come `readlink` e `rm` quando necessarie.
+- The `system` loader group includes advanced filesystem, locking and XDG helpers; `all` now also includes the integration groups.
+- Il gruppo loader `system` include filesystem avanzato, locking e XDG; `all` include ora anche i gruppi integrazione.
+- Existing public source files were expanded from minimal comments to contract-oriented docblocks covering purpose, usage, statuses, output, side effects, dependencies, security and non-obvious invariants.
+- I sorgenti pubblici esistenti sono passati da commenti minimi a docblock orientati al contratto con scopo, uso, status, output, side effect, dipendenze, sicurezza e invarianti non ovvie.
+- `blm_require_env` now validates the environment-variable name before indirect expansion.
+- `blm_require_env` valida ora il nome della variabile environment prima dell'espansione indiretta.

@@ -23,6 +23,7 @@ examples=(
   06-idempotency.sh
   07-output-error-model.sh
   08-advanced-system.sh
+  09-integrations.sh
 )
 
 printf '%s\n' '===================================================================='

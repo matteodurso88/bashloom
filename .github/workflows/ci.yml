@@ -33,6 +33,9 @@ jobs:
       - name: Formatting
         run: shfmt -d -i 2 -ci src examples tools
 
+      - name: Source documentation contract
+        run: bash tools/check-source-docs.sh
+
       - name: Bats
         run: bats tests
 

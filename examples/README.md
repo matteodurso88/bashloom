@@ -2,41 +2,30 @@
 
 ## English
 
-The `examples/` directory is a maintained part of the Bashloom project. It is intended to serve three purposes:
-
-1. show how the public API is used in realistic shell scripts;
-2. provide copyable starting points for users;
-3. act as executable integration documentation so public API changes cannot silently break the examples.
+The `examples/` directory is a maintained public surface: examples are copyable usage references and executable integration documentation. Public API changes must keep the relevant focused example, this matrix and `full-tour.sh` aligned.
 
 ### Examples
 
-- `00-foundation.sh` — version metadata, command/TTY/color capabilities and basic status output.
-- `01-command-runtime.sh` — M1 command execution, exit-code preservation, steps and dry-run.
-- `02-reliability.sh` — M2 retry, polling, timeout, cleanup and rollback/transactions.
-- `03-system-safety.sh` — M3 requirements, permissions, temp resources, idempotent filesystem helpers, atomic writes and paths.
-- `04-runtime-state.sh` — M4 output modes, logging, environment helpers, safe config and persistent state.
-- `05-consumption.sh` — M5 selective loading, prefix installation, vendoring and release metadata validation.
-- `06-idempotency.sh` — Linux-first idempotent convergence, aggregate change tracking, mode and exact-line ensures.
-- `07-output-error-model.sh` — M6B presentation helpers, runtime diagnostics and explicit non-exiting error statuses.
-- `08-advanced-system.sh` — M6C safe copy/move/backup, SHA-256, locking, ownership convergence and XDG paths.
-- `full-tour.sh` — non-destructive end-to-end tour of all currently maintained public capabilities.
+- `00-foundation.sh` — version, capabilities and status output.
+- `01-command-runtime.sh` — M1 command execution, status preservation and dry-run.
+- `02-reliability.sh` — M2 retry, wait, timeout, cleanup and rollback.
+- `03-system-safety.sh` — M3 requirements, temp resources, filesystem and paths.
+- `04-runtime-state.sh` — M4 output, logging, environment, config and state.
+- `05-consumption.sh` — M5 selective loading, installation, vendoring and release gate.
+- `06-idempotency.sh` — M6A convergence and change tracking.
+- `07-output-error-model.sh` — M6B presentation, diagnostics and explicit failures.
+- `08-advanced-system.sh` — M6C backup/copy/move, checksum, locks, ownership and XDG.
+- `09-integrations.sh` — M6D Git, Docker/systemd capability detection and network readiness.
+- `full-tour.sh` — non-destructive end-to-end tour of all maintained capabilities.
 
-Run an example from the repository root:
+Run from the repository root:
 
 ```bash
-bash examples/00-foundation.sh
-bash examples/01-command-runtime.sh
-bash examples/02-reliability.sh
-bash examples/03-system-safety.sh
-bash examples/04-runtime-state.sh
-bash examples/05-consumption.sh
-bash examples/06-idempotency.sh
-bash examples/07-output-error-model.sh
-bash examples/08-advanced-system.sh
+bash examples/09-integrations.sh
 bash examples/full-tour.sh
 ```
 
-All filesystem-changing examples operate inside temporary workspaces and clean up after themselves.
+Filesystem-changing focused examples use temporary workspaces and clean up after themselves. The integration example is intentionally non-destructive; mutating Docker/systemd calls are demonstrated as commented opt-in examples rather than executed by CI.
 
 ### Coverage matrix
 
@@ -44,82 +33,50 @@ All filesystem-changing examples operate inside temporary workspaces and clean u
 | --- | --- | --- |
 | version/capabilities/status | `00-foundation.sh` | yes |
 | `blm_run`, dry-run, `blm_step` | `01-command-runtime.sh` | yes |
-| retry/wait/timeout | `02-reliability.sh` | yes |
-| cleanup/rollback/transactions | `02-reliability.sh` | yes |
-| requirement/permission checks | `03-system-safety.sh` | yes |
-| temp file/temp directory | `03-system-safety.sh` | yes |
-| ensure directory/symlink | `03-system-safety.sh` | yes |
-| atomic write | `03-system-safety.sh` | yes |
-| path helpers | `03-system-safety.sh` | yes |
-| human/plain/JSON output + key/value | `04-runtime-state.sh` | yes |
-| logging | `04-runtime-state.sh` | yes |
-| environment helpers | `04-runtime-state.sh` | yes |
-| safe config | `04-runtime-state.sh` | yes |
-| persistent state | `04-runtime-state.sh` | yes |
-| selective module loading | `05-consumption.sh` | yes |
-| prefix installation | `05-consumption.sh` | yes |
-| vendoring | `05-consumption.sh` | yes |
-| release metadata gate | `05-consumption.sh` | yes |
-| aggregate/last change tracking | `06-idempotency.sh` | yes |
-| `blm_ensure_mode` | `06-idempotency.sh` | yes |
-| `blm_ensure_line` | `06-idempotency.sh` | yes |
-| convergence/no-op rerun | `06-idempotency.sh` | yes |
-| `blm_title` / `blm_section` | `07-output-error-model.sh` | yes |
-| runtime diagnostics | `07-output-error-model.sh` | yes |
-| explicit failure/usage statuses | `07-output-error-model.sh` | yes |
-| backup/safe copy/safe move | `08-advanced-system.sh` | yes |
-| SHA-256 checksum | `08-advanced-system.sh` | yes |
-| directory locking / `blm_with_lock` | `08-advanced-system.sh` | yes |
-| ownership convergence | `08-advanced-system.sh` | yes |
-| XDG path helpers | `08-advanced-system.sh` | yes |
+| retry/wait/timeout + cleanup/rollback | `02-reliability.sh` | yes |
+| requirements/temp/filesystem/path | `03-system-safety.sh` | yes |
+| output/logging/env/config/state | `04-runtime-state.sh` | yes |
+| loader/install/vendor/release gate | `05-consumption.sh` | yes |
+| change tracking + idempotent convergence | `06-idempotency.sh` | yes |
+| presentation/diagnostics/error status | `07-output-error-model.sh` | yes |
+| backup/copy/move/checksum/locks/owner/XDG | `08-advanced-system.sh` | yes |
+| Git adapter | `09-integrations.sh` | yes |
+| Docker Compose capability | `09-integrations.sh` | yes |
+| systemd capability | `09-integrations.sh` | yes |
+| DNS/network readiness | `09-integrations.sh` | yes |
 
 ### Maintenance rule
 
-Examples are part of the public feature contract. A pull request that adds, removes or changes a public Bashloom API must update the relevant example(s) and this coverage matrix when applicable.
-
-CI checks Bash syntax, ShellCheck and shfmt for `src/`, `examples/` and `tools/`, runs the Bats suites, and executes `full-tour.sh`. A public API or consumption change is therefore not considered complete if the maintained examples no longer work.
-
-Source comments remain in English according to the repository contribution policy. Canonical explanatory documentation is maintained in both English and Italian.
+CI checks Bash syntax, ShellCheck, shfmt, the public source-documentation contract, Bats suites and `full-tour.sh`. A public API change is incomplete if maintained examples or source documentation no longer satisfy those gates.
 
 ---
 
 ## Italiano
 
-La directory `examples/` è una parte mantenuta del progetto Bashloom. Ha tre scopi:
-
-1. mostrare come usare l'API pubblica in script shell realistici;
-2. fornire punti di partenza copiabili dagli utenti;
-3. funzionare come documentazione di integrazione eseguibile, impedendo che modifiche alle API pubbliche rompano silenziosamente gli esempi.
+La directory `examples/` è una superficie pubblica mantenuta: gli esempi sono riferimenti copiabili e documentazione di integrazione eseguibile. Le modifiche alle API pubbliche devono mantenere allineati l'esempio focalizzato, questa matrice e `full-tour.sh`.
 
 ### Esempi
 
-- `00-foundation.sh` — metadata versione, capability comando/TTY/colore e output di stato di base.
-- `01-command-runtime.sh` — M1: esecuzione comandi, preservazione exit code, step e dry-run.
-- `02-reliability.sh` — M2: retry, polling, timeout, cleanup e rollback/transazioni.
-- `03-system-safety.sh` — M3: requisiti, permessi, risorse temporanee, filesystem idempotente, atomic write e path.
-- `04-runtime-state.sh` — M4: modalità output, logging, helper environment, config sicura e stato persistente.
-- `05-consumption.sh` — M5: caricamento selettivo, installazione sotto prefix, vendoring e validazione metadata release.
-- `06-idempotency.sh` — convergenza idempotente Linux-first, change tracking aggregato, mode e righe esatte.
-- `07-output-error-model.sh` — M6B: helper di presentazione, diagnostica runtime e status di errore espliciti senza exit impliciti.
-- `08-advanced-system.sh` — M6C: backup/copy/move sicuri, SHA-256, locking, convergenza ownership e path XDG.
-- `full-tour.sh` — tour end-to-end non distruttivo di tutte le capability pubbliche attualmente mantenute.
+- `00-foundation.sh` — versione, capability e status output.
+- `01-command-runtime.sh` — M1 esecuzione comandi, preservazione status e dry-run.
+- `02-reliability.sh` — M2 retry, wait, timeout, cleanup e rollback.
+- `03-system-safety.sh` — M3 requisiti, temp, filesystem e path.
+- `04-runtime-state.sh` — M4 output, logging, environment, config e stato.
+- `05-consumption.sh` — M5 loader selettivo, installazione, vendoring e release gate.
+- `06-idempotency.sh` — M6A convergenza e change tracking.
+- `07-output-error-model.sh` — M6B presentazione, diagnostica e failure espliciti.
+- `08-advanced-system.sh` — M6C backup/copy/move, checksum, lock, ownership e XDG.
+- `09-integrations.sh` — M6D Git, capability Docker/systemd e readiness di rete.
+- `full-tour.sh` — tour end-to-end non distruttivo di tutte le capability mantenute.
 
-Esecuzione dalla root del repository:
+Dalla root:
 
 ```bash
-bash examples/00-foundation.sh
-bash examples/01-command-runtime.sh
-bash examples/02-reliability.sh
-bash examples/03-system-safety.sh
-bash examples/04-runtime-state.sh
-bash examples/05-consumption.sh
-bash examples/06-idempotency.sh
-bash examples/07-output-error-model.sh
-bash examples/08-advanced-system.sh
+bash examples/09-integrations.sh
 bash examples/full-tour.sh
 ```
 
-Tutti gli esempi che modificano il filesystem lavorano dentro workspace temporanei e si puliscono al termine.
+Gli esempi che modificano il filesystem usano workspace temporanei. L'esempio integrazioni è volutamente non distruttivo: le chiamate mutanti Docker/systemd restano esempi commentati e opt-in, non vengono eseguite dalla CI.
 
 ### Matrice di copertura
 
@@ -127,39 +84,18 @@ Tutti gli esempi che modificano il filesystem lavorano dentro workspace temporan
 | --- | --- | --- |
 | versione/capability/status | `00-foundation.sh` | sì |
 | `blm_run`, dry-run, `blm_step` | `01-command-runtime.sh` | sì |
-| retry/wait/timeout | `02-reliability.sh` | sì |
-| cleanup/rollback/transazioni | `02-reliability.sh` | sì |
-| controlli requisiti/permessi | `03-system-safety.sh` | sì |
-| file/directory temporanei | `03-system-safety.sh` | sì |
-| ensure directory/symlink | `03-system-safety.sh` | sì |
-| atomic write | `03-system-safety.sh` | sì |
-| helper path | `03-system-safety.sh` | sì |
-| output human/plain/JSON + key/value | `04-runtime-state.sh` | sì |
-| logging | `04-runtime-state.sh` | sì |
-| helper environment | `04-runtime-state.sh` | sì |
-| config sicura | `04-runtime-state.sh` | sì |
-| stato persistente | `04-runtime-state.sh` | sì |
-| caricamento selettivo moduli | `05-consumption.sh` | sì |
-| installazione sotto prefix | `05-consumption.sh` | sì |
-| vendoring | `05-consumption.sh` | sì |
-| release metadata gate | `05-consumption.sh` | sì |
-| change tracking aggregato/ultima operazione | `06-idempotency.sh` | sì |
-| `blm_ensure_mode` | `06-idempotency.sh` | sì |
-| `blm_ensure_line` | `06-idempotency.sh` | sì |
-| convergenza/rerun no-op | `06-idempotency.sh` | sì |
-| `blm_title` / `blm_section` | `07-output-error-model.sh` | sì |
-| diagnostica runtime | `07-output-error-model.sh` | sì |
-| status failure/usage espliciti | `07-output-error-model.sh` | sì |
-| backup/safe copy/safe move | `08-advanced-system.sh` | sì |
-| checksum SHA-256 | `08-advanced-system.sh` | sì |
-| locking directory / `blm_with_lock` | `08-advanced-system.sh` | sì |
-| convergenza ownership | `08-advanced-system.sh` | sì |
-| helper path XDG | `08-advanced-system.sh` | sì |
+| retry/wait/timeout + cleanup/rollback | `02-reliability.sh` | sì |
+| requisiti/temp/filesystem/path | `03-system-safety.sh` | sì |
+| output/logging/env/config/stato | `04-runtime-state.sh` | sì |
+| loader/install/vendor/release gate | `05-consumption.sh` | sì |
+| change tracking + convergenza idempotente | `06-idempotency.sh` | sì |
+| presentazione/diagnostica/status errore | `07-output-error-model.sh` | sì |
+| backup/copy/move/checksum/lock/owner/XDG | `08-advanced-system.sh` | sì |
+| adapter Git | `09-integrations.sh` | sì |
+| capability Docker Compose | `09-integrations.sh` | sì |
+| capability systemd | `09-integrations.sh` | sì |
+| readiness DNS/rete | `09-integrations.sh` | sì |
 
 ### Regola di manutenzione
 
-Gli esempi fanno parte del contratto pubblico delle feature. Una pull request che aggiunge, rimuove o modifica un'API pubblica Bashloom deve aggiornare gli esempi pertinenti e, quando necessario, questa matrice di copertura.
-
-La CI verifica sintassi Bash, ShellCheck e shfmt su `src/`, `examples/` e `tools/`, esegue i test Bats ed esegue `full-tour.sh`. Una modifica delle API o del modello di consumo non è quindi considerata completa se gli esempi mantenuti non funzionano più.
-
-I commenti nei sorgenti restano in inglese secondo la policy di contribuzione del repository. La documentazione esplicativa canonica viene mantenuta sia in inglese sia in italiano.
+La CI verifica sintassi Bash, ShellCheck, shfmt, contratto di documentazione pubblica in-source, suite Bats e `full-tour.sh`. Una modifica alle API pubbliche è incompleta se esempi mantenuti o documentazione source non superano questi gate.

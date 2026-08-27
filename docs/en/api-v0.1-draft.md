@@ -92,9 +92,14 @@ Supported module groups are:
 - `reliability`
 - `system`
 - `state`
+- `git`
+- `systemd`
+- `docker`
+- `network`
+- `integrations`
 - `all`
 
-Module loading is dependency-aware and idempotent. Unknown module names return status `2`.
+Module loading is dependency-aware and idempotent. Unknown module names return status `2`. Integration groups load only Bash code; their external tools remain call-time dependencies.
 
 The normal `src/bashloom.sh` entrypoint remains the complete-runtime interface and internally loads `all`.
 
@@ -166,6 +171,42 @@ Locks use atomic `mkdir` acquisition and are non-blocking. `blm_with_lock` prese
 
 XDG helpers honor explicit environment variables and use standard HOME-based defaults where defined. `blm_xdg_runtime_dir` requires `XDG_RUNTIME_DIR` and does not invent a fallback.
 
+## M6D — Integrations
+
+Git:
+
+- `blm_git_root [path]`
+- `blm_git_current_branch [path]`
+- `blm_git_is_clean [path]`
+- `blm_git_require_clean [path]`
+
+systemd:
+
+- `blm_systemd_is_active <unit>`
+- `blm_systemd_wait_active [--timeout S] [--interval S] <unit>`
+- `blm_systemd_restart <unit>`
+- `blm_systemd_reload <unit>`
+
+Docker Compose:
+
+- `blm_docker_available`
+- `blm_docker_compose_available`
+- `blm_docker_compose <compose-args...>`
+- `blm_docker_compose_up [service...]`
+- `blm_docker_compose_down [compose-down-args...]`
+
+Network readiness:
+
+- `blm_dns_resolves <host>`
+- `blm_http_check <url>`
+- `blm_wait_http [--timeout S] [--interval S] <url>`
+
+Adapters are intentionally thin and preserve external-tool visibility. They never add implicit `sudo`, never rebuild argv through `eval`, and require Git/systemctl/Docker/getent/curl only when the corresponding API is invoked. Wait helpers reuse `blm_wait_for`, including timeout status `124`.
+
+## Source documentation contract
+
+Every public `blm_*` function must have an adjacent machine-checkable `# Public API: blm_name` source docblock. Public source documentation describes purpose, usage, status/output semantics, side effects, external dependencies and relevant invariants/security constraints. CI enforces the marker with `tools/check-source-docs.sh`.
+
 ## Detailed contracts
 
 See:
@@ -178,6 +219,8 @@ See:
 - `docs/en/idempotency.md`
 - `docs/en/output-error-model.md`
 - `docs/en/advanced-system.md`
+- `docs/en/integrations.md`
+- `docs/en/source-documentation.md`
 - `examples/README.md`
 
 ## Exit semantics
@@ -188,6 +231,6 @@ Status `2` is generally used for invalid Bashloom arguments or configuration val
 
 ## Side effects
 
-Sourcing `src/bashloom.sh` or `src/bashloom-loader.sh` must not implicitly enable strict mode, replace caller traps, modify `IFS`, emit user-visible output, read configuration/state, create log files, or execute caller-provided text.
+Sourcing `src/bashloom.sh` or `src/bashloom-loader.sh` must not implicitly enable strict mode, replace caller traps, modify `IFS`, emit user-visible output, read configuration/state, create log files, execute caller-provided text, or require feature-specific external utilities.
 
 Feature-specific external utilities may be required only when the corresponding function is invoked; sourcing the runtime or loader itself remains dependency-free apart from Bash.

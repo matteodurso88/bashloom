@@ -9,185 +9,144 @@ Bashloom è attualmente nella fase foundation / implementazione iniziale della v
 - [x] baseline architetturale
 - [x] runtime entrypoint source-safe
 - [x] metadata di versione
-- [x] rilevamento capability di base
-- [x] output di stato di base
-- [x] requirement check di base
-- [x] smoke test Bats
-- [x] CI con ShellCheck/shfmt/Bats
-- [x] template contributor per issue e pull request
-- [x] bozza specifica API delle primitive v0.1
+- [x] capability/status/requirement di base
+- [x] smoke test Bats e CI ShellCheck/shfmt/Bats
+- [x] template contributor
+- [x] bozza specifica API v0.1
 - [ ] matrice di test compatibilità
 
 ## v0.1 — Reliable Shell Foundation
 
 ### M1 — Command Runtime
 
-- [x] `blm_run`
-- [x] preservazione esatta dell'exit status
-- [x] compatibilità con `set -e` del caller
-- [x] `--dry-run` locale
-- [x] `BLM_DRY_RUN=1` globale
+- [x] `blm_run`, dry-run e preservazione exit status
+- [x] compatibilità con `set -e`
 - [x] `blm_step`
 - [x] nessun `eval` / esecuzione argv-safe
 
 ### M2 — Reliability
 
-- [x] `blm_retry`
-- [x] delay retry e backoff intero
-- [x] `blm_wait_for`
+- [x] retry/wait/timeout
 - [x] status timeout `124`
-- [x] `blm_timeout`
-- [x] cleanup stack LIFO
-- [x] installazione esplicita delle cleanup trap
-- [x] rifiuto di sovrascrivere trap del caller
-- [x] rollback stack LIFO
-- [x] transazioni esplicite begin/commit/rollback
-- [x] copertura Bats dei contratti M1/M2
-- [x] documentazione runtime/reliability EN/IT
+- [x] cleanup LIFO con trap esplicite
+- [x] rollback LIFO e transazioni esplicite
+- [x] test Bats e documentazione EN/IT
 
 ### M3 — System Safety
 
-- [x] require root
-- [x] controlli permessi readable/writable/executable
-- [x] helper sicuri per file/directory temporanei
-- [x] ensure directory
-- [x] ensure symlink
-- [x] scrittura atomica file
+- [x] requirement root/permessi
+- [x] risorse temporanee sicure
+- [x] ensure directory/symlink
+- [x] atomic write
 - [x] helper path lessicali pure-Bash
-- [x] risoluzione path dell'entrypoint senza dipendenze esterne
-- [x] copertura contrattuale Bats per M3
-- [x] documentazione system-safety EN/IT
+- [x] test Bats e documentazione EN/IT
 
 ### M4 — Runtime State
 
-- [x] fondamenta logging
-- [x] helper environment
-- [x] helper di configurazione key/value sicuri
+- [x] logging e helper environment
+- [x] configurazione letterale sicura
 - [x] state file atomici
-- [x] modello output human/plain/JSON
-- [x] output key/value machine-readable
-- [x] copertura contrattuale Bats per M4
-- [x] esempio M4 mantenuto e copertura full-tour
-- [x] documentazione runtime-state EN/IT
+- [x] output human/plain/JSON
+- [x] test, esempio mantenuto e documentazione EN/IT
 
 ### M5 — Consumption
 
-- [x] modello esplicito di installazione sotto prefix
-- [x] helper e guida al vendoring
-- [x] caricamento selettivo dei moduli con dipendenze dichiarate
+- [x] installer prefix e vendoring
+- [x] loader selettivo dependency-aware
 - [x] documentazione compatibilità
-- [x] release gate sui metadata di versione
-- [x] workflow di release su tag con archivio e checksum SHA-256
-- [x] copertura contrattuale Bats dei percorsi di consumo
-- [x] esempio M5 mantenuto
-- [x] documentazione consumption EN/IT
+- [x] release gate e workflow tag
+- [x] test ed esempio mantenuto
 
 ### M6A — Hardening Linux & Idempotenza
 
-- [x] change tracking aggregato e per ultima operazione
-- [x] semantica changed/no-op per directory idempotenti
-- [x] semantica changed/no-op per symlink idempotenti
+- [x] change tracking aggregato/per operazione
+- [x] semantica changed/no-op per directory/symlink
 - [x] `blm_ensure_mode`
 - [x] `blm_ensure_line`
-- [x] controlli espliciti delle dipendenze `readlink` e `rm` dove necessarie
-- [x] copertura contrattuale Bats per l'idempotenza
-- [x] esempio idempotenza mantenuto e copertura full-tour
-- [x] documentazione idempotenza EN/IT
+- [x] dependency check filesystem espliciti
+- [x] test, esempio e documentazione EN/IT
 - [ ] hardening process-group per `blm_timeout`
 
-Le matrici cross-distribution, macOS e WSL sono rimandate finché quegli ambienti non potranno essere validati direttamente.
+Le matrici cross-distribution, macOS e WSL restano rimandate finché quegli ambienti non potranno essere validati direttamente.
 
 ### M6B — Output & Error Model
 
 - [x] diagnostica runtime/versione
 - [x] helper title/section
-- [x] helper di failure espliciti senza exit impliciti
-- [x] comportamento di presentazione deterministico human/plain/JSON
-- [x] contratti stdout/stderr e machine-readable documentati
-- [x] copertura contrattuale Bats per M6B
-- [x] esempio M6B mantenuto e copertura full-tour
-- [x] documentazione output/error EN/IT
+- [x] failure helper espliciti senza exit impliciti
+- [x] output human/plain/JSON deterministico
+- [x] contratti stdout/stderr documentati
+- [x] test, esempio e documentazione EN/IT
 - [ ] contesto errore strutturato più ricco
 - [ ] hardening policy colore e Unicode
 
 ### M6C — Primitive System avanzate
 
-- [x] helper backup sicuro esplicito
-- [x] helper safe copy/move senza sovrascrittura
-- [x] helper checksum SHA-256
-- [x] locking atomico tramite directory e `blm_with_lock`
-- [x] helper di convergenza ownership
-- [x] helper path XDG config/data/cache/state/runtime
-- [x] copertura contrattuale Bats per M6C
-- [x] esempio M6C mantenuto e copertura full-tour
-- [x] documentazione advanced-system EN/IT
+- [x] backup e copy/move senza sovrascrittura
+- [x] checksum SHA-256
+- [x] locking atomico con `blm_with_lock`
+- [x] convergenza ownership
+- [x] helper XDG
+- [x] test, esempio e documentazione EN/IT
 
 ### M6D — Integrations
 
-Prossimo blocco di implementazione. Primi adapter candidati:
+- [x] adapter Git
+- [x] adapter systemd
+- [x] adapter Docker / Compose
+- [x] readiness DNS / HTTP
+- [x] gruppi loader selettivi per integrazioni
+- [x] copertura contrattuale Bats
+- [x] esempio M6D e full-tour
+- [x] documentazione integrazioni EN/IT
+- [x] standard profondo di documentazione in-source per API pubbliche
+- [x] gate CI per la documentazione in-source
+- [x] pass di hardening commenti su tutto il sorgente pubblico esistente
+- [ ] adapter Debian / APT
 
-- [ ] Git
-- [ ] systemd
-- [ ] Docker / Compose
-- [ ] Debian / APT
-- [ ] network checks
+APT resta fuori dalla prima tranche M6D perché policy di package management e variabilità di ambiente sono significativamente più ampie rispetto agli adapter sottili già introdotti.
 
 ### M6E — Terminal UX
 
-Scope candidato:
-
 - [ ] spinner/progress
 - [ ] confirm/input/password/select
-- [ ] pannelli/tabelle/tree rendering
-- [ ] degradazione controllata in ambienti non interattivi
+- [ ] pannelli/tabelle/tree
+- [ ] degradazione controllata non-interattiva
 
 ### M6F — Production Validation
 
 Prima della `v0.1.0`:
 
-- [ ] integrare primitive Bashloom in almeno un workflow reale di deployment
-- [ ] validare su un workflow desktop/installer
-- [ ] validare su un workflow system/provisioning
-- [ ] correggere API instabili sulla base del feedback reale
-- [ ] taggare la prima `v0.1.0` utilizzabile
+- [ ] integrazione in almeno un deployment reale
+- [ ] validazione desktop/installer
+- [ ] validazione system/provisioning
+- [ ] revisione API instabili da feedback reale
+- [ ] tag `v0.1.0`
 
 ### Qualità
 
-- [x] ShellCheck clean per il sorgente pubblico implementato
-- [x] shfmt clean per il sorgente pubblico implementato
-- [x] test Bats per le API pubbliche implementate
-- [x] esempi eseguibili mantenuti fino a M6C
+- [x] ShellCheck clean
+- [x] shfmt clean
+- [x] test Bats per API implementate
+- [x] esempi mantenuti fino a M6D
+- [x] documentazione API pubblica in-source verificata dalla CI
 - [ ] matrice versioni Bash
 - [ ] matrice cross-distribution
-- [ ] controllo parità documentale dove praticabile
+- [ ] controllo automatico parità documentale dove praticabile
 
 ## v0.2 — Terminal UX
 
-Scope candidato dopo la prima release foundation utilizzabile:
-
-- pannelli e tabelle più ricchi
-- tree rendering
-- spinner/progress avanzati
-- timer
-- flussi prompt/select più ricchi
-- backend avanzati opzionali come Gum/fzf
+Scope candidato dopo la prima release foundation utilizzabile: UI terminale più ricca, progress/spinner avanzati, prompt/select e backend opzionali Gum/fzf.
 
 ## v0.3 — System & Integrations
 
-Scope candidato dopo la stabilizzazione della foundation v0.1:
-
-- adapter Git esteso
-- adapter Docker esteso
-- adapter systemd esteso
-- helper Debian/APT
-- helper XDG
-- controlli di rete
+Scope candidato: adapter Git/Docker/systemd più estesi, Debian/APT e network checks più ricchi.
 
 ## Esplorazioni successive
 
 - rifiniture output human/plain/JSON
-- bundler di moduli vendorabile
+- bundler moduli vendorabile
 - reference API generata
-- shell completion per una futura CLI Bashloom
+- shell completion per futura CLI Bashloom
 
-Nessun elemento successivo alla v0.1 è considerato impegnativo fino a quando non viene specificato nella documentazione e, quando opportuno, tramite ADR.
+Nessun elemento successivo alla v0.1 è considerato impegnativo finché non viene specificato nella documentazione e, quando opportuno, tramite ADR.

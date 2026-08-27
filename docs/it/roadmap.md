@@ -82,9 +82,65 @@ Bashloom è attualmente nella fase foundation / implementazione iniziale della v
 - [x] esempio M5 mantenuto
 - [x] documentazione consumption EN/IT
 
-### M6 — Production Validation
+### M6A — Hardening Linux & Idempotenza
 
-Prossimo blocco di implementazione:
+Blocco di implementazione corrente:
+
+- [x] change tracking aggregato e per ultima operazione
+- [x] semantica changed/no-op per directory idempotenti
+- [x] semantica changed/no-op per symlink idempotenti
+- [x] `blm_ensure_mode`
+- [x] `blm_ensure_line`
+- [x] controlli espliciti delle dipendenze `readlink` e `rm` dove necessarie
+- [x] copertura contrattuale Bats per l'idempotenza
+- [x] esempio idempotenza mantenuto e copertura full-tour
+- [x] documentazione idempotenza EN/IT
+- [ ] hardening process-group per `blm_timeout`
+
+Le matrici cross-distribution, macOS e WSL sono rimandate finché quegli ambienti non potranno essere validati direttamente.
+
+### M6B — Output & Error Model
+
+Prossimo blocco pianificato:
+
+- [ ] diagnostica runtime/versione
+- [ ] helper title/section
+- [ ] helper espliciti error/exit
+- [ ] contesto errore strutturato
+- [ ] maggiore coerenza human/plain/JSON
+- [ ] hardening policy colore e Unicode
+
+### M6C — Primitive System avanzate
+
+- [ ] helper backup/replace sicuri
+- [ ] locking file/directory
+- [ ] checksum
+- [ ] helper safe copy/move
+- [ ] helper ownership
+- [ ] helper path XDG
+
+### M6D — Integrations
+
+Primi adapter candidati:
+
+- [ ] Git
+- [ ] systemd
+- [ ] Docker / Compose
+- [ ] Debian / APT
+- [ ] network checks
+
+### M6E — Terminal UX
+
+Scope candidato:
+
+- [ ] spinner/progress
+- [ ] confirm/input/password/select
+- [ ] pannelli/tabelle/tree rendering
+- [ ] degradazione controllata in ambienti non interattivi
+
+### M6F — Production Validation
+
+Prima della `v0.1.0`:
 
 - [ ] integrare primitive Bashloom in almeno un workflow reale di deployment
 - [ ] validare su un workflow desktop/installer
@@ -92,46 +148,34 @@ Prossimo blocco di implementazione:
 - [ ] correggere API instabili sulla base del feedback reale
 - [ ] taggare la prima `v0.1.0` utilizzabile
 
-### Lavori UI/Core v0.1 ancora da completare
-
-- [ ] modello capability terminale più completo
-- [x] modello modalità di output
-- [ ] hardening policy colore e Unicode
-- [ ] diagnostica runtime/versione
-- [ ] helper title/section
-- [x] output key/value
-- [ ] helper espliciti error/exit
-
 ### Qualità
 
 - [x] ShellCheck clean per il sorgente pubblico implementato
 - [x] shfmt clean per il sorgente pubblico implementato
 - [x] test Bats per le API pubbliche implementate
-- [x] esempi eseguibili mantenuti fino a M5
+- [x] esempi eseguibili mantenuti fino all'idempotenza
 - [ ] matrice versioni Bash
 - [ ] matrice cross-distribution
 - [ ] controllo parità documentale dove praticabile
 
 ## v0.2 — Terminal UX
 
-Scope candidato:
+Scope candidato dopo la prima release foundation utilizzabile:
 
-- pannelli
-- tabelle
+- pannelli e tabelle più ricchi
 - tree rendering
-- spinner
-- progress
+- spinner/progress avanzati
 - timer
-- confirm/input/password/select
+- flussi prompt/select più ricchi
 - backend avanzati opzionali come Gum/fzf
 
 ## v0.3 — System & Integrations
 
-Scope candidato:
+Scope candidato dopo la stabilizzazione della foundation v0.1:
 
-- adapter Git
-- adapter Docker
-- adapter systemd
+- adapter Git esteso
+- adapter Docker esteso
+- adapter systemd esteso
 - helper Debian/APT
 - helper XDG
 - controlli di rete

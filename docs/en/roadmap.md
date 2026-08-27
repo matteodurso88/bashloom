@@ -82,9 +82,65 @@ Bashloom is currently in the foundation / early v0.1 implementation phase. The r
 - [x] maintained M5 example
 - [x] EN/IT consumption documentation
 
-### M6 — Production Validation
+### M6A — Linux Hardening & Idempotency
 
-Next implementation block:
+Current implementation block:
+
+- [x] aggregate and last-operation change tracking
+- [x] idempotent directory change semantics
+- [x] idempotent symlink change semantics
+- [x] `blm_ensure_mode`
+- [x] `blm_ensure_line`
+- [x] explicit `readlink` and `rm` dependency checks where required
+- [x] Bats contract coverage for idempotency
+- [x] maintained idempotency example and full-tour coverage
+- [x] EN/IT idempotency documentation
+- [ ] process-group hardening for `blm_timeout`
+
+Cross-distribution, macOS and WSL matrices are deferred until those environments can be validated directly.
+
+### M6B — Output & Error Model
+
+Planned next:
+
+- [ ] runtime/version diagnostics
+- [ ] title/section helpers
+- [ ] explicit error/exit helpers
+- [ ] structured error context
+- [ ] tighter human/plain/JSON consistency
+- [ ] color and Unicode policy hardening
+
+### M6C — Advanced System Primitives
+
+- [ ] safe backup/replace helpers
+- [ ] file/directory locking
+- [ ] checksums
+- [ ] safe copy/move helpers
+- [ ] ownership helpers
+- [ ] XDG path helpers
+
+### M6D — Integrations
+
+Candidate first adapters:
+
+- [ ] Git
+- [ ] systemd
+- [ ] Docker / Compose
+- [ ] Debian / APT
+- [ ] network checks
+
+### M6E — Terminal UX
+
+Candidate scope:
+
+- [ ] spinner/progress
+- [ ] confirm/input/password/select
+- [ ] panels/tables/tree rendering
+- [ ] graceful degradation for non-interactive environments
+
+### M6F — Production Validation
+
+Before `v0.1.0`:
 
 - [ ] integrate Bashloom primitives into at least one real deployment workflow
 - [ ] validate against a desktop/installer workflow
@@ -92,46 +148,34 @@ Next implementation block:
 - [ ] revise unstable APIs from field feedback
 - [ ] tag the first usable `v0.1.0`
 
-### Remaining v0.1 UI/Core work
-
-- [ ] richer terminal capability model
-- [x] output mode model
-- [ ] color and Unicode policy hardening
-- [ ] runtime/version diagnostics
-- [ ] title/section helpers
-- [x] key/value output
-- [ ] explicit error/exit helpers
-
 ### Quality
 
 - [x] ShellCheck clean for implemented public source
 - [x] shfmt clean for implemented public source
 - [x] Bats tests for implemented public APIs
-- [x] maintained executable examples through M5
+- [x] maintained executable examples through idempotency
 - [ ] Bash version matrix
 - [ ] cross-distribution matrix
 - [ ] documentation parity checks where practical
 
 ## v0.2 — Terminal UX
 
-Candidate scope:
+Candidate scope after the first usable foundation release:
 
-- panels
-- tables
+- richer panels and tables
 - tree rendering
-- spinner
-- progress
+- advanced spinners/progress
 - timers
-- confirm/input/password/select
+- richer prompt/select flows
 - optional enhanced backends such as Gum/fzf
 
 ## v0.3 — System & Integrations
 
-Candidate scope:
+Candidate scope after the v0.1 foundation stabilizes:
 
-- Git adapter
-- Docker adapter
-- systemd adapter
+- expanded Git adapter
+- expanded Docker adapter
+- expanded systemd adapter
 - Debian/APT helpers
 - XDG helpers
 - network checks

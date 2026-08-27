@@ -43,6 +43,7 @@ _blm_load_core() {
   _blm_source_module_file "$_BLM_ROOT/core/version.sh"
   _blm_source_module_file "$_BLM_ROOT/core/capabilities.sh"
   _blm_source_module_file "$_BLM_ROOT/core/validate.sh"
+  _blm_source_module_file "$_BLM_ROOT/core/change.sh"
   _blm_source_module_file "$_BLM_ROOT/core/output.sh"
   _blm_source_module_file "$_BLM_ROOT/core/env.sh"
   _blm_mark_module_loaded core

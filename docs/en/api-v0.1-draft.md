@@ -100,6 +100,25 @@ The normal `src/bashloom.sh` entrypoint remains the complete-runtime interface a
 
 Installation, vendoring and release commands under `tools/` are project tooling rather than sourced public runtime APIs.
 
+## M6A — Linux hardening and idempotency
+
+Change tracking:
+
+- `blm_change_reset`
+- `blm_last_changed`
+- `blm_changed`
+- `BLM_LAST_CHANGED`
+- `BLM_CHANGED`
+
+Additional idempotent filesystem primitives:
+
+- `blm_ensure_mode <mode> <path>`
+- `blm_ensure_line <path> <line>`
+
+`blm_ensure_dir` and `blm_ensure_symlink` now participate in change tracking. Tracked operations set `BLM_LAST_CHANGED=1` only when they actually modify the system. `BLM_CHANGED` is aggregate state and remains set until `blm_change_reset` is called.
+
+This milestone is Linux-first. Mode inspection currently uses GNU/Linux-compatible `stat -c` semantics.
+
 ## Detailed contracts
 
 See:
@@ -109,6 +128,7 @@ See:
 - `docs/en/runtime-state.md`
 - `docs/en/consumption.md`
 - `docs/en/compatibility.md`
+- `docs/en/idempotency.md`
 - `examples/README.md`
 
 ## Exit semantics

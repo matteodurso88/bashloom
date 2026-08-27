@@ -108,10 +108,16 @@ APT resta fuori dalla prima tranche M6D perché policy di package management e v
 
 ### M6E — Terminal UX
 
-- [ ] spinner/progress
-- [ ] confirm/input/password/select
-- [ ] pannelli/tabelle/tree
-- [ ] degradazione controllata non-interattiva
+- [x] spinner/progress
+- [x] confirm/input/password/select
+- [x] pannelli/tabelle/tree
+- [x] degradazione controllata non-interattiva
+- [x] gruppo loader selettivo `terminal`
+- [x] copertura contrattuale Bats
+- [x] esempio M6E e full-tour
+- [x] documentazione Terminal UX EN/IT
+
+Comportamenti TUI full-screen avanzati, backend esterni Gum/fzf e decorazioni Unicode più ricche restano candidati post-v0.1.
 
 ### M6F — Production Validation
 
@@ -128,7 +134,7 @@ Prima della `v0.1.0`:
 - [x] ShellCheck clean
 - [x] shfmt clean
 - [x] test Bats per API implementate
-- [x] esempi mantenuti fino a M6D
+- [x] esempi mantenuti fino a M6E
 - [x] documentazione API pubblica in-source verificata dalla CI
 - [ ] matrice versioni Bash
 - [ ] matrice cross-distribution
@@ -136,7 +142,7 @@ Prima della `v0.1.0`:
 
 ## v0.2 — Terminal UX
 
-Scope candidato dopo la prima release foundation utilizzabile: UI terminale più ricca, progress/spinner avanzati, prompt/select e backend opzionali Gum/fzf.
+Scope candidato dopo la prima release foundation utilizzabile: pannelli/tabelle più ricchi, spinner/progress avanzati, timer, prompt/select più evoluti, backend opzionali Gum/fzf e componenti full-screen solo se giustificati da consumer reali.
 
 ## v0.3 — System & Integrations
 

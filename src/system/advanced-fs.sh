@@ -101,6 +101,6 @@ blm_ensure_owner() {
   [[ $current == "$owner_group" ]] && return 0
 
   blm_require_command chown || return 1
-  command chown -- "$owner_group" "$path" || return $?
+  command chown -h -- "$owner_group" "$path" || return $?
   _blm_change_mark
 }

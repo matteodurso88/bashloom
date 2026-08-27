@@ -1,6 +1,6 @@
 # Roadmap
 
-Bashloom è attualmente nella fase di foundation. La roadmap è volutamente guidata dalle capability e non da date prefissate.
+Bashloom è attualmente nella fase foundation / implementazione iniziale della v0.1. La roadmap è volutamente guidata dalle capability e non da date prefissate.
 
 ## pre-v0.1 — Foundation
 
@@ -14,52 +14,91 @@ Bashloom è attualmente nella fase di foundation. La roadmap è volutamente guid
 - [x] requirement check di base
 - [x] smoke test Bats
 - [x] CI con ShellCheck/shfmt/Bats
-- [ ] template per issue e pull request
-- [ ] specifica API delle primitive v0.1
+- [x] template contributor per issue e pull request
+- [x] bozza specifica API delle primitive v0.1
 - [ ] matrice di test compatibilità
 
 ## v0.1 — Reliable Shell Foundation
 
-Capability pubbliche previste:
+### M1 — Command Runtime
 
-### Core
+- [x] `blm_run`
+- [x] preservazione esatta dell'exit status
+- [x] compatibilità con `set -e` del caller
+- [x] `--dry-run` locale
+- [x] `BLM_DRY_RUN=1` globale
+- [x] `blm_step`
+- [x] nessun `eval` / esecuzione argv-safe
 
-- modello capability terminale
-- modello modalità di output
-- policy colore e Unicode
-- diagnostica runtime/versione
+### M2 — Reliability
 
-### UI
+- [x] `blm_retry`
+- [x] delay retry e backoff intero
+- [x] `blm_wait_for`
+- [x] status timeout `124`
+- [x] `blm_timeout`
+- [x] cleanup stack LIFO
+- [x] installazione esplicita delle cleanup trap
+- [x] rifiuto di sovrascrivere trap del caller
+- [x] rollback stack LIFO
+- [x] transazioni esplicite begin/commit/rollback
+- [x] copertura Bats dei contratti M1/M2
+- [x] documentazione runtime/reliability EN/IT
 
-- info/success/warn/error
-- title/section
-- lifecycle degli step
-- output key/value
+### M3 — System Safety
 
-### Ops
+Prossimo blocco di implementazione:
 
-- require command/file/directory/environment
-- command runner con preservazione esatta degli exit code
-- retry
-- wait-until con timeout e intervallo
-- cleanup stack
-- helper espliciti per error/exit
+- [ ] require root
+- [ ] controlli permessi
+- [ ] helper sicuri per file/directory temporanei
+- [ ] ensure directory
+- [ ] ensure symlink
+- [ ] scrittura atomica file
+- [ ] helper path
 
-### System
+### M4 — Runtime State
 
-- helper sicuri per file/directory temporanei
-- ensure directory
-- scrittura atomica file
-- controllo permessi
-- helper path
+- [ ] fondamenta logging
+- [ ] helper environment
+- [ ] helper di configurazione sicuri
+- [ ] state file
+- [ ] modello output human/plain/machine-readable
+
+### M5 — Consumption
+
+- [ ] modello di installazione
+- [ ] guida al vendoring
+- [ ] caricamento selettivo moduli
+- [ ] documentazione compatibilità
+- [ ] workflow versioning/release
+
+### M6 — Production Validation
+
+- [ ] integrare primitive Bashloom in almeno un workflow reale di deployment
+- [ ] validare su un workflow desktop/installer
+- [ ] validare su un workflow system/provisioning
+- [ ] correggere API instabili sulla base del feedback reale
+- [ ] taggare la prima `v0.1.0` utilizzabile
+
+### Lavori UI/Core v0.1 ancora da completare
+
+- [ ] modello capability terminale più completo
+- [ ] modello modalità di output
+- [ ] hardening policy colore e Unicode
+- [ ] diagnostica runtime/versione
+- [ ] helper title/section
+- [ ] output key/value
+- [ ] helper espliciti error/exit
 
 ### Qualità
 
-- ShellCheck clean
-- shfmt clean
-- test Bats per le API pubbliche
-- matrice versioni Bash
-- controllo parità documentale dove praticabile
+- [x] ShellCheck clean per M1/M2
+- [x] shfmt clean per M1/M2
+- [x] test Bats per le API pubbliche implementate
+- [ ] matrice versioni Bash
+- [ ] matrice cross-distribution
+- [ ] controllo parità documentale dove praticabile
 
 ## v0.2 — Terminal UX
 
@@ -87,9 +126,7 @@ Scope candidato:
 
 ## Esplorazioni successive
 
-- transactional rollback stack
-- modello di esecuzione dry-run
-- modalità output human/plain/JSON
+- rifiniture output human/plain/JSON
 - bundler di moduli vendorabile
 - reference API generata
 - shell completion per una futura CLI Bashloom

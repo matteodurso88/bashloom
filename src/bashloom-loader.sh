@@ -143,7 +143,10 @@ _blm_load_integrations() {
 # Output: Silent on success; bootstrap errors use loader stderr output.
 # Side effects: Defines requested functions and updates _BLM_LOADED_MODULES.
 blm_load() {
-  (($# >= 1)) || { _blm_loader_error "Usage: blm_load <module> [module...]"; return 2; }
+  (($# >= 1)) || {
+    _blm_loader_error "Usage: blm_load <module> [module...]"
+    return 2
+  }
   local module
   for module in "$@"; do
     case $module in
@@ -169,7 +172,10 @@ blm_load() {
         _blm_load_terminal || return $?
         _blm_load_integrations || return $?
         ;;
-      *) _blm_loader_error "Unknown module: $module"; return 2 ;;
+      *)
+        _blm_loader_error "Unknown module: $module"
+        return 2
+        ;;
     esac
   done
 }

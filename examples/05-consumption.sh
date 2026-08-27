@@ -2,8 +2,9 @@
 
 # Bashloom example: consumption model (M5).
 #
-# Demonstrates selective loading, prefix installation, vendoring and release
-# metadata validation. All writes stay inside a temporary workspace.
+# Demonstrates selective loading, prefix installation, pinned vendoring with
+# integrity verification and release metadata validation. All writes stay
+# inside a temporary workspace.
 
 set -Eeuo pipefail
 
@@ -38,14 +39,16 @@ bash -c '
   printf "Installed version: %s\n" "$BLM_VERSION"
 ' _ "$prefix"
 
-printf '%s\n' '--- Vendoring ---'
+printf '%s\n' '--- Pinned vendoring ---'
 vendored="$workdir/project/vendor/bashloom"
-bash "$REPO_ROOT/tools/vendor.sh" --destination "$vendored"
+bash "$REPO_ROOT/tools/vendor.sh" --destination "$vendored" --pin example-pin
+bash "$REPO_ROOT/tools/vendor-verify.sh" "$vendored"
 bash -c '
   set -Eeuo pipefail
-  source "$1/bashloom-loader.sh"
+  source "$1/src/bashloom-loader.sh"
   blm_load core
   printf "Vendored version: %s\n" "$BLM_VERSION"
+  printf "Vendored pin: %s\n" "$(cat "$1/PIN")"
 ' _ "$vendored"
 
 printf '%s\n' '--- Release metadata gate ---'

@@ -6,6 +6,10 @@
 # Docker/systemd capability detection and a local resolver check. Operations
 # that would restart services or create/remove containers are shown in comments
 # rather than executed by the maintained full-tour.
+#
+# GitHub Actions commonly checks repositories out in detached HEAD state, so
+# branch reporting degrades explicitly to `detached` instead of treating that
+# perfectly valid CI state as an example failure.
 
 set -Eeuo pipefail
 
@@ -19,9 +23,12 @@ blm_title "M6D integrations"
 
 blm_section "Git"
 repo_root=$(blm_git_root "$ROOT")
-branch=$(blm_git_current_branch "$ROOT")
 blm_kv repository_root "$repo_root"
-blm_kv branch "$branch"
+if branch=$(blm_git_current_branch "$ROOT" 2>/dev/null); then
+  blm_kv branch "$branch"
+else
+  blm_kv branch detached
+fi
 if blm_git_is_clean "$ROOT"; then
   blm_kv work_tree clean
 else

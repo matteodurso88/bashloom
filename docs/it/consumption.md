@@ -122,7 +122,7 @@ Un tag `v*` attiva il workflow di release, che esegue:
 - creazione archivio e checksum SHA-256;
 - pubblicazione della GitHub Release.
 
-L'archivio di release contiene `src/`, `examples/`, `docs/`, `README.md`, `LICENSE` e `CHANGELOG.md`.
+L'archivio di release contiene `src/`, `examples/`, `docs/`, `tools/`, `README.md`, `LICENSE` e `CHANGELOG.md`.
 
 Il tag `v0.1.0` non deve essere creato finché la milestone di validazione in produzione non è completata.
 

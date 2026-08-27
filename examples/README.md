@@ -17,6 +17,7 @@ The `examples/` directory is a maintained part of the Bashloom project. It is in
 - `04-runtime-state.sh` — M4 output modes, logging, environment helpers, safe config and persistent state.
 - `05-consumption.sh` — M5 selective loading, prefix installation, vendoring and release metadata validation.
 - `06-idempotency.sh` — Linux-first idempotent convergence, aggregate change tracking, mode and exact-line ensures.
+- `07-output-error-model.sh` — M6B presentation helpers, runtime diagnostics and explicit non-exiting error statuses.
 - `full-tour.sh` — non-destructive end-to-end tour of all currently maintained public capabilities.
 
 Run an example from the repository root:
@@ -29,6 +30,7 @@ bash examples/03-system-safety.sh
 bash examples/04-runtime-state.sh
 bash examples/05-consumption.sh
 bash examples/06-idempotency.sh
+bash examples/07-output-error-model.sh
 bash examples/full-tour.sh
 ```
 
@@ -60,6 +62,9 @@ All filesystem-changing examples operate inside temporary workspaces and clean u
 | `blm_ensure_mode` | `06-idempotency.sh` | yes |
 | `blm_ensure_line` | `06-idempotency.sh` | yes |
 | convergence/no-op rerun | `06-idempotency.sh` | yes |
+| `blm_title` / `blm_section` | `07-output-error-model.sh` | yes |
+| runtime diagnostics | `07-output-error-model.sh` | yes |
+| explicit failure/usage statuses | `07-output-error-model.sh` | yes |
 
 ### Maintenance rule
 
@@ -88,6 +93,7 @@ La directory `examples/` è una parte mantenuta del progetto Bashloom. Ha tre sc
 - `04-runtime-state.sh` — M4: modalità output, logging, helper environment, config sicura e stato persistente.
 - `05-consumption.sh` — M5: caricamento selettivo, installazione sotto prefix, vendoring e validazione metadata release.
 - `06-idempotency.sh` — convergenza idempotente Linux-first, change tracking aggregato, mode e righe esatte.
+- `07-output-error-model.sh` — M6B: helper di presentazione, diagnostica runtime e status di errore espliciti senza exit impliciti.
 - `full-tour.sh` — tour end-to-end non distruttivo di tutte le capability pubbliche attualmente mantenute.
 
 Esecuzione dalla root del repository:
@@ -100,6 +106,7 @@ bash examples/03-system-safety.sh
 bash examples/04-runtime-state.sh
 bash examples/05-consumption.sh
 bash examples/06-idempotency.sh
+bash examples/07-output-error-model.sh
 bash examples/full-tour.sh
 ```
 
@@ -131,6 +138,9 @@ Tutti gli esempi che modificano il filesystem lavorano dentro workspace temporan
 | `blm_ensure_mode` | `06-idempotency.sh` | sì |
 | `blm_ensure_line` | `06-idempotency.sh` | sì |
 | convergenza/rerun no-op | `06-idempotency.sh` | sì |
+| `blm_title` / `blm_section` | `07-output-error-model.sh` | sì |
+| diagnostica runtime | `07-output-error-model.sh` | sì |
+| status failure/usage espliciti | `07-output-error-model.sh` | sì |
 
 ### Regola di manutenzione
 

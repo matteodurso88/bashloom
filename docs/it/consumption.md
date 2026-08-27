@@ -29,21 +29,7 @@ blm_load runtime system
 
 `blm_load` è idempotente e risolve automaticamente le dipendenze dichiarate.
 
-Gruppi di moduli supportati:
-
-| Modulo | Scopo |
-| --- | --- |
-| `core` | versione, capability, validazione, output e helper environment |
-| `status` | core più rendering degli status |
-| `logging` | status più logging |
-| `requirements` | status più controlli requisiti |
-| `runtime` | requirements più esecuzione comandi e step |
-| `reliability` | runtime più retry, wait, timeout, cleanup e rollback |
-| `system` | requirements più helper path, risorse temporanee e filesystem |
-| `state` | system più configurazione sicura e stato persistente |
-| `all` | runtime pubblico completo |
-
-I nomi modulo sconosciuti restituiscono status `2`.
+I gruppi supportati includono `core`, `status`, `terminal`, `logging`, `requirements`, `runtime`, `reliability`, `system`, `state`, `git`, `systemd`, `docker`, `network`, `integrations` e `all`. I nomi sconosciuti restituiscono status `2`.
 
 ## Installazione sotto prefix
 
@@ -71,58 +57,80 @@ source "$HOME/.local/lib/bashloom/bashloom.sh"
 bash tools/install.sh --prefix /opt/example
 ```
 
-Un'installazione esistente non viene mai sostituita senza `--force`.
+Un'installazione esistente non viene mai sostituita senza `--force`. Bashloom non invoca mai `sudo`: l'elevazione dei privilegi resta una policy dell'applicazione o dell'operatore.
 
-Per un'installazione di sistema, l'elevazione dei privilegi resta deliberatamente esterna a Bashloom:
+## Vendoring pinned
+
+Per applicazioni che portano Bashloom nel proprio repository, il vendoring pinned è il modello raccomandato prima della v1.0.
+
+Da un checkout/tag/commit Bashloom approvato:
 
 ```bash
-sudo bash tools/install.sh --prefix /usr/local
+bash tools/vendor.sh \
+  --destination /percorso/consumer/vendor/bashloom \
+  --pin b6a096ba1feb31f41a639856b29ae07e25ba3676
 ```
 
-Bashloom non invoca mai `sudo` autonomamente.
+Se `--pin` viene omesso, il tool risolve il `HEAD` Git corrente di Bashloom. Se i metadata Git non sono disponibili, il caller deve fornire `--pin` esplicitamente.
 
-## Vendoring
+Il bundle risultante è:
 
-Per applicazioni che devono portare nel proprio repository una copia Bashloom fissata:
-
-```bash
-bash /percorso/bashloom/tools/vendor.sh \
-  --destination vendor/bashloom
+```text
+vendor/bashloom/
+├── PIN
+├── LICENSE
+├── SHA256SUMS
+└── src/
+    ├── bashloom.sh
+    ├── bashloom-loader.sh
+    └── ...
 ```
 
-Il progetto risultante può usare:
+Il consumer fa source dal tree `src/` vendorizzato:
 
 ```bash
-source "$PROJECT_ROOT/vendor/bashloom/bashloom.sh"
+source "$PROJECT_ROOT/vendor/bashloom/src/bashloom.sh"
 ```
 
-oppure il caricamento selettivo:
+oppure:
 
 ```bash
-source "$PROJECT_ROOT/vendor/bashloom/bashloom-loader.sh"
+source "$PROJECT_ROOT/vendor/bashloom/src/bashloom-loader.sh"
 blm_load runtime reliability
 ```
 
-Il vendoring copia l'intero runtime `src/`, in modo che la risoluzione delle dipendenze resti autosufficiente. Una copia già presente richiede `--force` per essere sostituita.
+Il bundle vendor deve restare byte-identico al materiale upstream approvato. Le personalizzazioni specifiche del consumer devono vivere fuori da `vendor/bashloom/src/`.
+
+### Verifica di integrità
+
+La CI del consumer può verificare il bundle senza accesso di rete:
+
+```bash
+bash /percorso/bashloom/tools/vendor-verify.sh \
+  "$PROJECT_ROOT/vendor/bashloom"
+```
+
+Il verifier richiede un `PIN` non vuoto, controlla la struttura attesa e valida `LICENSE` più ogni file sotto `src/` contro `SHA256SUMS`. Un file runtime modificato o mancante fa fallire la verifica.
+
+Il lifecycle previsto è:
+
+```text
+commit/tag upstream approvato
+→ aggiornamento vendor esplicito
+→ PIN + SHA256SUMS committati nel consumer
+→ verifica integrità in CI consumer
+→ deploy usa solo la copia vendorizzata locale
+```
+
+Non esiste tracking automatico di upstream `main`, non esistono clone/download runtime durante deploy e non esiste repin automatico. Il rollback è un normale revert del consumer oppure un repin esplicito a una versione Bashloom precedentemente approvata.
+
+Una destinazione vendor già esistente non viene sostituita senza `--force`.
 
 ## Workflow di release
 
-I tag di release Bashloom usano la convenzione `vMAJOR.MINOR.PATCH`.
+I tag di release Bashloom usano la convenzione `vMAJOR.MINOR.PATCH`. Prima della pubblicazione, `tools/release-check.sh` verifica che la versione richiesta corrisponda esattamente a `BLM_VERSION` in `src/core/version.sh`.
 
-Prima della pubblicazione di una release taggata, `tools/release-check.sh` verifica che la versione richiesta corrisponda esattamente a `BLM_VERSION` in `src/core/version.sh`.
-
-Un tag `v*` attiva il workflow di release, che esegue:
-
-- controllo sintassi Bash;
-- ShellCheck;
-- verifica shfmt;
-- test Bats;
-- full feature tour mantenuto;
-- validazione metadata release;
-- creazione archivio e checksum SHA-256;
-- pubblicazione della GitHub Release.
-
-L'archivio di release contiene `src/`, `examples/`, `docs/`, `tools/`, `README.md`, `LICENSE` e `CHANGELOG.md`.
+Un tag `v*` rilancia sintassi, ShellCheck, shfmt, Bats, esempi mantenuti e gate metadata release prima di pubblicare archivio e checksum SHA-256.
 
 Il tag `v0.1.0` non deve essere creato finché la milestone di validazione in produzione non è completata.
 

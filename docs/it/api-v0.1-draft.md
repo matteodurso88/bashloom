@@ -76,6 +76,30 @@ Le operazioni con deadline usano status `124` allo scadere del timeout. Cleanup 
 
 Configurazione e stato usano dati letterali `key=value`. Non vengono mai caricati tramite `source` o `eval`.
 
+## M5 — Consumption
+
+Facendo source direttamente di `src/bashloom-loader.sh` è disponibile la seguente API pubblica del loader:
+
+- `blm_load <module> [module...]`
+
+Gruppi di moduli supportati:
+
+- `core`
+- `status`
+- `logging`
+- `requirements`
+- `runtime`
+- `reliability`
+- `system`
+- `state`
+- `all`
+
+Il caricamento dei moduli risolve le dipendenze ed è idempotente. Un nome modulo sconosciuto restituisce status `2`.
+
+Il normale entrypoint `src/bashloom.sh` resta l'interfaccia per il runtime completo e internamente carica `all`.
+
+I comandi di installazione, vendoring e release sotto `tools/` sono tooling di progetto e non API runtime pubbliche da importare tramite source.
+
 ## Contratti dettagliati
 
 Vedi:
@@ -83,6 +107,8 @@ Vedi:
 - `docs/it/runtime-reliability.md`
 - `docs/it/system-safety.md`
 - `docs/it/runtime-state.md`
+- `docs/it/consumption.md`
+- `docs/it/compatibility.md`
 - `examples/README.md`
 
 ## Semantica degli exit code
@@ -93,6 +119,6 @@ Lo status `2` viene generalmente usato per argomenti Bashloom o valori di config
 
 ## Effetti collaterali
 
-Il sourcing di `src/bashloom.sh` non deve abilitare implicitamente lo strict mode, sostituire trap del caller, modificare `IFS`, produrre output visibile, leggere configurazione/stato, creare file di log o eseguire testo fornito dal caller.
+Il sourcing di `src/bashloom.sh` o `src/bashloom-loader.sh` non deve abilitare implicitamente lo strict mode, sostituire trap del caller, modificare `IFS`, produrre output visibile, leggere configurazione/stato, creare file di log o eseguire testo fornito dal caller.
 
-Le utility esterne specifiche di una feature possono essere richieste soltanto quando quella funzione viene invocata; il sourcing del runtime resta senza dipendenze obbligatorie oltre a Bash.
+Le utility esterne specifiche di una feature possono essere richieste soltanto quando quella funzione viene invocata; il sourcing del runtime o del loader resta senza dipendenze obbligatorie oltre a Bash.

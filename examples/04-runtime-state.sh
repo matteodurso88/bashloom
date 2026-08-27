@@ -34,6 +34,9 @@ fi
 
 printf '%s\n' '--- Safe config ---'
 config="$workdir/app.conf"
+# SC2016 is intentional: the command substitution text is config data and must
+# remain literal to demonstrate that Bashloom never evaluates it.
+# shellcheck disable=SC2016
 printf '%s\n' \
   '# Parsed as data, never sourced.' \
   'APP_NAME=Bashloom' \

@@ -8,6 +8,8 @@ Durante la fase pre-v0.1 Bashloom può essere utilizzato in tre modi supportati:
 
 Nessun flusso supportato scarica ed esegue implicitamente codice shell remoto e nessun installer tenta escalation dei privilegi.
 
+Per l'integrazione a livello repository, inclusi vendoring pinned, adapter di progetto, CI locale, GitHub Actions e repin esplicito, vedi il [Contratto consumer Bashloom](consumer-contract.md).
+
 ## Runtime completo
 
 Il modello più semplice è:

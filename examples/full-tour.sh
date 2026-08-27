@@ -22,6 +22,7 @@ examples=(
   05-consumption.sh
   06-idempotency.sh
   07-output-error-model.sh
+  08-advanced-system.sh
 )
 
 printf '%s\n' '===================================================================='

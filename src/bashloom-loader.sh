@@ -48,9 +48,12 @@ _blm_load_status() {
 _blm_load_terminal() {
   _blm_module_loaded terminal && return 0
   _blm_load_status || return $?
-  _blm_source_module_file "$_BLM_ROOT/ui/prompt.sh"
+  _blm_source_module_file "$_BLM_ROOT/ui/theme.sh"
   _blm_source_module_file "$_BLM_ROOT/ui/render.sh"
+  _blm_source_module_file "$_BLM_ROOT/ui/width.sh"
+  _blm_source_module_file "$_BLM_ROOT/ui/prompt.sh"
   _blm_source_module_file "$_BLM_ROOT/ui/progress.sh"
+  _blm_source_module_file "$_BLM_ROOT/ui/tui.sh"
   _blm_mark_module_loaded terminal
 }
 _blm_load_logging() {

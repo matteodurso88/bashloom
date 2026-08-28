@@ -6,8 +6,30 @@
 # it independently from the caller shell. Consequently shell functions executed
 # through this API cannot propagate variable/cwd mutations back to the caller.
 #
-# Current scope is direct-child termination. Process-group/descendant hardening
-# remains a separately tracked Linux hardening item and is not implied here.
+# On Linux-like hosts with `setsid`, external commands are started in a separate
+# process group so timeout escalation reaches descendants as well as the direct
+# child. Shell functions/builtins retain the compatible direct-child fallback
+# because re-executing them through a new shell would break caller semantics.
+
+_blm_timeout_target_alive() {
+  (($# == 2)) || return 2
+  local pid=$1 grouped=$2
+  if ((grouped)); then
+    kill -0 -- "-$pid" 2>/dev/null
+  else
+    kill -0 "$pid" 2>/dev/null
+  fi
+}
+
+_blm_timeout_signal() {
+  (($# == 3)) || return 2
+  local signal=$1 pid=$2 grouped=$3
+  if ((grouped)); then
+    kill "-$signal" -- "-$pid" 2>/dev/null
+  else
+    kill "-$signal" "$pid" 2>/dev/null
+  fi
+}
 
 # Public API: blm_timeout
 # Purpose: Run one command and enforce TERM -> grace -> KILL after a deadline.
@@ -18,13 +40,14 @@
 #   124 when Bashloom enforces the timeout;
 #   2 for invalid options/values or missing command;
 #   127 when required sleep support fails during normal deadline polling.
-# Output:
-#   Wrapped command output is inherited. A timeout emits one Bashloom error.
-# Side effects:
-#   Starts a child process and may send TERM/KILL to that direct child.
+# Output: Wrapped output is inherited. A timeout emits one Bashloom error.
+# Side effects: Starts a child and may send TERM/KILL to it or its process group.
 # Isolation:
-#   The child clears inherited INT/TERM traps before running caller code so
-#   Bashloom's own cleanup trap configuration is not accidentally reused there.
+#   Direct-child fallback clears inherited INT/TERM traps before caller code.
+# Process groups:
+#   When the command resolves as an external executable and `setsid` is
+#   available, Bashloom creates a new session/process group and signals the
+#   group on timeout. Functions/builtins use the direct-child compatibility path.
 # Timing model: Bash SECONDS is used; polling resolution is one second.
 blm_timeout() {
   local timeout=30
@@ -50,9 +73,7 @@ blm_timeout() {
         blm_error "Unknown blm_timeout option: $1"
         return 2
         ;;
-      *)
-        break
-        ;;
+      *) break ;;
     esac
   done
 
@@ -69,43 +90,44 @@ blm_timeout() {
     return 2
   }
 
-  # `sleep` is a call-time dependency only. It is not required merely to source
-  # Bashloom, preserving the dependency-free runtime import contract.
   if ((timeout > 0 || grace > 0)); then
     blm_require_command sleep || return 127
   fi
 
-  (
-    trap - INT TERM
-    "$@"
-  ) &
+  local grouped=0 command_type
+  command_type=$(type -t -- "$1" 2>/dev/null || true)
+  if [[ $command_type == file ]] && blm_has_command setsid; then
+    command setsid -- "$@" &
+    grouped=1
+  else
+    (
+      trap - INT TERM
+      "$@"
+    ) &
+  fi
+
   local pid=$!
   local started=$SECONDS
 
-  while kill -0 "$pid" 2>/dev/null; do
+  while _blm_timeout_target_alive "$pid" "$grouped"; do
     if ((SECONDS - started >= timeout)); then
-      kill -TERM "$pid" 2>/dev/null || true
+      _blm_timeout_signal TERM "$pid" "$grouped" || true
 
       if ((grace > 0)); then
-        # Failure during grace sleeping does not prevent escalation; timeout has
-        # already occurred and the priority is to complete termination safely.
         command sleep "$grace" || true
       fi
 
-      if kill -0 "$pid" 2>/dev/null; then
-        kill -KILL "$pid" 2>/dev/null || true
+      if _blm_timeout_target_alive "$pid" "$grouped"; then
+        _blm_timeout_signal KILL "$pid" "$grouped" || true
       fi
 
-      # Reap the child regardless of signal-derived status; public timeout
-      # semantics intentionally normalize this path to status 124.
       wait "$pid" 2>/dev/null || true
       blm_error "Command timed out after ${timeout}s"
       return 124
     fi
 
     command sleep 1 || {
-      # A polling infrastructure failure must not orphan the managed child.
-      kill -TERM "$pid" 2>/dev/null || true
+      _blm_timeout_signal TERM "$pid" "$grouped" || true
       wait "$pid" 2>/dev/null || true
       return 127
     }
@@ -117,6 +139,5 @@ blm_timeout() {
   else
     status=$?
   fi
-
   return "$status"
 }

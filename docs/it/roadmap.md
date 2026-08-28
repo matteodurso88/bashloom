@@ -1,6 +1,6 @@
 # Roadmap
 
-Bashloom è attualmente nella fase foundation / implementazione iniziale della v0.1. La roadmap è volutamente guidata dalle capability e non da date prefissate.
+Bashloom è nella fase di validazione release candidate della v0.1. La roadmap è volutamente guidata dalle capability e non da date prefissate.
 
 ## pre-v0.1 — Foundation
 
@@ -59,7 +59,7 @@ Bashloom è attualmente nella fase foundation / implementazione iniziale della v
 - [x] `blm_ensure_mode`, `blm_ensure_line`
 - [x] dependency check filesystem espliciti
 - [x] test/esempio/docs
-- [ ] hardening process-group per `blm_timeout`
+- [x] hardening process-group per comandi esterni in `blm_timeout` tramite GNU `timeout` quando disponibile
 
 Le matrici cross-distribution, macOS e WSL restano rimandate finché quegli ambienti non potranno essere validati direttamente.
 
@@ -87,9 +87,9 @@ Le matrici cross-distribution, macOS e WSL restano rimandate finché quegli ambi
 - [x] gruppi integrazione selettivi
 - [x] standard documentazione in-source profonda e gate CI
 - [x] hardening commenti repository-wide
-- [ ] adapter Debian / APT
+- [x] adapter Debian / APT opzionale
 
-APT resta rimandato perché policy package-management e variabilità dell'ambiente sono significativamente più ampie rispetto agli adapter sottili già introdotti.
+L'integrazione APT fa parte di `v0.1.0-rc1`. Usa `apt-get`, `dpkg-query` e `apt-cache`, verifica le dipendenze feature-specific a call-time, non invoca mai sudo implicitamente e non aggiorna mai gli indici pacchetti in modo nascosto.
 
 ### M6E — Terminal UX Foundation
 
@@ -106,55 +106,56 @@ APT resta rimandato perché policy package-management e variabilità dell'ambien
 - [x] spinner Unicode/ASCII animato
 - [x] panel rich auto-dimensionati
 - [x] tabelle tab-delimited allineate
-- [x] tree con branch marker
+- [x] rendering tree topology-aware
 - [x] `BLM_UI_CHARSET=auto|ascii|unicode`
-- [x] `BLM_UI_STYLE=rich|minimal`
-- [x] `BLM_PROGRESS_WIDTH`
-- [x] showcase interattiva dedicata `examples/11-rich-terminal.sh`
+- [x] registry theme/style e varianti multiple per componente
+- [x] layout terminale width-aware con fallback deterministico
+- [x] foundation TUI full-screen dependency-light
 - [x] mantenimento fallback CI-safe
 - [x] documentazione EN/IT e copertura Bats
 
-Comportamenti TUI full-screen, mouse terminale e backend Gum/fzf obbligatori restano candidati post-v0.1.
+Backend Gum/fzf obbligatori e ulteriore espansione cosmetica/stilistica restano candidati post-v0.1.
 
 ### M6F — Production Validation
 
 Prima della `v0.1.0`:
 
 - [x] definire protocollo di ownership e field validation
-- [x] registrare Oriqo Infrastructure come consumer candidato per il deployment
+- [x] registrare Oriqo Infrastructure come consumer per il deployment
 - [x] richiedere che bug e miglioramenti emersi nei consumer vengano riportati upstream su Bashloom
-- [ ] completare almeno una validazione reale di deployment tramite il workflow del consumer owner
+- [x] completare almeno una validazione reale di deployment tramite il workflow del consumer owner — staging Oriqo Infrastructure PASS
 - [ ] validare un workflow desktop/installer
 - [ ] validare un workflow system/provisioning
-- [ ] rivedere le API instabili sulla base del feedback reale
-- [ ] taggare la prima `v0.1.0` utilizzabile
+- [ ] rivedere le API instabili sulla base del feedback reale quando l'evidence lo richiede
+- [x] pubblicare `v0.1.0-rc1` come baseline comune per la validazione multi-consumer
+- [ ] completare la campagna di validazione multi-consumer della RC
+- [ ] taggare la prima `v0.1.0` stabile
 
-Vedi `docs/it/production-validation.md` per il protocollo canonico M6F.
+L'evidence storica di deployment M6F su Oriqo ha usato il pin `b6a096ba1feb31f41a639856b29ae07e25ba3676` ed è terminata con successo. Il target corrente per l'adozione repository-wide nei consumer è `v0.1.0-rc1` al commit `bbbbd9b8e61c7d951b8b9fc8f00c351b50a1bf51`.
+
+Vedi `docs/it/production-validation.md` per il protocollo canonico M6F e lo stato corrente dell'evidence.
 
 ### Qualità
 
 - [x] ShellCheck clean
 - [x] shfmt clean
 - [x] test Bats per le API implementate
-- [x] esempi mantenuti fino a M6E.1
+- [x] esempi mantenuti sull'intera superficie feature della RC
 - [x] documentazione API pubblica in-source verificata dalla CI
+- [x] parità documentale EN/IT delle API pubbliche verificata automaticamente
 - [ ] matrice versioni Bash
 - [ ] matrice cross-distribution
-- [ ] controllo parità documentale dove praticabile
 
-## v0.2 — Terminal UX
+## Roadmap contributor post-v0.1
 
-Scope candidato dopo la prima release foundation utilizzabile: style registry, varianti spinner/progress, varianti panel/table/tree, temi/preset UI, override stile per chiamata, stili custom definiti dal consumer, timer, prompt/select più evoluti, backend opzionali Gum/fzf e componenti full-screen/cursor-addressed solo quando giustificati da consumer reali.
-
-## v0.3 — System & Integrations
-
-Scope candidato dopo la stabilizzazione v0.1: adapter Git/Docker/systemd più estesi, Debian/APT e network check più ricchi.
+Il lavoro feature post-RC è tracciato separatamente dalla stabilizzazione della RC. Vedi la issue GitHub `#28` per la roadmap contributor pubblica e i workstream scoped, inclusi identità/color system terminale più ricchi, componenti presentation evoluti, esempi/cookbook, portabilità/integrazioni e outreach.
 
 ## Esplorazioni successive
 
-- rifiniture human/plain/JSON
-- bundler moduli vendorabile
-- reference API generata
+- contesto errore strutturato più ricco
+- matrici di portabilità più ampie
+- integrazioni aggiuntive guidate da evidence reale dei consumer
+- backend Terminal UX opzionali quando giustificati
 - shell completion per futura CLI Bashloom
 
-Nessun elemento successivo alla v0.1 è considerato impegnativo finché non viene specificato nella documentazione e, quando opportuno, tramite ADR.
+Nessun elemento post-v0.1 è considerato impegnativo finché non viene specificato nella documentazione e, quando opportuno, tramite ADR o issue scoped.

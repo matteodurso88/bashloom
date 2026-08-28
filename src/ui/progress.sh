@@ -129,13 +129,14 @@ blm_spinner() {
     return "$stable_status"
   fi
 
-  "$@" &
-  local pid=$! frame=0 status charset rendered_frame
+  local charset frame=0 status rendered_frame
   charset=$(_blm_ui_effective_charset) || return $?
   local -a frames=()
   mapfile -t frames < <(_blm_spinner_frames "$style" "$charset")
   ((${#frames[@]} > 0)) || return 2
 
+  "$@" &
+  local pid=$!
   while kill -0 "$pid" 2>/dev/null; do
     rendered_frame=${frames[frame % ${#frames[@]}]}
     printf '\r%-3s %s' "$rendered_frame" "$label" >&2

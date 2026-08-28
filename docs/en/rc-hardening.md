@@ -6,9 +6,11 @@ This document records behavior intentionally stabilized before the common multi-
 
 `blm_timeout` preserves the existing command-status contract and status `124` for enforced deadlines.
 
-When the wrapped command resolves to an external executable and `setsid` is available, Bashloom starts it in a separate session/process group. TERM/KILL escalation targets that group, allowing descendants created by the command to be terminated with it.
+When the wrapped command resolves to an external executable and GNU coreutils `timeout` is available, Bashloom delegates the deadline to that backend. GNU timeout provides mature process-group signaling, so TERM/KILL escalation reaches descendants created by the command as well as the direct command process.
 
-Shell functions and builtins retain the direct-child compatibility path because re-executing them in a new shell would change caller semantics. This distinction is deliberate and documented rather than hidden.
+Shell functions and builtins retain Bashloom's direct-child compatibility path because re-executing caller shell state through an external wrapper would change semantics. Hosts without GNU timeout also use the direct Bash backend. All dependencies remain call-time only; sourcing Bashloom does not require GNU timeout.
+
+`--timeout 0` keeps Bashloom's historical immediate-deadline behavior even though GNU timeout interprets duration zero as disabled. `--grace 0` means immediate escalation and is mapped to a minimal positive GNU kill-after interval because GNU `-k 0` disables escalation.
 
 ## Numeric filesystem modes
 

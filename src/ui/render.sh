@@ -119,13 +119,30 @@ blm_panel() {
   local chars top_left vertical bottom_left horizontal top_right bottom_right
   chars=$(_blm_panel_border_chars "$style" "$charset") || return $?
   if [[ $chars == '+|+-' ]]; then
-    top_left='+'; vertical='|'; bottom_left='+'; horizontal='-'; top_right='+'; bottom_right='+'
+    top_left='+'
+    vertical='|'
+    bottom_left='+'
+    horizontal='-'
+    top_right='+'
+    bottom_right='+'
   else
-    top_left=${chars:0:1}; vertical=${chars:1:1}; bottom_left=${chars:2:1}; horizontal=${chars:3:1}
+    top_left=${chars:0:1}
+    vertical=${chars:1:1}
+    bottom_left=${chars:2:1}
+    horizontal=${chars:3:1}
     case $style in
-      rounded) top_right='╮'; bottom_right='╯' ;;
-      square) top_right='┐'; bottom_right='┘' ;;
-      double) top_right='╗'; bottom_right='╝' ;;
+      rounded)
+        top_right='╮'
+        bottom_right='╯'
+        ;;
+      square)
+        top_right='┐'
+        bottom_right='┘'
+        ;;
+      double)
+        top_right='╗'
+        bottom_right='╝'
+        ;;
     esac
   fi
 
@@ -192,11 +209,33 @@ blm_table() {
   charset=$(_blm_ui_effective_charset) || return $?
   case $style in
     unicode)
-      if [[ $charset == unicode ]]; then sep=' │ '; divider_sep='─┼─'; divider_glyph='─'; else sep=' | '; divider_sep='-+-'; divider_glyph='-'; fi
+      if [[ $charset == unicode ]]; then
+        sep=' │ '
+        divider_sep='─┼─'
+        divider_glyph='─'
+      else
+        sep=' | '
+        divider_sep='-+-'
+        divider_glyph='-'
+      fi
       ;;
-    ascii) sep=' | '; divider_sep='-+-'; divider_glyph='-' ;;
-    compact) sep='  '; divider_sep='  '; divider_glyph='-'; header_divider=0 ;;
-    minimal) sep='  '; divider_sep='  '; divider_glyph=' '; header_divider=0 ;;
+    ascii)
+      sep=' | '
+      divider_sep='-+-'
+      divider_glyph='-'
+      ;;
+    compact)
+      sep='  '
+      divider_sep='  '
+      divider_glyph='-'
+      header_divider=0
+      ;;
+    minimal)
+      sep='  '
+      divider_sep='  '
+      divider_glyph=' '
+      header_divider=0
+      ;;
   esac
 
   local row_index=0 rendered
@@ -318,7 +357,10 @@ blm_tree_view() {
     for ((j = i + 1; j < ${#raw_lines[@]}; j++)); do
       next_depth=${depths[j]}
       ((next_depth < depth)) && break
-      if ((next_depth == depth)); then last=0; break; fi
+      if ((next_depth == depth)); then
+        last=0
+        break
+      fi
     done
     lasts[i]=$last
   done

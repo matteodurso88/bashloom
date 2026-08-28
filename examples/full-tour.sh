@@ -26,6 +26,7 @@ examples=(
   09-integrations.sh
   10-terminal-ux.sh
   11-rich-terminal.sh
+  12-apt.sh
 )
 
 printf '%s\n' '===================================================================='

@@ -1,6 +1,6 @@
 # M6F — Production Validation
 
-M6F validates Bashloom against real consumer workflows before `v0.1.0`. The purpose is not to force consumers to adopt Bashloom wholesale; it is to discover API, reliability and operability defects that unit/integration tests cannot expose.
+M6F validates Bashloom against real consumer workflows before `v0.1.0`. The purpose is to discover API, reliability and operability defects that unit/integration tests cannot expose, while preserving each consumer repository's ownership and deployment policy.
 
 ## Ownership boundary
 
@@ -15,33 +15,46 @@ Bashloom maintainers may:
 
 Bashloom maintainers must not independently merge or deploy changes in a consumer repository unless that repository's normal ownership workflow explicitly authorizes it.
 
-## Candidate consumers
+## Consumer evidence
 
-### Oriqo Infrastructure
+### Oriqo Infrastructure — historical M6F deployment validation
 
 Repository: `oriqoproject/oriqo-infrastructure`
 
-Status: candidate real deployment consumer.
+Status: **PASS**.
 
-A draft integration proposal exists in the consumer repository for OR/DEV review. Oriqo OR/DEV remain responsible for deciding whether, where and how Bashloom is adopted in that repository.
+Oriqo Infrastructure completed the first real deployment validation through the consumer owner's staging workflow. The historical validation evidence is tracked in Bashloom issue `#16` and the corresponding completed Oriqo Infrastructure consumer tracker.
 
-The current validation pin is:
+Historical validation pin:
 
 ```text
 b6a096ba1feb31f41a639856b29ae07e25ba3676
 ```
 
+This pin is evidence for the completed M6F deployment validation and is not the current repository-wide adoption target.
+
+### Current RC multi-consumer adoption baseline
+
+The current common validation/adoption target is:
+
+```text
+release: v0.1.0-rc1
+commit: bbbbd9b8e61c7d951b8b9fc8f00c351b50a1bf51
+```
+
+The RC campaign expands beyond the historical single-workflow M6F evidence and validates Bashloom across full Bash surfaces in multiple real consumer repositories. That campaign is tracked separately from the already completed Oriqo deployment PASS.
+
 ## Validation protocol
 
 For each consumer integration:
 
-1. Pick one representative, low-blast-radius workflow.
+1. Pick one representative workflow or Bash surface with a clear validation purpose.
 2. Pin Bashloom to an exact commit or release.
 3. Preserve the consumer's existing behavior, exit codes and rollback policy.
-4. Prefer opt-in adoption for the first validation pass.
-5. Exercise the same workflow both with and without Bashloom where practical.
+4. Use the consumer repository's normal ownership and review workflow.
+5. Exercise equivalent pre/post-migration behavior where practical.
 6. Run the consumer's native CI/static checks.
-7. Run the consumer's normal staging or test procedure under its own ownership process.
+7. Run the consumer's normal staging, test or device procedure under its own ownership process.
 8. Record every Bashloom defect or missing primitive in the Bashloom repository.
 9. Fix library defects in Bashloom rather than adding consumer-specific compensation unless the workaround is itself a legitimate consumer policy.
 10. Re-pin or upgrade only after the Bashloom fix is merged and validated.
@@ -64,14 +77,22 @@ A useful report includes:
 
 When a consumer discovers a possible improvement rather than a defect, it should still be reported upstream. The Bashloom repository is the source of truth for deciding whether that improvement belongs in the generic library, in a future milestone, or only in the consumer.
 
-## M6F exit criteria
+Documentation drift discovered by consumers is also a valid upstream finding when canonical roadmap, release notes and recorded validation evidence disagree.
 
-Before `v0.1.0`, Bashloom should have evidence for:
+## Current M6F / RC state
 
-- at least one real deployment workflow;
-- one desktop/installer-style workflow;
-- one system/provisioning workflow;
-- feedback-driven review of unstable APIs;
-- no known critical source-safety, exit-status or rollback regressions in validated consumers.
+Completed evidence:
+
+- [x] field-validation ownership and feedback protocol defined;
+- [x] at least one real deployment workflow validated — Oriqo Infrastructure staging PASS;
+- [x] first public RC baseline published as `v0.1.0-rc1`.
+
+Still required before stable `v0.1.0`:
+
+- [ ] desktop/installer-style workflow evidence;
+- [ ] system/provisioning workflow evidence;
+- [ ] broader multi-consumer RC validation sufficient to exercise core/runtime, reliability, filesystem/idempotency, integrations and terminal UX;
+- [ ] evidence-driven review/fixes for any unstable behavior found in consumers;
+- [ ] no known blocker-class source-safety, exit-status or rollback regressions.
 
 Cross-distribution, macOS and WSL manual matrices remain deferred until those environments can be validated directly.

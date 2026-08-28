@@ -26,9 +26,11 @@ _blm_ui_charset() {
 
 _blm_ui_effective_charset() {
   _blm_ui_theme_validate || return $?
+  local validated
+  validated=$(_blm_ui_charset) || return $?
   case ${BLM_UI_THEME:-default} in
     ascii | ci) printf '%s\n' ascii ;;
-    *) _blm_ui_charset ;;
+    *) printf '%s\n' "$validated" ;;
   esac
 }
 
@@ -82,6 +84,9 @@ blm_panel() {
   local mode style charset title_width content_width line line_width
   mode=$(_blm_output_mode) || return $?
   style=$(_blm_ui_resolve_style panel "$style_override") || return $?
+  if [[ $mode == human ]]; then
+    charset=$(_blm_ui_effective_charset) || return $?
+  fi
 
   if [[ $mode == json ]]; then
     if (($# == 0)); then
@@ -115,7 +120,6 @@ blm_panel() {
     ((line_width > content_width)) && content_width=$line_width
   done
 
-  charset=$(_blm_ui_effective_charset) || return $?
   local chars top_left vertical bottom_left horizontal top_right bottom_right
   chars=$(_blm_panel_border_chars "$style" "$charset") || return $?
   if [[ $chars == '+|+-' ]]; then

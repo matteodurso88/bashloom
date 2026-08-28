@@ -40,8 +40,8 @@ setup() {
   [ "$output" = "new|640" ]
 }
 
-@test "timeout process-group path terminates external-command descendants when setsid exists" {
-  command -v setsid >/dev/null 2>&1 || skip "setsid unavailable"
+@test "GNU timeout backend terminates external-command descendants" {
+  command timeout --version 2>/dev/null | grep -q 'GNU coreutils' || skip "GNU timeout unavailable"
   pidfile="$BATS_TEST_TMPDIR/descendant.pid"
   run bash -c '
     source "$1"

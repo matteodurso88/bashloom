@@ -1,6 +1,6 @@
 # Roadmap
 
-Bashloom is currently in the foundation / early v0.1 implementation phase. The roadmap is intentionally capability-driven rather than date-driven.
+Bashloom is in the v0.1 release-candidate validation phase. The roadmap is intentionally capability-driven rather than date-driven.
 
 ## pre-v0.1 — Foundation
 
@@ -59,7 +59,7 @@ Bashloom is currently in the foundation / early v0.1 implementation phase. The r
 - [x] `blm_ensure_mode`, `blm_ensure_line`
 - [x] explicit filesystem dependency checks
 - [x] tests/example/docs
-- [ ] process-group hardening for `blm_timeout`
+- [x] process-group hardening for external-command `blm_timeout` through GNU `timeout` when available
 
 Cross-distribution, macOS and WSL matrices are deferred until those environments can be validated directly.
 
@@ -87,9 +87,9 @@ Cross-distribution, macOS and WSL matrices are deferred until those environments
 - [x] selective integration groups
 - [x] deep source-documentation standard and CI contract
 - [x] repository-wide source comment hardening
-- [ ] Debian / APT adapter
+- [x] optional Debian / APT adapter
 
-APT remains deferred because package-management policy and environment variance are materially broader than the thin adapters above.
+The APT integration is part of `v0.1.0-rc1`. It uses `apt-get`, `dpkg-query` and `apt-cache`, performs feature dependency checks at call time, never invokes implicit sudo and never refreshes package indexes implicitly.
 
 ### M6E — Terminal UX Foundation
 
@@ -106,55 +106,56 @@ APT remains deferred because package-management policy and environment variance 
 - [x] animated Unicode/ASCII spinner
 - [x] auto-sized rich panels
 - [x] aligned tab-delimited tables
-- [x] branch-marked tree rendering
+- [x] topology-aware tree rendering
 - [x] `BLM_UI_CHARSET=auto|ascii|unicode`
-- [x] `BLM_UI_STYLE=rich|minimal`
-- [x] `BLM_PROGRESS_WIDTH`
-- [x] dedicated interactive showcase `examples/11-rich-terminal.sh`
+- [x] theme/style registry and multiple component variants
+- [x] width-aware terminal layout with deterministic fallback
+- [x] dependency-light full-screen TUI foundation
 - [x] CI-safe degradation retained
 - [x] EN/IT documentation and Bats coverage
 
-Full-screen TUI behavior, terminal mouse handling and mandatory Gum/fzf backends remain post-v0.1 candidates.
+Mandatory Gum/fzf backends and broader cosmetic/style expansion remain post-v0.1 candidates.
 
 ### M6F — Production Validation
 
 Before `v0.1.0`:
 
 - [x] define field-validation ownership and feedback protocol
-- [x] register Oriqo Infrastructure as a candidate deployment consumer
+- [x] register Oriqo Infrastructure as a deployment consumer
 - [x] require consumer findings and improvements to be reported upstream to Bashloom
-- [ ] complete at least one real deployment validation through the consumer owner's workflow
+- [x] complete at least one real deployment validation through the consumer owner's workflow — Oriqo Infrastructure staging PASS
 - [ ] validate against a desktop/installer workflow
 - [ ] validate against a system/provisioning workflow
-- [ ] revise unstable APIs from field feedback
-- [ ] tag the first usable `v0.1.0`
+- [ ] revise unstable APIs from field feedback where evidence requires it
+- [x] publish `v0.1.0-rc1` as the common multi-consumer validation baseline
+- [ ] complete the RC multi-consumer validation campaign
+- [ ] tag the first stable `v0.1.0`
 
-See `docs/en/production-validation.md` for the canonical M6F protocol.
+Historical Oriqo M6F deployment evidence used pin `b6a096ba1feb31f41a639856b29ae07e25ba3676` and completed successfully. The current repository-wide consumer adoption target is `v0.1.0-rc1` at commit `bbbbd9b8e61c7d951b8b9fc8f00c351b50a1bf51`.
+
+See `docs/en/production-validation.md` for the canonical M6F protocol and current evidence state.
 
 ### Quality
 
 - [x] ShellCheck clean for implemented public source
 - [x] shfmt clean for implemented public source
 - [x] Bats tests for implemented public APIs
-- [x] maintained executable examples through M6E.1
+- [x] maintained executable examples through the RC feature surface
 - [x] machine-enforced public API source documentation
+- [x] machine-enforced EN/IT public API documentation parity
 - [ ] Bash version matrix
 - [ ] cross-distribution matrix
-- [ ] documentation parity checks where practical
 
-## v0.2 — Terminal UX
+## Post-v0.1 contributor roadmap
 
-Candidate scope after the first usable foundation release: style registry, spinner/progress variants, panel/table/tree variants, UI themes/presets, per-call style overrides, user-defined custom styles, timers, richer prompt/select flows, optional Gum/fzf backends and full-screen/cursor-addressed components only when real consumers justify them.
-
-## v0.3 — System & Integrations
-
-Candidate scope after v0.1 stabilizes: expanded Git/Docker/systemd adapters, Debian/APT helpers and richer network checks.
+Post-RC feature work is tracked separately from RC stabilization. See GitHub issue `#28` for the public contributor roadmap and scoped workstreams, including richer terminal identity/color systems, richer presentation components, examples/cookbook, portability/integrations and outreach.
 
 ## Later exploration
 
-- human/plain/JSON refinements
-- vendorable module bundler
-- generated API reference
+- richer structured error context
+- broader portability matrices
+- additional integrations driven by real consumer evidence
+- optional terminal UX backends where justified
 - shell completion for a future Bashloom CLI
 
-No item beyond v0.1 is considered committed until specified through documentation and, where appropriate, an ADR.
+No post-v0.1 item is considered committed until specified through documentation and, where appropriate, an ADR or scoped issue.

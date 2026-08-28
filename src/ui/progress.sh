@@ -87,10 +87,10 @@ _blm_spinner_frames() {
       if [[ $charset == unicode ]]; then
         printf '%s\n' '⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏'
       else
-        printf '%s\n' '|' '/' '-' '\\'
+        printf '%s\n' '|' '/' '-' "\\"
       fi
       ;;
-    line) printf '%s\n' '|' '/' '-' '\\' ;;
+    line) printf '%s\n' '|' '/' '-' "\\" ;;
     dots) printf '%s\n' '.  ' '.. ' '...' ;;
     pulse)
       if [[ $charset == unicode ]]; then printf '%s\n' '·' '•' '●' '•'; else printf '%s\n' '.' 'o' 'O' 'o'; fi

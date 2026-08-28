@@ -17,14 +17,35 @@ _blm_progress_bar() {
 
   case $style in
     blocks)
-      if [[ $charset == unicode ]]; then filled_glyph='█'; empty_glyph='░'; else filled_glyph='#'; empty_glyph='-'; fi
+      if [[ $charset == unicode ]]; then
+        filled_glyph='█'
+        empty_glyph='░'
+      else
+        filled_glyph='#'
+        empty_glyph='-'
+      fi
       ;;
-    bar) filled_glyph='='; empty_glyph='-' ;;
+    bar)
+      filled_glyph='='
+      empty_glyph='-'
+      ;;
     thin)
-      if [[ $charset == unicode ]]; then filled_glyph='━'; empty_glyph='─'; else filled_glyph='='; empty_glyph='-'; fi
+      if [[ $charset == unicode ]]; then
+        filled_glyph='━'
+        empty_glyph='─'
+      else
+        filled_glyph='='
+        empty_glyph='-'
+      fi
       ;;
     dots)
-      if [[ $charset == unicode ]]; then filled_glyph='●'; empty_glyph='·'; else filled_glyph='o'; empty_glyph='.'; fi
+      if [[ $charset == unicode ]]; then
+        filled_glyph='●'
+        empty_glyph='·'
+      else
+        filled_glyph='o'
+        empty_glyph='.'
+      fi
       ;;
     percent) return 0 ;;
     *) return 2 ;;

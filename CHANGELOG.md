@@ -1,49 +1,76 @@
 # Changelog / Registro modifiche
 
-All notable changes to Bashloom will be documented in this file.
+All notable changes to Bashloom are documented in this file.
 
-Tutte le modifiche rilevanti a Bashloom saranno documentate in questo file.
+Tutte le modifiche rilevanti a Bashloom sono documentate in questo file.
 
-The project follows Semantic Versioning once public versioned releases begin. During the pre-v0.1 foundation phase, entries may describe unreleased development milestones.
+The project follows Semantic Versioning for public versioned releases.
 
-Il progetto seguirà il Semantic Versioning a partire dalle release pubbliche versionate. Durante la fase foundation pre-v0.1, le voci possono descrivere milestone di sviluppo non ancora rilasciate.
+Il progetto segue il Semantic Versioning per le release pubbliche versionate.
 
 ## [Unreleased] / [Non rilasciato]
 
+No changes after the v0.1.0-rc1 freeze candidate yet.
+
+Nessuna modifica successiva al candidato al freeze v0.1.0-rc1 al momento.
+
+## [0.1.0-rc1] - 2026-08-28
+
+First public release-candidate baseline for multi-consumer field validation.
+
+Prima baseline release candidate pubblica per la validazione sul campo multi-consumer.
+
 ### Added / Aggiunto
 
-- Project identity, governance, MIT license and bilingual EN/IT documentation policy.
-- Identità del progetto, governance, licenza MIT e policy documentale bilingue EN/IT.
-- M1 command runtime, M2 reliability, M3 system safety, M4 runtime state and M5 consumption foundations.
-- Foundation M1 command runtime, M2 reliability, M3 system safety, M4 runtime state e M5 consumption.
-- M6A idempotency and change tracking.
-- M6A idempotenza e change tracking.
-- M6B output/error model with diagnostics and explicit non-exiting failure helpers.
-- M6B output/error model con diagnostica e failure helper espliciti senza exit impliciti.
-- M6C advanced filesystem, locking, ownership and XDG primitives.
-- M6C primitive filesystem avanzate, locking, ownership e XDG.
-- M6D Git, systemd, Docker Compose and network integrations.
-- M6D integrazioni Git, systemd, Docker Compose e rete.
-- Repository-wide deep source-documentation standard with CI enforcement.
-- Standard repository-wide di documentazione profonda in-source con enforcement CI.
-- M6E terminal UX: prompt, confirm, password, select, progress, spinner, panel, table and tree primitives.
-- M6E terminal UX: primitive prompt, confirm, password, select, progress, spinner, panel, table e tree.
-- M6E.1 rich terminal rendering with visual progress bars, animated Unicode/ASCII spinner, auto-sized panels, aligned tables and branch-marked trees.
-- M6E.1 rendering terminale rich con progress bar visuali, spinner Unicode/ASCII animato, panel auto-dimensionati, tabelle allineate e tree con branch marker.
-- `BLM_UI_CHARSET=auto|ascii|unicode`, `BLM_UI_STYLE=rich|minimal` and configurable `BLM_PROGRESS_WIDTH`.
-- `BLM_UI_CHARSET=auto|ascii|unicode`, `BLM_UI_STYLE=rich|minimal` e `BLM_PROGRESS_WIDTH` configurabile.
-- Maintained `examples/11-rich-terminal.sh` visual showcase with deterministic CI fallback.
-- Showcase visuale mantenuta `examples/11-rich-terminal.sh` con fallback deterministico in CI.
+- M1 command runtime with argv-safe execution, dry-run support and exact exit-status preservation.
+- Runtime comandi M1 con esecuzione argv-safe, supporto dry-run e preservazione esatta degli exit status.
+- M2 reliability primitives: retry, wait, timeout, cleanup and transaction/rollback helpers.
+- Primitive reliability M2: retry, wait, timeout, cleanup e helper transaction/rollback.
+- M3/M6 system and filesystem primitives for requirements, temporary resources, paths, idempotent convergence, safe copy/move, checksums, locking, ownership, XDG and atomic replacement.
+- Primitive sistema e filesystem M3/M6 per requirements, risorse temporanee, path, convergenza idempotente, copy/move sicuri, checksum, locking, ownership, XDG e sostituzione atomica.
+- Runtime state layer with human/plain/JSON output, logging, environment helpers, literal key=value config and persistent atomic state.
+- Layer runtime state con output human/plain/JSON, logging, helper environment, config key=value letterale e stato persistente atomico.
+- Selective dependency-aware loader, local installer, pinned vendoring with integrity verification and release archive tooling.
+- Loader selettivo dependency-aware, installer locale, vendoring pinnato con verifica integrità e tooling per gli archivi release.
+- Git, systemd, Docker Compose and network integrations.
+- Integrazioni Git, systemd, Docker Compose e network.
+- Optional Debian-family APT integration using `apt-get`, `dpkg-query` and `apt-cache` without implicit sudo or hidden index refreshes.
+- Integrazione APT opzionale per sistemi Debian-family tramite `apt-get`, `dpkg-query` e `apt-cache`, senza sudo implicito né refresh nascosti degli indici.
+- Terminal UX primitives for prompts, confirmation, password input, selection, presentation, progress, spinners and trees.
+- Primitive Terminal UX per prompt, conferma, password, selezione, presentation, progress, spinner e tree.
+- Theme/style registry with `default`, `modern`, `minimal`, `ascii` and `ci` presets plus per-component/per-call overrides.
+- Registry theme/style con preset `default`, `modern`, `minimal`, `ascii` e `ci` più override per componente e per chiamata.
+- Multiple spinner, progress, panel, table and tree visual variants without public API proliferation.
+- Varianti visuali multiple per spinner, progress, panel, table e tree senza proliferazione delle API pubbliche.
+- Width-aware terminal layout via `blm_display_width`, using Unicode-aware measurement when Python is available and deterministic fallback otherwise.
+- Layout terminale width-aware tramite `blm_display_width`, con misura Unicode-aware quando Python è disponibile e fallback deterministico negli altri casi.
+- Advanced topology-aware `blm_tree_view` rendering with sibling endings and continuation branches.
+- Rendering avanzato topology-aware `blm_tree_view` con terminazioni sibling e continuation branch.
+- Dependency-light full-screen TUI foundation with alternate-screen lifecycle, cursor movement, size detection and key normalization.
+- Foundation TUI full-screen dependency-light con lifecycle alternate-screen, movimento cursore, rilevamento dimensioni e normalizzazione tasti.
+- Repository-wide public source documentation contract and permanent EN/IT public-API documentation parity gate.
+- Contratto repository-wide di documentazione pubblica in-source e gate permanente di parità documentale API pubbliche EN/IT.
 
 ### Changed / Modificato
 
-- Filesystem helpers check feature-specific dependencies such as `readlink` and `rm` explicitly when needed.
-- Gli helper filesystem verificano esplicitamente dipendenze feature-specific come `readlink` e `rm` quando necessarie.
-- The `system` loader group includes advanced filesystem, locking and XDG helpers; `all` includes integrations and terminal UX.
-- Il gruppo loader `system` include filesystem avanzato, locking e XDG; `all` include integrazioni e terminal UX.
-- Existing public source files use contract-oriented docblocks covering purpose, usage, statuses, output, side effects, dependencies, security and non-obvious invariants.
-- I sorgenti pubblici usano docblock orientati al contratto con scopo, uso, status, output, side effect, dipendenze, sicurezza e invarianti non ovvie.
-- `blm_require_env` validates environment-variable names before indirect expansion.
-- `blm_require_env` valida i nomi delle variabili environment prima dell'espansione indiretta.
-- `examples/10-terminal-ux.sh` now evaluates TTY state outside command substitution so it reports the real terminal capability.
-- `examples/10-terminal-ux.sh` valuta ora lo stato TTY fuori dalla command substitution, riportando la reale capability del terminale.
+- `blm_timeout` uses GNU coreutils `timeout` for external executables when available so enforced deadlines can terminate command descendants; shell functions/builtins retain the Bash-compatible direct-child backend.
+- `blm_timeout` usa GNU coreutils `timeout` per gli eseguibili esterni quando disponibile, così le deadline applicate possono terminare i discendenti del comando; funzioni shell/builtin mantengono il backend direct-child compatibile Bash.
+- Numeric permission modes are validated as octal before filesystem mutation.
+- I permission mode numerici vengono validati come ottali prima delle mutazioni filesystem.
+- `blm_ensure_line` explicitly rejects multiline payloads.
+- `blm_ensure_line` rifiuta esplicitamente payload multilinea.
+- Core JSON escaping covers all C0 controls representable by Bash variables while preserving printable Unicode.
+- L'escaping JSON del core copre tutti i control C0 rappresentabili dalle variabili Bash preservando l'Unicode stampabile.
+- `blm_atomic_write` is explicitly defined as same-filesystem atomic replacement, not an fsync/power-loss durability primitive.
+- `blm_atomic_write` è esplicitamente definita come sostituzione atomica sullo stesso filesystem, non come primitiva di durabilità fsync/power-loss.
+- Directory locks deliberately do not perform automatic stale-lock recovery; liveness policy remains application-owned.
+- I directory lock deliberatamente non effettuano recovery automatico degli stale lock; la policy di liveness resta responsabilità dell'applicazione.
+- `BLM_LOG_FILE` never creates parent directories implicitly.
+- `BLM_LOG_FILE` non crea mai implicitamente le directory parent.
+
+### Validation / Validazione
+
+- Bash syntax, ShellCheck, shfmt, source-documentation contract, public-API EN/IT documentation contract, Bats and maintained examples are merge-blocking CI gates.
+- Sintassi Bash, ShellCheck, shfmt, contratto documentazione sorgente, contratto documentazione API pubbliche EN/IT, Bats ed esempi mantenuti sono gate CI bloccanti per il merge.
+- The RC convergence baseline passes 118 Bats tests before release-preparation changes; release-specific regression tests are added on top of that baseline.
+- La baseline di convergenza RC supera 118 test Bats prima delle modifiche di release preparation; i test di regressione specifici per la release vengono aggiunti sopra tale baseline.

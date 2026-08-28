@@ -121,11 +121,24 @@ teardown() {
   [ "$(cat "$destination/PIN")" = second ]
 }
 
-@test "release gate validates metadata and rejects mismatched version" {
+@test "release gate validates metadata, v-prefixed RC tag, and mismatch" {
   run bash "$REPO_ROOT/tools/release-check.sh" "$CURRENT_VERSION"
+  [ "$status" -eq 0 ]
+
+  run bash "$REPO_ROOT/tools/release-check.sh" "v$CURRENT_VERSION"
   [ "$status" -eq 0 ]
 
   run bash "$REPO_ROOT/tools/release-check.sh" 999.999.999
   [ "$status" -eq 1 ]
   [[ "$output" == *"Version mismatch"* ]]
+}
+
+@test "release gate rejects malformed prerelease and build metadata" {
+  run bash "$REPO_ROOT/tools/release-check.sh" 0.1.0-
+  [ "$status" -eq 2 ]
+  [[ "$output" == *"Invalid release version"* ]]
+
+  run bash "$REPO_ROOT/tools/release-check.sh" 0.1.0-rc1+build
+  [ "$status" -eq 2 ]
+  [[ "$output" == *"Invalid release version"* ]]
 }

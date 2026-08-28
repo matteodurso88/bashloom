@@ -27,6 +27,8 @@ jobs:
           find src examples tools -type f -name '*.sh' -print0 | xargs -0 -n1 bash -n
           find src examples tools -type f -name '*.sh' -print0 | xargs -0 shellcheck
           shfmt -d -i 2 -ci src examples tools
+          bash tools/check-source-docs.sh
+          bash tools/check-public-api-docs.sh
           bats tests
           bash examples/full-tour.sh
 
@@ -55,9 +57,18 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set -Eeuo pipefail
           version=${GITHUB_REF_NAME#v}
-          gh release create "$GITHUB_REF_NAME" \
-            "dist/bashloom-$version.tar.gz" \
-            "dist/bashloom-$version.tar.gz.sha256" \
-            --title "Bashloom $version" \
+          release_args=(
+            "$GITHUB_REF_NAME"
+            "dist/bashloom-$version.tar.gz"
+            "dist/bashloom-$version.tar.gz.sha256"
+            --title "Bashloom $version"
             --generate-notes
+          )
+
+          if [[ $version == *-* ]]; then
+            release_args+=(--prerelease)
+          fi
+
+          gh release create "${release_args[@]}"

@@ -2,6 +2,9 @@
 
 setup() {
   export BASHLOOM_ENTRYPOINT="$BATS_TEST_DIRNAME/../src/bashloom.sh"
+  # shellcheck source=src/core/version.sh
+  source "$BATS_TEST_DIRNAME/../src/core/version.sh"
+  export EXPECTED_BASHLOOM_VERSION=$BLM_VERSION
 }
 
 @test "path helpers are lexical and dependency-free" {
@@ -52,5 +55,5 @@ setup() {
 @test "entrypoint sourcing does not require external dirname" {
   run bash -c 'PATH=/nonexistent; source "$1"; printf "%s" "$BLM_VERSION"' _ "$BASHLOOM_ENTRYPOINT"
   [ "$status" -eq 0 ]
-  [ "$output" = "0.0.0-dev" ]
+  [ "$output" = "$EXPECTED_BASHLOOM_VERSION" ]
 }

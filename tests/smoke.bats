@@ -2,12 +2,15 @@
 
 setup() {
   export BASHLOOM_ENTRYPOINT="$BATS_TEST_DIRNAME/../src/bashloom.sh"
+  # shellcheck source=src/core/version.sh
+  source "$BATS_TEST_DIRNAME/../src/core/version.sh"
+  export EXPECTED_BASHLOOM_VERSION=$BLM_VERSION
 }
 
 @test "entrypoint can be sourced" {
   run bash -c 'source "$1"; printf "%s" "$BLM_VERSION"' _ "$BASHLOOM_ENTRYPOINT"
   [ "$status" -eq 0 ]
-  [ "$output" = "0.0.0-dev" ]
+  [ "$output" = "$EXPECTED_BASHLOOM_VERSION" ]
 }
 
 @test "sourcing does not enable errexit" {

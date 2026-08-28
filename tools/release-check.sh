@@ -17,7 +17,9 @@ REPO_ROOT="$(cd -- "$TOOL_DIR/.." && pwd)"
 
 requested=${1#v}
 
-[[ $requested =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]] || {
+# Bashloom v0.x release tags follow SemVer core + optional prerelease identifiers.
+# Build metadata is intentionally not accepted in the release tag contract yet.
+[[ $requested =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z]+([.-][0-9A-Za-z]+)*)?$ ]] || {
   printf 'Invalid release version: %s\n' "$1" >&2
   exit 2
 }

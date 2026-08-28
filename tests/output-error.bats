@@ -2,6 +2,10 @@
 
 setup() {
   export BASHLOOM_ENTRYPOINT="$BATS_TEST_DIRNAME/../src/bashloom.sh"
+  export BASHLOOM_VERSION_FILE="$BATS_TEST_DIRNAME/../src/core/version.sh"
+  # shellcheck source=src/core/version.sh
+  source "$BASHLOOM_VERSION_FILE"
+  export EXPECTED_BASHLOOM_VERSION=$BLM_VERSION
 }
 
 @test "title and section render human output" {
@@ -44,7 +48,7 @@ setup() {
 @test "diagnostics expose stable keys in plain mode" {
   run bash -c 'source "$1"; BLM_OUTPUT_MODE=plain; blm_diagnostics' _ "$BASHLOOM_ENTRYPOINT"
   [ "$status" -eq 0 ]
-  [[ "$output" == *"bashloom_version: 0.0.0-dev"* ]]
+  [[ "$output" == *"bashloom_version: $EXPECTED_BASHLOOM_VERSION"* ]]
   [[ "$output" == *"bash_version:"* ]]
   [[ "$output" == *"output_mode: plain"* ]]
   [[ "$output" == *"tty: false"* ]]
@@ -55,6 +59,6 @@ setup() {
 @test "diagnostics emit machine-readable JSON records" {
   run bash -c 'source "$1"; BLM_OUTPUT_MODE=json; blm_diagnostics' _ "$BASHLOOM_ENTRYPOINT"
   [ "$status" -eq 0 ]
-  [[ "$output" == *'{"key":"bashloom_version","value":"0.0.0-dev"}'* ]]
+  [[ "$output" == *"{\"key\":\"bashloom_version\",\"value\":\"$EXPECTED_BASHLOOM_VERSION\"}"* ]]
   [[ "$output" == *'{"key":"output_mode","value":"json"}'* ]]
 }

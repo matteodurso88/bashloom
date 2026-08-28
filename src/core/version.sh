@@ -8,4 +8,4 @@
 
 # Public metadata is consumed by downstream scripts after sourcing Bashloom.
 # shellcheck disable=SC2034
-BLM_VERSION="0.0.0-dev"
+BLM_VERSION="0.1.0-rc1"

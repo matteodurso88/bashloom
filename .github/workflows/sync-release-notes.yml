@@ -1,0 +1,40 @@
+name: Sync release notes
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/releases/v*.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Sync GitHub release bodies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Sync canonical release notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          shopt -s nullglob
+          notes=(docs/releases/v*.md)
+
+          for file in "${notes[@]}"; do
+            tag=$(basename "$file" .md)
+
+            if gh release view "$tag" >/dev/null 2>&1; then
+              gh release edit "$tag" --notes-file "$file"
+              printf 'updated release notes: %s\n' "$tag"
+            fi
+          done

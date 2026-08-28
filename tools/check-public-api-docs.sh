@@ -19,15 +19,15 @@ find "$ROOT/src" -type f -name '*.sh' -print | sort >"$SOURCE_FILES"
 
 while IFS= read -r file; do
   grep -E '^blm_[A-Za-z0-9_]+\(\)[[:space:]]*\{' "$file" || true
-done <"$SOURCE_FILES" \
-  | sed -E 's/^((blm_[A-Za-z0-9_]+))\(\).*/\2/' \
-  | sort >"$DEFINITIONS"
+done <"$SOURCE_FILES" |
+  sed -E 's/^((blm_[A-Za-z0-9_]+))\(\).*/\2/' |
+  sort >"$DEFINITIONS"
 
 while IFS= read -r file; do
   grep -E '^# Public API: blm_[A-Za-z0-9_]+' "$file" || true
-done <"$SOURCE_FILES" \
-  | sed -E 's/^# Public API: (blm_[A-Za-z0-9_]+).*/\1/' \
-  | sort >"$MARKERS"
+done <"$SOURCE_FILES" |
+  sed -E 's/^# Public API: (blm_[A-Za-z0-9_]+).*/\1/' |
+  sort >"$MARKERS"
 
 fail=0
 

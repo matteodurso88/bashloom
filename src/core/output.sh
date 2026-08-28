@@ -45,7 +45,7 @@ _blm_json_escape() {
     char=${value:i:1}
     case $char in
       '"') result+='\"' ;;
-      '\') result+='\\' ;;
+      $'\\') result="${result}\\\\" ;;
       $'\b') result+='\b' ;;
       $'\f') result+='\f' ;;
       $'\n') result+='\n' ;;

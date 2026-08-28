@@ -85,8 +85,16 @@ blm_apt_candidate_version() {
   (($# == 1)) || return 2
   _blm_apt_validate_package "$1" || return 2
   _blm_apt_require_available || return 1
-  local candidate
-  candidate=$(command apt-cache policy -- "$1" 2>/dev/null | awk '/^[[:space:]]*Candidate:/ { print $2; exit }') || return $?
+
+  local output line candidate=''
+  output=$(command apt-cache policy -- "$1" 2>/dev/null) || return $?
+  while IFS= read -r line; do
+    if [[ $line =~ ^[[:space:]]*Candidate:[[:space:]]+([^[:space:]]+) ]]; then
+      candidate=${BASH_REMATCH[1]}
+      break
+    fi
+  done <<<"$output"
+
   [[ -n $candidate && $candidate != '(none)' ]] || return 1
   printf '%s\n' "$candidate"
 }

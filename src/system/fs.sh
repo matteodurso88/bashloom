@@ -6,8 +6,22 @@
 # resets BLM_LAST_CHANGED and marks it only after an actual successful mutation.
 # Aggregate BLM_CHANGED remains sticky until the caller resets its run scope.
 #
-# Linux-first note: mode inspection and mode preservation currently rely on GNU
-# `stat -c` and `chmod --reference` semantics.
+# Linux-first note: mode inspection and mode preservation rely on GNU `stat -c`
+# and `chmod --reference` semantics. These feature-specific assumptions are
+# checked only when the corresponding operations are invoked.
+
+_blm_normalize_numeric_mode() {
+  (($# == 1)) || return 2
+  local mode=$1
+  [[ $mode =~ ^0?[0-7]{3,4}$ ]] || {
+    blm_error "Invalid numeric mode: $mode"
+    return 2
+  }
+  while [[ $mode == 0* && ${#mode} -gt 1 ]]; do
+    mode=${mode#0}
+  done
+  printf '%s\n' "$mode"
+}
 
 # Public API: blm_ensure_dir
 # Purpose: Ensure a directory exists and optionally converge its numeric mode.
@@ -15,20 +29,21 @@
 # Returns:
 #   0  Directory exists after the call and requested mode (if any) is correct.
 #   1  Required utility or filesystem operation failed.
-#   2  Invalid Bashloom arguments.
+#   2  Invalid Bashloom arguments/mode.
 # Output: Native utility diagnostics plus Bashloom dependency errors as needed.
 # Side effects: May create parent directories and/or chmod the final directory.
 # Change tracking:
 #   Marks changed when the directory is newly created or its mode is corrected;
 #   an already-converged directory leaves BLM_LAST_CHANGED=0.
-# External dependencies: mkdir; stat/chmod only when --mode is supplied.
+# External dependencies: mkdir; GNU stat/chmod only when --mode is supplied.
 blm_ensure_dir() {
   _blm_change_begin
 
-  local mode=""
+  local mode='' requested_mode=''
   if [[ ${1:-} == --mode ]]; then
     (($# >= 3)) || return 2
     mode=$2
+    requested_mode=$(_blm_normalize_numeric_mode "$mode") || return $?
     shift 2
   fi
   (($# == 1)) || return 2
@@ -45,12 +60,8 @@ blm_ensure_dir() {
     blm_require_command stat || return 1
     blm_require_command chmod || return 1
 
-    local current_mode requested_mode=$mode
+    local current_mode
     current_mode=$(command stat -c '%a' -- "$path") || return $?
-    # GNU stat emits modes without a leading zero. Strip one optional zero from
-    # caller notation only for comparison; chmod still receives the original.
-    [[ $requested_mode == 0* ]] && requested_mode=${requested_mode#0}
-
     if [[ $current_mode != "$requested_mode" ]]; then
       command chmod "$mode" -- "$path" || return $?
       _blm_change_mark
@@ -102,7 +113,7 @@ blm_ensure_symlink() {
 # Returns:
 #   0  Mode already matched or chmod succeeded.
 #   1  Path missing, dependency unavailable, or stat/chmod failed.
-#   2  Invalid arguments.
+#   2  Invalid arguments/mode.
 # Output: Bashloom errors/native utility diagnostics to stderr.
 # Side effects: May chmod the path; marks change only after successful chmod.
 # External dependencies: GNU/Linux stat (`-c`) and chmod.
@@ -117,6 +128,9 @@ blm_ensure_mode() {
 
   local mode=$1
   local path=$2
+  local requested_mode
+  requested_mode=$(_blm_normalize_numeric_mode "$mode") || return $?
+
   [[ -e $path || -L $path ]] || {
     blm_error "Path does not exist: $path"
     return 1
@@ -125,10 +139,8 @@ blm_ensure_mode() {
   blm_require_command stat || return 1
   blm_require_command chmod || return 1
 
-  local current_mode requested_mode=$mode
+  local current_mode
   current_mode=$(command stat -c '%a' -- "$path") || return $?
-  [[ $requested_mode == 0* ]] && requested_mode=${requested_mode#0}
-
   [[ $current_mode == "$requested_mode" ]] && return 0
 
   command chmod "$mode" -- "$path" || return $?
@@ -136,18 +148,19 @@ blm_ensure_mode() {
 }
 
 # Public API: blm_ensure_line
-# Purpose: Ensure one exact literal line appears at least once in a regular file.
+# Purpose: Ensure one exact literal single line appears at least once in a file.
 # Usage: blm_ensure_line <path> <line>
 # Returns:
 #   0  Exact line already existed or was appended successfully.
 #   1  Parent missing, destination non-regular, or append failed.
-#   2  Invalid arguments.
+#   2  Invalid arguments or multiline/control-line data.
 # Output: Bashloom validation errors to stderr.
 # Side effects: Creates/appends the file when the line is absent; marks change.
 # Matching semantics:
 #   Equality is literal Bash string equality. No regex, trimming, escaping or
 #   variable expansion is applied, so reruns converge on exactly caller data.
-# Safety: Parent directories are never created implicitly by this helper.
+# Safety: Parent directories are never created implicitly. LF/CR are rejected
+# because this API intentionally converges exactly one logical text line.
 blm_ensure_line() {
   _blm_change_begin
   (($# == 2)) || {
@@ -157,6 +170,11 @@ blm_ensure_line() {
 
   local path=$1
   local wanted=$2
+  if [[ $wanted == *$'\n'* || $wanted == *$'\r'* ]]; then
+    blm_error "blm_ensure_line requires single-line data"
+    return 2
+  fi
+
   local directory
   directory=$(blm_path_dirname "$path") || return $?
 
@@ -196,13 +214,13 @@ blm_ensure_line() {
 # Side effects:
 #   Creates a secure temporary file in the destination directory and atomically
 #   renames it over the destination on success. Existing destination mode is
-#   preserved with `chmod --reference` before rename.
+#   preserved with GNU `chmod --reference` before rename.
 # Failure safety:
 #   Producer/mode failures remove the temp and leave the original destination
 #   untouched. Same-directory temp placement provides same-filesystem rename
-#   semantics. This is atomic replacement, not fsync/power-loss durability.
+#   semantics. This is atomic replacement, NOT fsync/power-loss durability.
 # Security: Producer is invoked as original argv; no eval or shell text parsing.
-# External dependencies: rm, mv, mktemp; chmod only when destination exists.
+# External dependencies: rm, mv, mktemp; GNU chmod when destination exists.
 blm_atomic_write() {
   (($# >= 2)) || {
     blm_error "Usage: blm_atomic_write <path> <producer-command> [args...]"
@@ -222,8 +240,6 @@ blm_atomic_write() {
   blm_require_command rm || return 1
   blm_require_command mv || return 1
 
-  # The temporary file must be in the destination directory: cross-filesystem
-  # moves could otherwise lose rename atomicity.
   local tmp
   tmp=$(blm_temp_file "$directory") || return $?
 
@@ -244,6 +260,7 @@ blm_atomic_write() {
     command chmod --reference="$path" "$tmp" || {
       status=$?
       command rm -f -- "$tmp"
+      blm_error "Unable to preserve destination mode; GNU chmod --reference is required"
       return "$status"
     }
   fi

@@ -13,9 +13,9 @@ ROOT="$(cd -- "$ROOT/.." && pwd)"
 
 source "$ROOT/src/bashloom.sh"
 
-BLM_UI_STYLE=rich
-BLM_UI_CHARSET=${BLM_UI_CHARSET:-auto}
-BLM_UI_THEME=${BLM_UI_THEME:-default}
+export BLM_UI_STYLE=rich
+export BLM_UI_CHARSET=${BLM_UI_CHARSET:-auto}
+export BLM_UI_THEME=${BLM_UI_THEME:-default}
 
 blm_title "v0.1 RC terminal UX showcase"
 

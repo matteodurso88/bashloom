@@ -45,7 +45,7 @@ setup() {
   pidfile="$BATS_TEST_TMPDIR/descendant.pid"
   run bash -c '
     source "$1"
-    if blm_timeout --timeout 1 --grace 0 -- bash -c '\''sleep 30 & echo $! >"$1"; wait'\'' _ "$2"; then
+    if blm_timeout --timeout 1 --grace 0 -- bash -c '\''sleep 30 & echo $! >"$1"; wait'\'' _ "$2" 2>/dev/null; then
       exit 90
     else
       status=$?
@@ -66,7 +66,7 @@ setup() {
   run bash -c '
     source "$1"
     f() { sleep 5; }
-    if blm_timeout --timeout 1 --grace 0 -- f; then exit 90; else printf "%s" "$?"; fi
+    if blm_timeout --timeout 1 --grace 0 -- f 2>/dev/null; then exit 90; else printf "%s" "$?"; fi
   ' _ "$BASHLOOM_ENTRYPOINT"
   [ "$status" -eq 0 ]
   [ "$output" = "124" ]

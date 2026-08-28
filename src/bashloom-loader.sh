@@ -127,12 +127,19 @@ _blm_load_network() {
   _blm_source_module_file "$_BLM_ROOT/integrations/network.sh"
   _blm_mark_module_loaded network
 }
+_blm_load_apt() {
+  _blm_module_loaded apt && return 0
+  _blm_load_runtime || return $?
+  _blm_source_module_file "$_BLM_ROOT/integrations/apt.sh"
+  _blm_mark_module_loaded apt
+}
 _blm_load_integrations() {
   _blm_module_loaded integrations && return 0
   _blm_load_git || return $?
   _blm_load_systemd || return $?
   _blm_load_docker || return $?
   _blm_load_network || return $?
+  _blm_load_apt || return $?
   _blm_mark_module_loaded integrations
 }
 
@@ -141,7 +148,7 @@ _blm_load_integrations() {
 # Usage: blm_load <module> [module...]
 # Supported groups:
 #   core status terminal logging requirements runtime reliability system state
-#   git systemd docker network integrations all
+#   git systemd docker network apt integrations all
 # Returns: 0 on success, 2 for invalid/unknown groups, otherwise source failure.
 # Output: Silent on success; bootstrap errors use loader stderr output.
 # Side effects: Defines requested functions and updates _BLM_LOADED_MODULES.
@@ -166,6 +173,7 @@ blm_load() {
       systemd) _blm_load_systemd || return $? ;;
       docker) _blm_load_docker || return $? ;;
       network) _blm_load_network || return $? ;;
+      apt) _blm_load_apt || return $? ;;
       integrations) _blm_load_integrations || return $? ;;
       all)
         _blm_load_reliability || return $?

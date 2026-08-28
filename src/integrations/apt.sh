@@ -8,6 +8,8 @@
 # operations use dpkg-query and apt-cache. Bashloom never invokes sudo.
 
 _blm_apt_require_available() {
+  # blm_apt_available intentionally has a zero-argument public contract.
+  # shellcheck disable=SC2119
   if ! blm_apt_available; then
     blm_error "APT integration is unavailable: apt-get, dpkg-query and apt-cache are required"
     return 1
@@ -40,6 +42,7 @@ _blm_apt_validate_packages() {
 # Returns: 0 when apt-get, dpkg-query and apt-cache exist; 1 otherwise; 2 on args.
 # Output: None.
 # Side effects: None.
+# shellcheck disable=SC2120
 blm_apt_available() {
   (($# == 0)) || return 2
   blm_has_command apt-get && blm_has_command dpkg-query && blm_has_command apt-cache

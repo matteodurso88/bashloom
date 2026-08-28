@@ -6,9 +6,11 @@ Questo documento registra i comportamenti intenzionalmente stabilizzati prima de
 
 `blm_timeout` conserva il contratto esistente sullo status del comando e lo status `124` per le deadline applicate da Bashloom.
 
-Quando il comando wrapped si risolve in un eseguibile esterno e `setsid` è disponibile, Bashloom lo avvia in una sessione/process group separata. L'escalation TERM/KILL viene indirizzata al gruppo, permettendo di terminare insieme al comando anche i discendenti da esso creati.
+Quando il comando wrapped si risolve in un eseguibile esterno e GNU coreutils `timeout` è disponibile, Bashloom delega la deadline a quel backend. GNU timeout fornisce una gestione matura dei process group, quindi l'escalation TERM/KILL raggiunge sia il comando diretto sia i discendenti da esso creati.
 
-Le funzioni shell e i builtin mantengono invece il percorso compatibile direct-child, perché rieseguirli in una nuova shell modificherebbe la semantica del caller. Questa distinzione è deliberata e documentata, non nascosta.
+Le funzioni shell e i builtin mantengono invece il backend direct-child di Bashloom, perché rieseguire lo stato shell del caller tramite un wrapper esterno ne modificherebbe la semantica. Anche gli host senza GNU timeout usano il backend Bash diretto. Tutte le dipendenze restano call-time: il sourcing di Bashloom non richiede GNU timeout.
+
+`--timeout 0` conserva il comportamento storico Bashloom di deadline immediata, anche se GNU timeout interpreta una durata zero come timeout disabilitato. `--grace 0` significa escalation immediata e viene mappato su un intervallo GNU kill-after minimo positivo, perché GNU `-k 0` disabilita l'escalation.
 
 ## Mode filesystem numerici
 

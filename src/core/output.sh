@@ -32,19 +32,38 @@ blm_output_mode() {
   _blm_output_mode
 }
 
-# Internal helper: escape one string for Bashloom's single-line JSON records.
-# Bash parameter substitutions avoid a jq/Python dependency in core output.
-# The helper escapes the JSON-sensitive characters Bashloom records may emit;
-# callers must not use it as a general-purpose serializer for arbitrary binary
-# data or as a replacement for a full JSON implementation.
+# Internal helper: escape one Bash string for JSON string context.
+# Bash variables cannot contain NUL bytes, but every other representable C0
+# control character (U+0001..U+001F) is escaped. Common JSON escapes use their
+# short form; remaining controls use \u00XX. Printable Unicode is preserved.
+# No jq/Python dependency is introduced into the core output path.
 _blm_json_escape() {
-  local value=$1
-  value=${value//\\/\\\\}
-  value=${value//\"/\\\"}
-  value=${value//$'\n'/\\n}
-  value=${value//$'\r'/\\r}
-  value=${value//$'\t'/\\t}
-  printf '%s' "$value"
+  (($# == 1)) || return 2
+  local value=$1 result='' char escaped code i
+
+  for ((i = 0; i < ${#value}; i++)); do
+    char=${value:i:1}
+    case $char in
+      '"') result+='\"' ;;
+      '\') result+='\\' ;;
+      $'\b') result+='\b' ;;
+      $'\f') result+='\f' ;;
+      $'\n') result+='\n' ;;
+      $'\r') result+='\r' ;;
+      $'\t') result+='\t' ;;
+      *)
+        printf -v code '%d' "'$char"
+        if ((code > 0 && code < 32)); then
+          printf -v escaped '\\u%04x' "$code"
+          result+=$escaped
+        else
+          result+=$char
+        fi
+        ;;
+    esac
+  done
+
+  printf '%s' "$result"
 }
 
 # Internal renderer: emit one status/event record to the selected stream.
@@ -66,8 +85,6 @@ _blm_emit_status() {
 
   case $mode in
     human)
-      # Color is a capability/policy decision, never forced merely because
-      # human mode is active.
       if blm_color_enabled; then
         printf '%b[%s]\033[0m %s\n' "$color" "$label" "$message" >&"$fd"
       else
@@ -96,7 +113,7 @@ _blm_emit_status() {
 #   json: one JSON object with `key` and `value` string fields.
 # Side effects: Writes one record to stdout only.
 # Notes: Values are intentionally strings in JSON to keep this primitive simple
-# and deterministic; typed JSON belongs to a richer future serialization API.
+# and deterministic; typed JSON belongs to a richer serialization API.
 blm_kv() {
   (($# == 2)) || return 2
   local key=$1

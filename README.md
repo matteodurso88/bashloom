@@ -20,6 +20,21 @@ Per l'integrazione in un repository, Bashloom raccomanda un **runtime vendorizza
 - Italiano: [`docs/it/consumer-contract.md`](docs/it/consumer-contract.md)
 - Consumption model / Modello di utilizzo: [`docs/en/consumption.md`](docs/en/consumption.md) · [`docs/it/consumption.md`](docs/it/consumption.md)
 
+## Want to contribute? / Vuoi contribuire?
+
+Bashloom has a public contributor roadmap with scoped work that can be developed without destabilizing the `v0.1` RC validation baseline.
+
+Bashloom dispone di una roadmap pubblica per i contributor con attività circoscritte che possono essere sviluppate senza destabilizzare la baseline di validazione RC `v0.1`.
+
+- **Contributor roadmap / Roadmap contributor:** [Issue #28](https://github.com/matteodurso88/bashloom/issues/28)
+- **Recommended first contribution / Primo contributo consigliato:** [Issue #31](https://github.com/matteodurso88/bashloom/issues/31)
+- **Help wanted:** [#29](https://github.com/matteodurso88/bashloom/issues/29), [#30](https://github.com/matteodurso88/bashloom/issues/30), [#32](https://github.com/matteodurso88/bashloom/issues/32), [#33](https://github.com/matteodurso88/bashloom/issues/33)
+- Contribution rules / Regole di contribuzione: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+
+Start from an existing scoped issue whenever possible. Public API or behavior changes should be discussed before implementation; accepted changes must preserve source-safety, exact status semantics, CI/non-TTY degradation and canonical EN/IT documentation parity.
+
+Quando possibile, partire da una issue già circoscritta. Le modifiche ad API o comportamento pubblico vanno discusse prima dell'implementazione; i cambi accettati devono preservare source-safety, semantica esatta degli status, degradazione CI/non-TTY e parità documentale canonica EN/IT.
+
 ---
 
 ## English

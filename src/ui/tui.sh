@@ -33,6 +33,7 @@ blm_tui_available() {
 # Returns: 0 on success; 1 when no suitable interactive TTY exists; 2 for args.
 # Output: ANSI terminal control sequences to stdout.
 # Side effects: Changes terminal presentation until blm_tui_leave is called.
+# shellcheck disable=SC2120
 blm_tui_enter() {
   (($# == 0)) || return 2
   _blm_tui_capable || return 1
@@ -47,6 +48,7 @@ blm_tui_enter() {
 # Returns: 0 on success; 2 for args.
 # Output: ANSI terminal control sequences when a TUI is active.
 # Side effects: Restores presentation state changed by blm_tui_enter.
+# shellcheck disable=SC2120
 blm_tui_leave() {
   (($# == 0)) || return 2
   ((_BLM_TUI_ACTIVE == 1)) || return 0
@@ -119,6 +121,8 @@ blm_tui_read_key() {
     read_args+=(-t "$timeout")
   fi
 
+  # read_args already contains -r; ShellCheck cannot infer array-provided flags.
+  # shellcheck disable=SC2162
   if IFS= read "${read_args[@]}" key; then
     read_status=0
   else
@@ -156,6 +160,7 @@ blm_tui_read_key() {
 # Invariant: Does not install or overwrite caller traps.
 blm_tui_run() {
   (($# >= 1)) || return 2
+  # shellcheck disable=SC2119
   blm_tui_enter || return $?
   local status
   if "$@"; then
@@ -163,6 +168,7 @@ blm_tui_run() {
   else
     status=$?
   fi
+  # shellcheck disable=SC2119
   blm_tui_leave || true
   return "$status"
 }

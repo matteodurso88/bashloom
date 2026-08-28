@@ -36,6 +36,9 @@ jobs:
       - name: Source documentation contract
         run: bash tools/check-source-docs.sh
 
+      - name: Public API documentation contract
+        run: bash tools/check-public-api-docs.sh
+
       - name: Bats
         run: bats tests
 

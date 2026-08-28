@@ -6,6 +6,19 @@ Thank you for considering a contribution to Bashloom.
 
 Bashloom is an Italian open-source project with an international contribution model. The repository is owned by Matteo D'Urso (`matteodurso88`); day-to-day technical work may be performed by the technical account Developer Oriqo (`dev-oriqo`). See `GOVERNANCE.md` for authoritative governance rules.
 
+### Where to start
+
+Start from the public contributor roadmap: https://github.com/matteodurso88/bashloom/issues/28
+
+Recommended entry points:
+- `#31` — task-oriented cookbook and classic Bash vs Bashloom examples (**good first issue**);
+- `#29` — semantic color system and visual identity;
+- `#30` — richer terminal components;
+- `#32` — integrations and portability evidence;
+- `#33` — community outreach and technical launch preparation.
+
+Prefer an existing scoped issue before starting implementation. Discuss public API/behavior changes before coding. The `v0.1` RC validation baseline is governed separately by `#21`; contributor feature work must not silently change frozen RC semantics.
+
 ### Contribution rules
 
 - Source identifiers and public API names are **English**.
@@ -67,6 +80,19 @@ English and Italian are the two canonical documentation languages and have equal
 Grazie per voler contribuire a Bashloom.
 
 Bashloom è un progetto open source italiano con modello di contribuzione internazionale. Il repository è di Matteo D'Urso (`matteodurso88`); le attività tecniche quotidiane possono essere svolte tramite l'account tecnico Developer Oriqo (`dev-oriqo`). `GOVERNANCE.md` contiene le regole ufficiali.
+
+### Da dove iniziare
+
+Parti dalla roadmap pubblica dei contributor: https://github.com/matteodurso88/bashloom/issues/28
+
+Punti di ingresso consigliati:
+- `#31` — cookbook task-oriented e confronti Bash classico vs Bashloom (**good first issue**);
+- `#29` — sistema colori semantico e identità visiva;
+- `#30` — componenti terminal rich più evoluti;
+- `#32` — integrazioni ed evidence di portabilità;
+- `#33` — outreach community e preparazione del lancio tecnico.
+
+Preferire una issue già circoscritta prima di iniziare l'implementazione. Le modifiche ad API/comportamento pubblico vanno discusse prima di scrivere codice. La baseline RC `v0.1` è governata separatamente da `#21`; il lavoro contributor non deve modificare implicitamente semantiche RC congelate.
 
 ### Regole di contribuzione
 
